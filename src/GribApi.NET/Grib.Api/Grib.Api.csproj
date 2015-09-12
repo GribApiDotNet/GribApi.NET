@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9CC21630-ACE4-4D14-93BA-E4E801AD2A91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Grib.Api</RootNamespace>
+    <AssemblyName>Grib.Api</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugX64|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\DebugX64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\..\..\bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugX64|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\DebugX64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>..\..\..\bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugX64|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\DebugX64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GribApiException.cs" />
+    <Compile Include="GribGridSpec.cs" />
+    <Compile Include="GribPackingSpec.cs" />
+    <Compile Include="Interop\AutoCleanup.cs" />
+    <Compile Include="Interop\FileHandleProxy.cs" />
+    <Compile Include="GeoCoordinate.cs" />
+    <Compile Include="GeoSpatialValue.cs" />
+    <Compile Include="GribEnvironment.cs" />
+    <Compile Include="GribFile.cs" />
+    <Compile Include="GribMessage.cs" />
+    <Compile Include="GribValue.cs" />
+    <Compile Include="Interop\SWIG\GribUtilGridSpec.cs" />
+    <Compile Include="Interop\SWIG\GribUtilPackingSpec.cs" />
+    <Compile Include="Interop\SWIG\GribApiProxy.cs" />
+    <Compile Include="Interop\SWIG\GribApiProxyPINVOKE.cs" />
+    <Compile Include="Interop\SWIG\GribPoints.cs" />
+    <Compile Include="Interop\SWIG\GribStringList.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_double.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_FILE.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_int_p_q_const__char__void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_p_void_p_q_const__char__void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_p_void_size_t__p_void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_p_void__void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_size_t__p_void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_void_p_void_long__long.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_box.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_context.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_fieldset.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_handle.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_index.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_iterator.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_keys_iterator.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_multi_handle.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_nearest.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_points.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_string_list.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_grib_values.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_int.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_long.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_off_t.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_p_char.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_p_void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_size_t.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_unsigned_char.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_void.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

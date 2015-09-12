@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v120:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit
+Debug|Win32|C:\Users\eric\grib_api\grib_api_lib\grib_api-1.14.0-Source\jasper-1.900.1\src\msvc\|
