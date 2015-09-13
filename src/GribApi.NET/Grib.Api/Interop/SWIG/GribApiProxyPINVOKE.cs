@@ -416,7 +416,7 @@ class GribApiProxyPINVOKE {
   public static extern global::System.IntPtr GribHandleNewFromMessage(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, uint jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribHandleNewFromMultiMessage")]
-  public static extern global::System.IntPtr GribHandleNewFromMultiMessage(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, out int jarg4);
+  public static extern global::System.IntPtr GribHandleNewFromMultiMessage(global::System.Runtime.InteropServices.HandleRef jarg1, out System.IntPtr jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, out int jarg4);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribHandleNewFromMessageCopy")]
   public static extern global::System.IntPtr GribHandleNewFromMessageCopy(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, uint jarg3);
@@ -446,10 +446,10 @@ class GribApiProxyPINVOKE {
   public static extern int GribMultiHandleWrite(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetMessage")]
-  public static extern int GribGetMessage(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+  public static extern int GribGetMessage(global::System.Runtime.InteropServices.HandleRef jarg1, out System.IntPtr jarg2, ref uint jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetMessageCopy")]
-  public static extern int GribGetMessageCopy(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3);
+  public static extern int GribGetMessageCopy(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, ref uint jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorNew")]
   public static extern global::System.IntPtr GribIteratorNew(global::System.Runtime.InteropServices.HandleRef jarg1, uint jarg2, out int jarg3);

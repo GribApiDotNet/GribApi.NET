@@ -119,13 +119,14 @@ public class GribUtilPackingSpec : global::System.IDisposable {
   }
 
   public int truncateLaplacian {
-    set {
-      GribApiProxyPINVOKE.GribUtilPackingSpec_truncateLaplacian_set(swigCPtr, value);
-    } 
-    get {
-      int ret = GribApiProxyPINVOKE.GribUtilPackingSpec_truncateLaplacian_get(swigCPtr);
-      return ret;
-    } 
+	set
+	{
+		GribApiProxyPINVOKE.GribUtilPackingSpec_truncateLaplacian_set(swigCPtr, value);
+	} 
+	get
+	{
+		return GribApiProxyPINVOKE.GribUtilPackingSpec_truncateLaplacian_get(swigCPtr);
+	} 
   }
 
   public double laplacianOperator {

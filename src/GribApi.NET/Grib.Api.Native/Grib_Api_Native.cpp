@@ -283,53 +283,54 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_GribApiProxy(SWIG_CSharpS
 #include "grib_api.h"
 
 
+
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
 extern "C" {
-    SWIGEXPORT struct FileHandleProxy
-    {
-        HANDLE Win32Handle;
-        FILE* File;
-    };
+SWIGEXPORT struct FileHandleProxy
+{
+	HANDLE Win32Handle;
+	FILE* File;
+};
 
-    SWIGEXPORT int SWIGSTDCALL Count(char * fn)
-    {
-        int nm = 0;
-        FILE* f = 0;
+SWIGEXPORT int __stdcall Count(char * fn)
+{
+	int nm = 0;
+	FILE* f = 0;
 
-        f = fopen(fn, "r");
-        rewind(f);
-        auto c = grib_context_get_default();
-        grib_count_in_file(c, f, &nm);
-        return nm;
-    }
-
-    SWIGEXPORT void SWIGSTDCALL DestroyFileHandleProxy(FileHandleProxy* fhp)
-    {
-        assert(CloseHandle((HANDLE)fhp->Win32Handle) == TRUE);
-        fclose(fhp->File);
-        free(fhp);
-    }
-
-
-    SWIGEXPORT FileHandleProxy* SWIGSTDCALL CreateFileHandleProxy(char * fn)
-    {
-        int err = 0;
-
-        FileHandleProxy* fhp = 0;
-        fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
-
-        auto h = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        auto fd = _open_osfhandle((intptr_t)h, 0);
-        if (fd == -1) assert(0);
-        fhp->File = _fdopen(fd, "r");
-        fhp->Win32Handle = h;
-
-        return fhp;
-    }
-
+	f = fopen(fn, "r");
+	rewind(f);
+	auto c = grib_context_get_default();
+	grib_count_in_file(c, f, &nm);
+	return nm;
 }
+
+SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
+{
+	assert(CloseHandle((HANDLE)fhp->Win32Handle) == TRUE);
+	fclose(fhp->File);
+	free(fhp);
+}
+
+
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
+{
+	int err = 0;
+
+	FileHandleProxy* fhp = 0;
+	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
+
+	auto h = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	auto fd = _open_osfhandle((intptr_t)h, 0);
+	if (fd == -1) assert(0);
+	fhp->File = _fdopen(fd, "r");
+	fhp->Win32Handle = h;
+
+	return fhp;
+}
+}
+
 
 #ifdef __cplusplus
 extern "C" {

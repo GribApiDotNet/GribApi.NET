@@ -16,11 +16,11 @@ namespace Grib.Api
 
         public static void Init()
         {
+            // if GRIB_DEFINITION_PATH is not defined, set it to the same directory as the dll
             if (String.IsNullOrWhiteSpace(DefinitionsPath))
             {
-                // grib_api_lib assumes POSIX-style paths
                 string basePath = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-                DefinitionsPath = Path.Combine(basePath, "definitions").Replace("\\", "/");
+                DefinitionsPath = Path.Combine(basePath, "definitions");
             }
         }
 
@@ -42,8 +42,15 @@ namespace Grib.Api
             }
 
             set
-            {                
-                Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", value, EnvironmentVariableTarget.Process);
+            {
+                string val = value;
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    // grib_api_lib assumes POSIX-style paths
+                    val = value.Replace("\\", "/");
+                }
+                
+                Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", val, EnvironmentVariableTarget.Process);
             }
         }
     }

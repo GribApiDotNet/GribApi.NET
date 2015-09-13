@@ -6,6 +6,11 @@ GribApi.NET is a C# wrapper around the [European Centre for Medium Range Weather
 In theory, all grib_api_lib's functionality is already be exposed via [P\Invoke](https://msdn.microsoft.com/en-us/library/aa446536.aspx). However, there's more work required to make it "csharpy".
 
 ## Usage
+Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definitions** directory to your project. By default, GribApi.NET assumes the definitions are in the same directory as the library, but you can change the location by setting `Grib::Api::GribEnvironment::DefinitionsPath` or setting the `GRIB_DEFINITION_PATH` environment variable.
+
+You're ready to go!
+
+##
 Getting grid information in a GRIB message:
 ```csharp
 using (GribFile file = new GribFile("mygrib.grb"))
@@ -36,7 +41,7 @@ Iterating Lat/Lon/Value:
 
 	GribMessage msg = gribFile.First();
 	
-	foreach (GeoSpatialValue val in msg.SpatialValues)
+	foreach (GeoSpatialValue val in msg.GeoSpatialValues)
 	{
 		if (val.IsMissing) { continue; }
 
@@ -66,7 +71,7 @@ Build the projects in this order:
 2. ext/grib_api-1.14.0-Source/windows/msvc/grib_api.sln
 3. src/GribApi.NET/GribApi.sln
 
-After you build libjasper and grib_api_lib the first time, you should only need to build GribApi.sln thereafter.
+After you've built libjasper and grib_api_lib once, you should only need to build GribApi.sln thenceforth.
 
 ## Running Tests
 1. Install [NUnit](http://www.nunit.org/) and expose it on PATH.

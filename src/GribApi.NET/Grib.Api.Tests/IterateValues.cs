@@ -43,7 +43,7 @@ namespace Grib.Api.Tests
 
                     foreach (var val in msg)
                     {
-                        if (GribApiProxy.GribIsDefined(msg.Handle, val.KeyName) == 0 || !val.IsDefined || val.IsMissing || val.KeyName == "bitmap") { continue; }
+                        if (!val.IsDefined || val.IsMissing || val.KeyName == "bitmap") { continue; }
                         // TODO: some sort of actual test here
                         Console.WriteLine("{0} = {1}", val.KeyName, val.AsString());
                     }
@@ -52,7 +52,7 @@ namespace Grib.Api.Tests
                     List<double> lons = new List<double>();
                     List<double> vals = new List<double>();
 
-                    foreach (var val in msg.SpatialValues)
+                    foreach (var val in msg.GeoSpatialValues)
                     {
                         if (val.IsMissing) { continue; }
 

@@ -7,20 +7,11 @@
 #include "grib_api.h"
 %}
 
-%include "swigtype_inout.i" 
+//%include "swigtype_inout.i" 
 
-
-%define %$isproperty        "match"="csvarin"  %enddef
-
-
-
-%typemap(imtype) size_t * length "ref uint"
-%typemap(cstype) size_t * length "ref uint"
-%typemap(csin) size_t * length "ref length"
-
-%typemap(imtype) size_t * size "ref uint"
-%typemap(cstype) size_t * size "ref uint"
-%typemap(csin) size_t * size "ref size"
+%typemap(imtype) size_t * size, size_t * length, size_t * message_length "ref uint"
+%typemap(cstype) size_t * size, size_t * length, size_t * message_length "ref uint"
+%typemap(csin) size_t * size, size_t * length, size_t * message_length "ref  $csinput"
 
 %typemap(imtype) size_t * offset "out uint"
 %typemap(cstype) size_t * offset "out uint"
@@ -115,6 +106,10 @@
 %typemap(cstype) int * indexes "int[]"
 %typemap(imtype) int * indexes "int[]"
 
+%typemap(csin) void **, const void ** "out $csinput"
+%typemap(cstype) void **, const void ** "out System.IntPtr"
+%typemap(imtype) void **, const void ** "out System.IntPtr"
+
 %typemap(csin) char * mesg "mesg"
 %typemap(imtype) char * mesg "System.Text.StringBuilder"
 %typemap(cstype) char * mesg "System.Text.StringBuilder"
@@ -123,15 +118,26 @@
 %typemap(imtype) const char * mesg "string"
 %typemap(cstype) const char * mesg "string"
 
-%typemap(cstype, out="int") int grib_iterator_next, int grib_keys_iterator_next, int grib_is_missing, int grib_is_missing, int grib_is_defined "int"
-%typemap(csout, excode=SWIGEXCODE) int grib_iterator_next, int grib_keys_iterator_next, int grib_is_missing, int grib_is_defined {
+%typemap(imtype) grib_get_native_type "out int"
+%typemap(cstype) grib_get_native_type "out int"
+%typemap(csin) grib_get_native_type "out type"
+
+%typemap(cstype, out="int") int grib_iterator_next, int grib_keys_iterator_next, int grib_is_defined "int"
+%typemap(csout, excode=SWIGEXCODE) int grib_iterator_next, int grib_keys_iterator_next {
     return $imcall;$excode
 }
 
-%typemap(csvarin, out="int") int gridType "int"
-%typemap(csvarout, excode=SWIGEXCODE) int gridType {
-    return $imcall;$excode
-}
+%typemap(csvarin) int grid_type, int truncateLaplacian %{
+	set
+	{
+		$imcall;$excode
+	} %}
+%typemap(csvarout, out="int", excode=SWIGEXCODE2) int grid_type, int truncateLaplacian %{
+	get
+	{
+		return $imcall;$excode
+	} %}
+%typemap(cstype, out="int") int grid_type, int truncateLaplacian "int $ccall"
 
 %typemap(cstype, out="void") int "int"
 %typemap(csout, excode=SWIGEXCODE) int {
@@ -141,13 +147,29 @@
 	{
 		throw Grib.Api.GribApiException.Create(ret);
 	}
-}
+  }
+  
+%typemap(cstype, out="bool") int grib_is_missing, int grib_is_defined "bool"
+%typemap(csout, excode=SWIGEXCODE) int grib_is_missing  {
+    int ret = $imcall;$excode
+	
+	if (err != 0)
+	{
+		throw Grib.Api.GribApiException.Create(ret);
+	}
+	
+	return ret == 1;
+  }
+%typemap(csout, excode=SWIGEXCODE) int grib_is_defined  {
+    int ret = $imcall;$excode
 
-
+	return ret == 1;
+  }
 
 %typemap(imtype,         inattributes="[global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]",
          outattributes="[return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]") char * "string"
 
+		 
 %ignore grib_values;
 		 
 %rename("%(lowercamelcase)s", %$isvariable) "";
@@ -159,14 +181,15 @@
 %rename("%(camelcase)s", %$isfunction) "";
 %rename("%(camelcase)s", %$isenum) "";
 %rename("%(camelcase)s", %$isenumitem) "";
-%rename("%(camelcase)s", %$isproperty) "";
-%include "grib_api.h"
+//%rename("%(camelcase)s", %$isproperty) "";
 
+%include "grib_api.h"
 %{
+
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
-
+extern "C" {
 SWIGEXPORT struct FileHandleProxy
 {
 	HANDLE Win32Handle;
@@ -208,5 +231,5 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 
 	return fhp;
 }
-
+}
 %}

@@ -26,8 +26,10 @@ namespace Grib.Api.Tests
             string dllPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(GribFile)).Location);
             string path = Environment.GetEnvironmentVariable("PATH");
             Environment.SetEnvironmentVariable("PATH", dllPath + ";" + path, EnvironmentVariableTarget.Process);
+           // GribEnvironment.DefinitionsPath = dllPath;
             Assert.IsTrue(File.Exists("Grib.Api.Native.dll"));
             Assert.IsTrue(Directory.Exists("TestData"));
+            Assert.IsTrue(Directory.Exists("definitions"));
         }
     }
 }

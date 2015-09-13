@@ -39,13 +39,14 @@ public class GribUtilGridSpec : global::System.IDisposable {
   }
 
   public int gridType {
-    set {
-      GribApiProxyPINVOKE.GribUtilGridSpec_gridType_set(swigCPtr, value);
-    } 
-    get {
-      int ret = GribApiProxyPINVOKE.GribUtilGridSpec_gridType_get(swigCPtr);
-      return ret;
-    } 
+	set
+	{
+		GribApiProxyPINVOKE.GribUtilGridSpec_gridType_set(swigCPtr, value);
+	} 
+	get
+	{
+		return GribApiProxyPINVOKE.GribUtilGridSpec_gridType_get(swigCPtr);
+	} 
   }
 
   public int ni {

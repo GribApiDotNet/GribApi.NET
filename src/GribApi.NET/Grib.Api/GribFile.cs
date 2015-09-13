@@ -37,6 +37,14 @@ namespace Grib.Api
 
             _fileName = fileName;
             _pFileHandleProxy = CreateFileHandleProxy(_fileName);
+
+            if (_pFileHandleProxy == IntPtr.Zero)
+            {
+                // need to get last
+
+                throw new IOException(Marshal.GetLastWin32Error().ToString());
+            }
+
             _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
             File = new SWIGTYPE_p_FILE(_fileHandleProxy.File, false);
 

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
@@ -56,7 +58,7 @@ namespace Grib.Api
             }
         }
 
-        public IEnumerable<GeoSpatialValue> SpatialValues 
+        public IEnumerable<GeoSpatialValue> GeoSpatialValues 
         { 
             get
             {
@@ -111,7 +113,18 @@ namespace Grib.Api
 
         public void SaveAs(string path)
         {
-           // GribApiProxy.GribGetMessage(this.Handle,)
+            var tl = this["totalLength"].AsInt();
+            byte[] bytes = new byte[tl];
+            IntPtr p = Marshal.AllocHGlobal(tl);
+            uint s = 0;
+            GribApiProxy.GribGetMessage(this.Handle, out p, ref s);
+            Marshal.Copy(p, bytes, 0, tl);
+
+           File.WriteAllBytes(path, bytes);
+           try
+           {
+               Marshal.FreeHGlobal(p);
+           } catch (BadImageFormatException) { }
         }
 
         public GribValue this[string keyName]
