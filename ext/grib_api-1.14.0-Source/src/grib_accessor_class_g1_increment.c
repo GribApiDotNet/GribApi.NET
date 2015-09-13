@@ -231,7 +231,7 @@ static int pack_double(grib_accessor* a, const double* val, size_t *len)
 		return ret;
 	}	
 	
-	numberOfPoints = 1+rintWin(fabs((last-first) / *val));
+	numberOfPoints = 1+rint(fabs((last-first) / *val));
 	
 	incrementInMillidegrees = *val * 1000;
 	if ((int)incrementInMillidegrees ==  incrementInMillidegrees ) {

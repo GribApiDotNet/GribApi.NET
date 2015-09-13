@@ -291,7 +291,7 @@ static int pack_double(grib_accessor* a, const double* val, size_t *len)
         directionIncrementGiven=1;
         numberOfPoints=GRIB_MISSING_LONG;
     } else {
-        numberOfPointsInternal = 1+rintWin(fabs((last-first) / *val));
+        numberOfPointsInternal = 1+rint(fabs((last-first) / *val));
 
         directionIncrementDouble = rint (*val * (double)angleDivisor / (double)angleMultiplier);
 

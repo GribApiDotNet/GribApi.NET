@@ -71,8 +71,10 @@ extern "C" {
    #include <direct.h>
    #include <io.h>
 
+#if _MSC_VER < 1800
    /* Replace Unix rint() for Windows */
-   extern double rintWin(double x);
+   extern double rint(double x);
+#endif /* _MSC_VER < 1800 */
 
    #ifndef S_ISREG
      #define S_ISREG(mode) (mode & S_IFREG)
