@@ -46,7 +46,7 @@ namespace Grib.Api
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
             GribApiProxy.GribGetLength(_handle, KeyName, ref ptLen);
             StringBuilder val = new StringBuilder((int) ptLen);
-
+            
             GribApiProxy.GribGetString(_handle, KeyName, val, ref len);
 
             return val.ToString();

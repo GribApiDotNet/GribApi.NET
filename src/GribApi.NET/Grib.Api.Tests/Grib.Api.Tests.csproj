@@ -87,26 +87,27 @@
   <ItemGroup>
     <Compile Include="Get.cs" />
     <Compile Include="Index.cs" />
-    <Compile Include="IterateKeys.cs" />
+    <Compile Include="IterateValues.cs" />
     <Compile Include="Precision.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\GRIB.grb">
+    <None Include="TestData\GRIB.grb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Data\Pacific.wind.7days.grb">
+    <None Include="TestData\Pacific.wind.7days.grb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="Data\reduced_gaussian_model_level.grib1">
+    <None Include="TestData\reduced_gaussian_model_level.grib1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Data\reduced_latlon_surface.grib2">
+    <None Include="TestData\reduced_latlon_surface.grib2">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Data\regular_latlon_surface.grib1">
+    <None Include="TestData\regular_latlon_surface.grib1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

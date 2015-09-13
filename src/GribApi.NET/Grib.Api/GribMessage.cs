@@ -40,6 +40,8 @@ namespace Grib.Api
 
         public uint KeyFilters { get; set; }
 
+        public string GridType { get { return this["gridType"].AsString(); } }
+
         public int DecimalPrecision
         {
             get
@@ -105,6 +107,11 @@ namespace Grib.Api
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
         {
             throw new NotImplementedException();
+        }
+
+        public void SaveAs(string path)
+        {
+           // GribApiProxy.GribGetMessage(this.Handle,)
         }
 
         public GribValue this[string keyName]

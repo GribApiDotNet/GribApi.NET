@@ -150,7 +150,6 @@
     <Compile Include="Interop\SWIG\SWIGTYPE_p_size_t.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_unsigned_char.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_void.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
