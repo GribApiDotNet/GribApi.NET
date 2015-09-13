@@ -16,10 +16,8 @@ namespace Grib.Api.Tests
         [SetUp]
         public void Init()
         {
-
-       //     Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetCallingAssembly().Location));
-            bool run = true;
-            while (run) ;
+            //bool run = true;
+            //while (run) ;
             string dllPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(GribFile)).Location);
             string path = Environment.GetEnvironmentVariable("PATH");
             Environment.SetEnvironmentVariable("PATH", dllPath + ";" + path, EnvironmentVariableTarget.Process);
@@ -39,7 +37,7 @@ namespace Grib.Api.Tests
             double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPointInDegrees"].AsDouble();
             Assert.AreEqual(latitudeOfLastGridPointInDegrees, -90);
             double longitudeOfLastGridPointInDegrees = msg["longitudeOfLastGridPointInDegrees"].AsDouble();
-            Assert.AreEqual(longitudeOfLastGridPointInDegrees, -359.64);
+            Assert.AreEqual(longitudeOfLastGridPointInDegrees, 359.64);
 
             double jDirectionIncrementInDegrees = msg["jDirectionIncrementInDegrees"].AsDouble();
             Assert.AreEqual(jDirectionIncrementInDegrees, 0.36);
