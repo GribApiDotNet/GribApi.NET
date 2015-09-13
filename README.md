@@ -6,8 +6,6 @@ GribApi.NET is a C# wrapper around the [European Centre for Medium Range Weather
 In theory, all grib_api_lib's functionality is already be exposed via [P\Invoke](https://msdn.microsoft.com/en-us/library/aa446536.aspx). However, there's more work required to make it "csharpy".
 
 ## Usage
-GribApi.NET handles GRIB 1 and 2 files transparently 
-
 Getting grid information in a GRIB message:
 ```csharp
 using (GribFile file = new GribFile("mygrib.grb"))
