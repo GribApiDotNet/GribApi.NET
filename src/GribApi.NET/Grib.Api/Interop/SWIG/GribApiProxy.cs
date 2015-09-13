@@ -788,12 +788,21 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static int GribIsMissing(SWIGTYPE_p_grib_handle h, string key, out int err) {
-    return GribApiProxyPINVOKE.GribIsMissing(SWIGTYPE_p_grib_handle.getCPtr(h), key, out err);
+  public static bool GribIsMissing(SWIGTYPE_p_grib_handle h, string key, out int err) {
+    int ret = GribApiProxyPINVOKE.GribIsMissing(SWIGTYPE_p_grib_handle.getCPtr(h), key, out err);
+
+    if (err != 0)
+    {
+        throw Grib.Api.GribApiException.Create(err);
+    }
+
+    return ret == 1;
 }
 
-  public static int GribIsDefined(SWIGTYPE_p_grib_handle h, string key) {
-    return GribApiProxyPINVOKE.GribIsDefined(SWIGTYPE_p_grib_handle.getCPtr(h), key);
+  public static bool GribIsDefined(SWIGTYPE_p_grib_handle h, string key) {
+      int ret = GribApiProxyPINVOKE.GribIsDefined(SWIGTYPE_p_grib_handle.getCPtr(h), key);
+
+      return ret == 1;
 }
 
   public static void GribSetMissing(SWIGTYPE_p_grib_handle h, string key) {

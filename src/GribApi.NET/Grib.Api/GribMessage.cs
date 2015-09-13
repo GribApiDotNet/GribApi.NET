@@ -116,7 +116,7 @@ namespace Grib.Api
 
         public GribValue this[string keyName]
         {
-            get { return new GribValue(Handle, keyName, MissingValue); }
+            get { return new GribValue(Handle, keyName); }
         }
 
 

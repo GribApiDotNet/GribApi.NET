@@ -13,26 +13,9 @@ namespace Grib.Api
 
         const uint MAX_VAL_LEN = 1024;
         private SWIGTYPE_p_grib_handle _handle;
-        public string KeyName { get; private set; }
-        public bool IsMissing
-        {
-            get
-            {
-                int err = 0;
 
-                return GribApiProxy.GribIsMissing(_handle, KeyName, out err) == 1;
-            }
-        }
 
-        public bool IsDefined
-        {
-            get
-            {
-                return GribApiProxy.GribIsDefined(_handle, KeyName) == 1;
-            }
-        }
-
-        public GribValue(SWIGTYPE_p_grib_handle handle, string keyName, double missing = 9999D)
+        public GribValue(SWIGTYPE_p_grib_handle handle, string keyName)
         {
             _handle = handle;
             KeyName = keyName;
@@ -122,7 +105,24 @@ namespace Grib.Api
             }
         }
 
+        public string KeyName { get; private set; }
 
+        public bool IsMissing
+        {
+            get
+            {
+                int err;
+                return GribApiProxy.GribIsMissing(_handle, KeyName, out err);
+            }
+        }
+
+        public bool IsDefined
+        {
+            get
+            {
+                return GribApiProxy.GribIsDefined(_handle, KeyName);
+            }
+        }
 
         //public Type NativeType
         //{
