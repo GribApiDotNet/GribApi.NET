@@ -24,6 +24,28 @@ namespace Grib.Api
             }
         }
 
+        // GRIB_API_LOG_STREAM=stderr
+
+        // GRIB_DUMP_JPG_FILE
+        public static string JpegDumpPath
+        {
+            get
+            {
+                return Environment.GetEnvironmentVariable("GRIB_DUMP_JPG_FILE");
+            }
+            set
+            {
+                string val = value;
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    // grib_api_lib assumes POSIX-style paths
+                    val = value.Replace("\\", "/");
+                }
+                Environment.SetEnvironmentVariable("GRIB_DUMP_JPG_FILE", val,
+                    EnvironmentVariableTarget.Process);
+            }
+        }
+
         // GRIB_API_NO_ABORT
         public static bool NoAbort
         {

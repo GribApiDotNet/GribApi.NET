@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Grib.Api
 {
@@ -120,11 +121,17 @@ namespace Grib.Api
             GribApiProxy.GribGetMessage(this.Handle, out p, ref s);
             Marshal.Copy(p, bytes, 0, tl);
 
-           File.WriteAllBytes(path, bytes);
+            File.WriteAllBytes(path, bytes);
+            Debug.Assert(File.Exists(path));
+
            try
            {
+               // why does this throw BadImgFormatException? IIUC, that should only occur
+               // if we're calling a 32 bit assembly from 64 bit process. Bug in .NET?
                Marshal.FreeHGlobal(p);
-           } catch (BadImageFormatException) { }
+           } catch (BadImageFormatException e) {
+               Console.WriteLine(e.Message);
+           }
         }
 
         public GribValue this[string keyName]

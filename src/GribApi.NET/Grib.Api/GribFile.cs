@@ -21,9 +21,8 @@ namespace Grib.Api
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
 
         private IntPtr _pFileHandleProxy;
-        protected string _fileName;
         protected FileHandleProxy _fileHandleProxy;
-        public SWIGTYPE_p_FILE File { get; protected set; }
+        protected SWIGTYPE_p_FILE File { get; set; }
 
         static GribFile()
         {
@@ -35,13 +34,12 @@ namespace Grib.Api
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
-            _fileName = fileName;
-            _pFileHandleProxy = CreateFileHandleProxy(_fileName);
+            FileName = fileName;
+            _pFileHandleProxy = CreateFileHandleProxy(FileName);
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
-                // need to get last
-
+                // need to get error msg
                 throw new IOException(Marshal.GetLastWin32Error().ToString());
             }
 
@@ -89,7 +87,7 @@ namespace Grib.Api
             throw new NotImplementedException();
         }
 
-        public string FileName { get { return _fileName; } }
+        public string FileName { get; private set; }
 
         public SWIGTYPE_p_grib_context Context { get; set; }
 
