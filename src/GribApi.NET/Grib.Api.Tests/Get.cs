@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using Grib.Api.Interop;
 
 namespace Grib.Api.Tests
 {
@@ -23,6 +24,8 @@ namespace Grib.Api.Tests
 
                     double latitudeOfFirstGridPointInDegrees = msg["latitudeOfFirstGridPointInDegrees"].AsDouble();
                     Assert.AreEqual(latitudeOfFirstGridPointInDegrees, 90);
+                    Assert.AreEqual(msg["latitudeOfFirstGridPointInDegrees"].NativeType, GribValueType.Double);
+
                     double longitudeOfFirstGridPointInDegrees = msg["longitudeOfFirstGridPointInDegrees"].AsDouble();
                     Assert.AreEqual(longitudeOfFirstGridPointInDegrees, 0);
                     double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPointInDegrees"].AsDouble();
@@ -42,6 +45,7 @@ namespace Grib.Api.Tests
 
                     string packingType = msg["packingType"].AsString();
                     Assert.AreEqual("grid_simple", packingType);
+                    Assert.AreEqual(msg["packingType"].NativeType, GribValueType.String);
                 }
             }
         }
