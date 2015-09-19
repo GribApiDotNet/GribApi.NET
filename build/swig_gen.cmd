@@ -4,5 +4,5 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 
 mv %~dp0Grib_Api_Native.cpp %~dp0..\src\GribApi.NET\Grib.Api.Native\Grib_Api_Native.cpp
 
-%~dp0fix_int.cmd
+powershell -ExecutionPolicy Unrestricted -File %~dp0fix_int.ps1
 
