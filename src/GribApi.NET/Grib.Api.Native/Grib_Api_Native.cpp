@@ -313,18 +313,102 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 	free(fhp);
 }
 
+HANDLE OpenGribFile(char * fn, int access, int mode) {
+	HANDLE hFile;
 
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
+	int share = FILE_SHARE_READ;
+	int disposition = OPEN_EXISTING;
+
+	// convert System.IO.FileAccess to win32 constants
+	switch (access) {
+		case 1:
+			access = GENERIC_READ;
+			break;
+		case 2:
+			access = GENERIC_WRITE;
+			break;
+		case 3:
+			access = GENERIC_READ | GENERIC_WRITE;
+			break;
+	}
+
+	switch (mode) {
+		// create new
+		case 1:
+			disposition = CREATE_NEW;
+			break;
+		// create
+		case 2:
+			disposition = CREATE_ALWAYS;
+			break;
+		// open
+		case 3:
+			disposition = OPEN_EXISTING;
+			break;
+		// open or create
+		case 4:
+			disposition = OPEN_ALWAYS;
+			break;
+		// truncate
+		case 5:
+			disposition = TRUNCATE_EXISTING;
+			break;
+		// append
+		case 6:
+			access = FILE_APPEND_DATA;
+			break;
+	}
+
+	hFile = CreateFileA(fn,
+		access, 
+		share,
+		NULL,                     			 // no security
+		disposition,
+		FILE_ATTRIBUTE_NORMAL,    // normal file
+		NULL);                 				  // no attr. template
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		return NULL;
+	}
+
+	return hFile;
+}
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
 {
 	int err = 0;
+    char * fmode = NULL;
 
 	FileHandleProxy* fhp = 0;
 	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
 
-	auto h = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	auto h = OpenGribFile(fn, access, mode);
 	auto fd = _open_osfhandle((intptr_t)h, 0);
-	if (fd == -1) assert(0);
-	fhp->File = _fdopen(fd, "r");
+
+    if (fd == -1)
+    {
+        free(fhp);
+        return NULL;    
+    }
+
+    if (access == 6) {
+        fmode = "a+";
+    }
+    else if (mode == 1) {
+        fmode = "r";
+    }
+    else if (mode == 2) {
+        fmode = "w";
+    }
+    else if (mode == 3) {
+        fmode = "w+";
+    }
+    else {
+        // unknown option
+        assert(0);
+    }
+
+	fhp->File = _fdopen(fd, fmode);
 	fhp->Win32Handle = h;
 
 	return fhp;
@@ -431,86 +515,6 @@ SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_LOG_DEBUG_get() {
   int result;
   
   result = (int)(4);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_UNDEFINED_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(0);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_LONG_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(1);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_DOUBLE_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(2);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_STRING_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(3);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_BYTES_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(4);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_SECTION_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(5);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_LABEL_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(6);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_TYPE_MISSING_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(7);
   jresult = result; 
   return jresult;
 }

@@ -108,6 +108,7 @@
     <Compile Include="GribApiException.cs" />
     <Compile Include="GribGridSpec.cs" />
     <Compile Include="GribPackingSpec.cs" />
+    <Compile Include="IGeoCoordinate.cs" />
     <Compile Include="Interop\AutoCleanup.cs" />
     <Compile Include="Interop\FileHandleProxy.cs" />
     <Compile Include="GeoCoordinate.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="GribFile.cs" />
     <Compile Include="GribMessage.cs" />
     <Compile Include="GribValue.cs" />
+    <Compile Include="Interop\GribValueType.cs" />
     <Compile Include="Interop\SWIG\GribUtilGridSpec.cs" />
     <Compile Include="Interop\SWIG\GribUtilPackingSpec.cs" />
     <Compile Include="Interop\SWIG\GribApiProxy.cs" />

@@ -21,7 +21,7 @@ namespace Grib.Api.Tests
                 foreach (var val in file.First())
                 {
                     // TODO: some sort of actual test here
-                    Console.WriteLine("{0} = {1}", val.KeyName, val.AsString());
+                    Console.WriteLine("{0} = {1}", val.Key, val.AsString());
                 }
             }
         }
@@ -43,9 +43,9 @@ namespace Grib.Api.Tests
 
                     foreach (var val in msg)
                     {
-                        if (!val.IsDefined || val.IsMissing || val.KeyName == "bitmap") { continue; }
+                        if (!val.IsDefined || val.IsMissing || val.Key == "bitmap") { continue; }
                         // TODO: some sort of actual test here
-                        Console.WriteLine("{0} = {1}", val.KeyName, val.AsString());
+                        Console.WriteLine("{0} = {1}", val.Key, val.AsString());
                     }
 
                     List<double> lats = new List<double>();
@@ -56,8 +56,8 @@ namespace Grib.Api.Tests
                     {
                         if (val.IsMissing) { continue; }
 
-                        lats.Add(val.Coordinate.Latitude);
-                        lons.Add(val.Coordinate.Longitude);
+                        lats.Add(val.Latitude);
+                        lons.Add(val.Longitude);
                         vals.Add(val.Value);
                     }
 

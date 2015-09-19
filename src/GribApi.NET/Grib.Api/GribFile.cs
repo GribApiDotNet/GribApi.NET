@@ -15,27 +15,44 @@ namespace Grib.Api
     {
 
         [DllImport("Grib.Api.Native.dll")]
-        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
+        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename, int access, int mode);
 
         [DllImport("Grib.Api.Native.dll")]
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
 
         private IntPtr _pFileHandleProxy;
         protected FileHandleProxy _fileHandleProxy;
-        protected SWIGTYPE_p_FILE File { get; set; }
 
+        /// <summary>
+        /// Gets or sets the file.
+        /// </summary>
+        /// <value>
+        /// The file.
+        /// </value>
+        internal SWIGTYPE_p_FILE File { get; set; }
+
+        /// <summary>
+        /// Initializes the <see cref="GribFile"/> class.
+        /// </summary>
         static GribFile()
         {
             GribEnvironment.Init();
         }
 
-        public GribFile(string fileName): base()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribFile" /> class. File read rights are shared between processes.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="mode">The file mode.</param>
+        /// <exception cref="System.IO.IOException"></exception>
+        public GribFile (string fileName, FileAccess access = FileAccess.Read, FileMode mode = FileMode.Open)
+            : base()
         {
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
             FileName = fileName;
-            _pFileHandleProxy = CreateFileHandleProxy(FileName);
+            _pFileHandleProxy = CreateFileHandleProxy(FileName, (int)access, (int)mode);
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
@@ -53,11 +70,19 @@ namespace Grib.Api
             MessageCount = count;
         }
 
+        /// <summary>
+        /// Called when [dispose].
+        /// </summary>
         protected override void OnDispose ()
         {
             DestroyFileHandleProxy(_pFileHandleProxy);
         }
 
+        /// <summary>
+        /// Tries the get message.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
+        /// <returns></returns>
         protected bool TryGetMessage(out GribMessage msg)
         {
             msg = null;
@@ -72,6 +97,12 @@ namespace Grib.Api
             return msg != null;
         }
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// </returns>
         public IEnumerator<GribMessage> GetEnumerator ()
         {
             GribMessage msg;
@@ -82,15 +113,40 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// NOT IMPLEMENTED.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the name of the file.
+        /// </summary>
+        /// <value>
+        /// The name of the file.
+        /// </value>
         public string FileName { get; private set; }
 
-        public SWIGTYPE_p_grib_context Context { get; set; }
+        /// <summary>
+        /// Gets or sets the context.
+        /// </summary>
+        /// <value>
+        /// The context.
+        /// </value>
+        internal SWIGTYPE_p_grib_context Context { get; set; }
 
+        /// <summary>
+        /// Gets or sets the message count.
+        /// </summary>
+        /// <value>
+        /// The message count.
+        /// </value>
         public int MessageCount { get; protected set; }
     }
 }

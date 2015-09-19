@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Grib.Api
 {
-    public struct GeoCoordinate
+    public struct GeoCoordinate : IGeoCoordinate
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }

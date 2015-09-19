@@ -17,26 +17,28 @@
 %typemap(cstype) size_t * offset "out uint"
 %typemap(csin) size_t * offset "out offset"
 
-//%typemap(ctype) int * error "int &"
-%typemap(imtype) int * error "out int"
-%typemap(cstype) int * error "out int"
-%typemap(csin) int * error "out error"
-
-%typemap(imtype) int * err "out int"
-%typemap(cstype) int * err "out int"
-%typemap(csin) int * err "out err"
-
-%typemap(imtype) int * n "out int"
-%typemap(cstype) int * n "out int"
-%typemap(csin) int * n "out n"
+%typemap(imtype) int * err, int * error "out int"
+%typemap(cstype) int * err, int * error "out int"
+%typemap(csin) int * err, int * error "out $csinput"
+// %typemap(csout, excode=SWIGEXCODE)  int * err, int * error {
+    // if ($csinput != 0)
+	// {
+		// throw Grib.Api.GribApiException.Create($csinput);
+	// }
+	
+	// return $imcall;$excode
+// }
+%typemap(imtype) int * n, int * type "out int"
+%typemap(cstype) int * n, int * type "out int"
+%typemap(csin) int * n, int * type "out $csinput"
 
 %typemap(imtype) long * value "out int"
 %typemap(cstype) long * value "out int"
 %typemap(csin) long * value "out value"
 
-%typemap(imtype) double * value "out double"
-%typemap(cstype) double * value "out double"
-%typemap(csin) double * value "out value"
+%typemap(imtype) double * value, double * val "out double"
+%typemap(cstype) double * value, double * val "out double"
+%typemap(csin) double * value, double * val "out $csinput"
 
 %typemap(imtype) float * value "out float"
 %typemap(cstype) float * value "out float"
@@ -171,6 +173,15 @@
 
 		 
 %ignore grib_values;
+%ignore grib_values;
+%ignore GRIB_TYPE_UNDEFINED;
+%ignore  GRIB_TYPE_LONG;
+%ignore  GRIB_TYPE_DOUBLE;
+%ignore  GRIB_TYPE_STRING;
+%ignore  GRIB_TYPE_BYTES;
+%ignore  GRIB_TYPE_SECTION;
+%ignore  GRIB_TYPE_LABEL;
+%ignore  GRIB_TYPE_MISSING;
 		 
 %rename("%(lowercamelcase)s", %$isvariable) "";
 %rename("%(camelcase)s", %$isclass) "";
@@ -215,18 +226,102 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 	free(fhp);
 }
 
+HANDLE OpenGribFile(char * fn, int access, int mode) {
+	HANDLE hFile;
 
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
+	int share = FILE_SHARE_READ;
+	int disposition = OPEN_EXISTING;
+
+	// convert System.IO.FileAccess to win32 constants
+	switch (access) {
+		case 1:
+			access = GENERIC_READ;
+			break;
+		case 2:
+			access = GENERIC_WRITE;
+			break;
+		case 3:
+			access = GENERIC_READ | GENERIC_WRITE;
+			break;
+	}
+
+	switch (mode) {
+		// create new
+		case 1:
+			disposition = CREATE_NEW;
+			break;
+		// create
+		case 2:
+			disposition = CREATE_ALWAYS;
+			break;
+		// open
+		case 3:
+			disposition = OPEN_EXISTING;
+			break;
+		// open or create
+		case 4:
+			disposition = OPEN_ALWAYS;
+			break;
+		// truncate
+		case 5:
+			disposition = TRUNCATE_EXISTING;
+			break;
+		// append
+		case 6:
+			access = FILE_APPEND_DATA;
+			break;
+	}
+
+	hFile = CreateFileA(fn,
+		access, 
+		share,
+		NULL,                     			 // no security
+		disposition,
+		FILE_ATTRIBUTE_NORMAL,    // normal file
+		NULL);                 				  // no attr. template
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		return NULL;
+	}
+
+	return hFile;
+}
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
 {
 	int err = 0;
+    char * fmode;
 
 	FileHandleProxy* fhp = 0;
 	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
 
-	auto h = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	auto h = OpenGribFile(fn, access, mode);
 	auto fd = _open_osfhandle((intptr_t)h, 0);
-	if (fd == -1) assert(0);
-	fhp->File = _fdopen(fd, "r");
+
+    if (fd == -1)
+    {
+        free(fhp);
+        return NULL;    
+    }
+
+    if (access == 6) {
+        fmode = "a+";
+    }
+    else if (mode == 1) {
+        fmode = "r";
+    }
+    else if (mode == 2) {
+        fmode = "w";
+    }
+    else if (mode == 3) {
+        fmode = "w+";
+    }
+    else {
+        // unknown option
+        assert(0);
+    }
+
+	fhp->File = _fdopen(fd, fmode);
 	fhp->Win32Handle = h;
 
 	return fhp;

@@ -754,8 +754,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribGetNativeType(SWIGTYPE_p_grib_handle h, string name, SWIGTYPE_p_int type) {
-    int ret = GribApiProxyPINVOKE.GribGetNativeType(SWIGTYPE_p_grib_handle.getCPtr(h), name, SWIGTYPE_p_int.getCPtr(type));
+  public static void GribGetNativeType(SWIGTYPE_p_grib_handle h, string name, out int type) {
+    int ret = GribApiProxyPINVOKE.GribGetNativeType(SWIGTYPE_p_grib_handle.getCPtr(h), name, out type);
 	
 	if (ret != 0)
 	{
@@ -966,8 +966,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribPointsGetValues(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_grib_points points, SWIGTYPE_p_double val) {
-    int ret = GribApiProxyPINVOKE.GribPointsGetValues(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_grib_points.getCPtr(points), SWIGTYPE_p_double.getCPtr(val));
+  public static void GribPointsGetValues(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_grib_points points, out double val) {
+    int ret = GribApiProxyPINVOKE.GribPointsGetValues(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_grib_points.getCPtr(points), out val);
 	
 	if (ret != 0)
 	{
@@ -991,14 +991,6 @@ public class GribApiProxy {
   public static readonly int GRIB_LOG_ERROR = GribApiProxyPINVOKE.GRIB_LOG_ERROR_get();
   public static readonly int GRIB_LOG_FATAL = GribApiProxyPINVOKE.GRIB_LOG_FATAL_get();
   public static readonly int GRIB_LOG_DEBUG = GribApiProxyPINVOKE.GRIB_LOG_DEBUG_get();
-  public static readonly int GRIB_TYPE_UNDEFINED = GribApiProxyPINVOKE.GRIB_TYPE_UNDEFINED_get();
-  public static readonly int GRIB_TYPE_LONG = GribApiProxyPINVOKE.GRIB_TYPE_LONG_get();
-  public static readonly int GRIB_TYPE_DOUBLE = GribApiProxyPINVOKE.GRIB_TYPE_DOUBLE_get();
-  public static readonly int GRIB_TYPE_STRING = GribApiProxyPINVOKE.GRIB_TYPE_STRING_get();
-  public static readonly int GRIB_TYPE_BYTES = GribApiProxyPINVOKE.GRIB_TYPE_BYTES_get();
-  public static readonly int GRIB_TYPE_SECTION = GribApiProxyPINVOKE.GRIB_TYPE_SECTION_get();
-  public static readonly int GRIB_TYPE_LABEL = GribApiProxyPINVOKE.GRIB_TYPE_LABEL_get();
-  public static readonly int GRIB_TYPE_MISSING = GribApiProxyPINVOKE.GRIB_TYPE_MISSING_get();
   public static readonly int GRIB_MISSING_LONG = GribApiProxyPINVOKE.GRIB_MISSING_LONG_get();
   public static readonly double GRIB_MISSING_DOUBLE = GribApiProxyPINVOKE.GRIB_MISSING_DOUBLE_get();
   public static readonly int GRIB_UTIL_SET_SPEC_FLAGS_ONLY_PACKING = GribApiProxyPINVOKE.GRIB_UTIL_SET_SPEC_FLAGS_ONLY_PACKING_get();

@@ -14,10 +14,24 @@ namespace Grib.Api
     public class GribMessage: AutoCleanup, IEnumerable<GribValue>
     {
         private SWIGTYPE_p_FILE _file;
+
+        /// <summary>
+        /// The key namespaces. Set the <see cref="Namespace"/> property with these values to
+        /// filter the keys return when iterating this message. Default value is [all].
+        /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribMessage"/> class.
+        /// </summary>
         internal GribMessage () { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribMessage"/> class.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="context">The context.</param>
         internal GribMessage(SWIGTYPE_p_grib_handle handle, SWIGTYPE_p_FILE file, SWIGTYPE_p_grib_context context = null):base()
         {
             _file = file;
@@ -28,23 +42,65 @@ namespace Grib.Api
             MissingValue = this["missingValue"].AsDouble();
         }
 
+        /// <summary>
+        /// Called when [dispose].
+        /// </summary>
         protected override void OnDispose ()
         {
             GribApiProxy.GribHandleDelete(Handle);
         }
 
-        public SWIGTYPE_p_grib_handle Handle { get; protected set; }
+        /// <summary>
+        /// Gets or sets the grib_handle.
+        /// </summary>
+        /// <value>
+        /// The handle.
+        /// </value>
+        internal SWIGTYPE_p_grib_handle Handle { get; set; }
 
-        public SWIGTYPE_p_grib_context Context { get; protected set; }
+        /// <summary>
+        /// Gets or sets the grib_context.
+        /// </summary>
+        /// <value>
+        /// The context.
+        /// </value>
+        internal SWIGTYPE_p_grib_context Context { get; set; }
 
+        /// <summary>
+        /// Gets the value used to represent a missing value. This value is provided by grib_api,
+        /// not the file itself.
+        /// </summary>
+        /// <value>
+        /// The missing value.
+        /// </value>
         public double MissingValue { get; private set; }
 
+        /// <summary>
+        /// Set this property with a value in <see cref="Namespaces"/> to
+        /// filter the keys return when iterating this message.
+        /// </summary>
+        /// <value>
+        /// The namespace.
+        /// </value>
         public string Namespace { get; set; }
 
         public uint KeyFilters { get; set; }
 
+        /// <summary>
+        /// Gets the type of the grid.
+        /// </summary>
+        /// <value>
+        /// The type of the grid.
+        /// </value>
         public string GridType { get { return this["gridType"].AsString(); } }
 
+        /// <summary>
+        /// Gets or sets the decimal precision. Setting this value currently
+        /// updates all packed values to the new precision.
+        /// </summary>
+        /// <value>
+        /// The decimal precision.
+        /// </value>
         public int DecimalPrecision
         {
             get
@@ -59,6 +115,12 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// Gets the messages values with coordinates.
+        /// </summary>
+        /// <value>
+        /// The geo spatial values.
+        /// </value>
         public IEnumerable<GeoSpatialValue> GeoSpatialValues 
         { 
             get
@@ -77,6 +139,12 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// Gets or sets the mesage values.
+        /// </summary>
+        /// <value>
+        /// The values.
+        /// </value>
         public double[] Values
         {
             get
@@ -89,7 +157,30 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// Gets the message size.
+        /// </summary>
+        /// <value>
+        /// The size.
+        /// </value>
+        public uint Size
+        {
+            get
+            {
+                uint sz = 0;
+                GribApiProxy.GribGetMessageSize(Handle, ref sz);
 
+                return sz;
+            }
+        }
+
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// </returns>
         public IEnumerator<GribValue> GetEnumerator ()
         {
             // null returns keys from all namespaces
@@ -107,11 +198,22 @@ namespace Grib.Api
             GribApiProxy.GribKeysIteratorDelete(keyIter);
         }
 
+        /// <summary>
+        /// NOT IMPLEMENTED.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Save this message to file.
+        /// </summary>
+        /// <param name="path">The path.</param>
         public void SaveAs(string path)
         {
             var tl = this["totalLength"].AsInt();
@@ -134,6 +236,14 @@ namespace Grib.Api
            }
         }
 
+        /// <summary>
+        /// Gets the <see cref="GribValue"/> with the specified key name.
+        /// </summary>
+        /// <value>
+        /// The <see cref="GribValue"/>.
+        /// </value>
+        /// <param name="keyName">Name of the key.</param>
+        /// <returns></returns>
         public GribValue this[string keyName]
         {
             get { return new GribValue(Handle, keyName); }
