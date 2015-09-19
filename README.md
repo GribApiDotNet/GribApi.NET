@@ -45,7 +45,7 @@ Iterating Lat/Lon/Value:
 	{
 		if (val.IsMissing) { continue; }
 
-		Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Coordinate.Latitude, val.Coordinate.Longitude, val.Value);
+		Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
 	}
 ```
 
@@ -81,4 +81,4 @@ build/run_tests x64 Debug
 ```
 
 ## A note about SWIG
-Most of the interop interfaces are generated using SWIG and included in the repository. If you run SWIG yourself, you can use `build/swig_gen.cmd`. You'll need to hand edit a few places in the C# code and change the return signature from `void` to `int`. Just follow the IDE.
+Most of the interop interfaces are generated using SWIG and included in the repository. If you run SWIG yourself, you can use `build/swig_gen.cmd`.
