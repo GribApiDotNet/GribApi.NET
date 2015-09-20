@@ -26,14 +26,6 @@ namespace Grib.Api
         protected FileHandleProxy _fileHandleProxy;
 
         /// <summary>
-        /// Gets or sets the file.
-        /// </summary>
-        /// <value>
-        /// The file.
-        /// </value>
-        internal SWIGTYPE_p_FILE File { get; set; }
-
-        /// <summary>
         /// Initializes the <see cref="GribFile"/> class.
         /// </summary>
         static GribFile()
@@ -53,6 +45,14 @@ namespace Grib.Api
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
+            FileInfo fi = new FileInfo(FileName);
+
+            // need a better check
+            if (fi.Length < 4)
+            {
+                throw new FileLoadException("This file is empty.");
+            }
+
             _pFileHandleProxy = CreateFileHandleProxy(fileName);
 
             if (_pFileHandleProxy == IntPtr.Zero)
@@ -67,14 +67,6 @@ namespace Grib.Api
             Context = GribApiProxy.GribContextGetDefault();
 
             int count = 0;
-            FileInfo fi = new FileInfo(FileName);
-
-            // need a better check
-            if (fi.Length < 4)
-            {
-                throw new FileLoadException("This file is empty.");
-            }
-
             GribApiProxy.GribCountInFile(Context, File, out count);
             MessageCount = count;
         }
@@ -183,6 +175,14 @@ namespace Grib.Api
         public string FileName { get; private set; }
 
         /// <summary>
+        /// Gets or sets the message count.
+        /// </summary>
+        /// <value>
+        /// The message count.
+        /// </value>
+        public int MessageCount { get; protected set; }
+
+        /// <summary>
         /// Gets or sets the context.
         /// </summary>
         /// <value>
@@ -191,11 +191,11 @@ namespace Grib.Api
         internal SWIGTYPE_p_grib_context Context { get; set; }
 
         /// <summary>
-        /// Gets or sets the message count.
+        /// Gets or sets the file.
         /// </summary>
         /// <value>
-        /// The message count.
+        /// The file.
         /// </value>
-        public int MessageCount { get; protected set; }
+        internal SWIGTYPE_p_FILE File { get; set; }
     }
 }
