@@ -285,8 +285,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetMessage(SWIGTYPE_p_grib_handle h, out System.IntPtr message, ref uint message_length) {
-    int ret = GribApiProxyPINVOKE.GribGetMessage(SWIGTYPE_p_grib_handle.getCPtr(h), out message, ref  message_length);
+  public static void GribGetMessage(SWIGTYPE_p_grib_handle h, ref System.IntPtr message, out uint message_length) {
+    int ret = GribApiProxyPINVOKE.GribGetMessage(SWIGTYPE_p_grib_handle.getCPtr(h), ref message, out  message_length);
 	
 	if (ret != 0)
 	{

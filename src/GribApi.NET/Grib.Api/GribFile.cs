@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.Contracts;
 using System.IO;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Grib.Api
 {
@@ -15,7 +17,7 @@ namespace Grib.Api
     {
 
         [DllImport("Grib.Api.Native.dll")]
-        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename, int access, int mode);
+        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
 
         [DllImport("Grib.Api.Native.dll")]
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
@@ -43,29 +45,36 @@ namespace Grib.Api
         /// Initializes a new instance of the <see cref="GribFile" /> class. File read rights are shared between processes.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        /// <param name="mode">The file mode.</param>
-        /// <exception cref="System.IO.IOException"></exception>
-        public GribFile (string fileName, FileAccess access = FileAccess.Read, FileMode mode = FileMode.Open)
+        /// <exception cref="System.IO.IOException">Could not open file. See inner exception for more detail.</exception>
+        /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
+        public GribFile (string fileName)
             : base()
         {
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
-            FileName = fileName;
-            _pFileHandleProxy = CreateFileHandleProxy(FileName, (int)access, (int)mode);
+            _pFileHandleProxy = CreateFileHandleProxy(fileName);
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
-                // need to get error msg
-                throw new IOException(Marshal.GetLastWin32Error().ToString());
+                throw new IOException("Could not open file. See inner exception for more detail.", new Win32Exception(Marshal.GetLastWin32Error()));
             }
 
             _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
-            File = new SWIGTYPE_p_FILE(_fileHandleProxy.File, false);
 
+            FileName = fileName;
+            File = new SWIGTYPE_p_FILE(_fileHandleProxy.File, false);
             Context = GribApiProxy.GribContextGetDefault();
 
             int count = 0;
+            FileInfo fi = new FileInfo(FileName);
+
+            // need a better check
+            if (fi.Length < 4)
+            {
+                throw new FileLoadException("This file is empty.");
+            }
+
             GribApiProxy.GribCountInFile(Context, File, out count);
             MessageCount = count;
         }
@@ -123,6 +132,46 @@ namespace Grib.Api
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Writes a message to the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="mode">The mode.</param>
+        public static void Write (string path, GribMessage message, FileMode mode = FileMode.Create)
+        {
+            Write(path, new [] { message }, mode);
+        }
+
+        /// <summary>
+        /// Writes all messages in the file to the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="file">The file.</param>
+        /// <param name="mode">The mode.</param>
+        public static void Write (string path, GribFile file, FileMode mode = FileMode.Create)
+        {
+            Write(path, file as IEnumerable<GribMessage>, mode);
+        }
+
+        /// <summary>
+        /// Writes messages the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="messages">The messages.</param>
+        /// <param name="mode">The mode.</param>
+        public static void Write (string path, IEnumerable<GribMessage> messages, FileMode mode = FileMode.Create)
+        {
+            // TODO: Getting the buffer and writing to file in C++ precludes the need for byte[] copy
+            using (FileStream fs = new FileStream(path, mode, FileAccess.Write, FileShare.Read, 8192))
+            {
+                foreach (var message in messages)
+                {
+                    fs.Write(message.Buffer, 0, message.Buffer.Length);
+                }
+            }
         }
 
         /// <summary>

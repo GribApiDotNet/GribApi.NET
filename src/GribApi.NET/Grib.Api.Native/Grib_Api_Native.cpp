@@ -355,7 +355,7 @@ HANDLE OpenGribFile(char * fn, int access, int mode) {
 			break;
 		// append
 		case 6:
-			access = FILE_APPEND_DATA;
+			access |= FILE_APPEND_DATA;
 			break;
 	}
 
@@ -374,7 +374,7 @@ HANDLE OpenGribFile(char * fn, int access, int mode) {
 
 	return hFile;
 }
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 {
 	int err = 0;
     char * fmode = NULL;
@@ -382,34 +382,22 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int acces
 	FileHandleProxy* fhp = 0;
 	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
 
-	auto h = OpenGribFile(fn, access, mode);
-	auto fd = _open_osfhandle((intptr_t)h, 0);
+    auto hFile = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+        return NULL;
+    }
+    auto fd = _open_osfhandle((intptr_t)hFile, 0);
 
     if (fd == -1)
     {
         free(fhp);
-        return NULL;    
+        return NULL;
     }
-
-    if (access == 6) {
-        fmode = "a+";
-    }
-    else if (mode == 1) {
-        fmode = "r";
-    }
-    else if (mode == 2) {
-        fmode = "w";
-    }
-    else if (mode == 3) {
-        fmode = "w+";
-    }
-    else {
-        // unknown option
-        assert(0);
-    }
-
-	fhp->File = _fdopen(fd, fmode);
-	fhp->Win32Handle = h;
+    
+    fhp->File = _fdopen(fd, "r");
+    fhp->Win32Handle = hFile;
 
 	return fhp;
 }

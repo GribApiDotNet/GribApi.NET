@@ -13,6 +13,7 @@ namespace Grib.Api.Tests
         public const string REG_LATLON_GRB1 = ".\\TestData\\regular_latlon_surface.grib1";
         public const string REDUCED_LATLON_GRB2 = ".\\TestData\\reduced_latlon_surface.grib2";
         public const string OUT_INDEX = ".\\TestData\\out.index";
+        public const string OUT_GRIB = ".\\TestData\\out.grb";
         public const string GAUSS = ".\\TestData\\reduced_gaussian_model_level.grib1";
     }
 }

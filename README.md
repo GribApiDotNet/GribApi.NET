@@ -11,29 +11,29 @@ Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definition
 You're ready to go!
 
 ##
-Getting grid information in a GRIB message:
+Getting grid information from a GRIB message:
 ```csharp
-using (GribFile file = new GribFile("mygrib.grb"))
-{
-	GribMessage msg = file.First();
+	using (GribFile file = new GribFile("mygrib.grb"))
+	{
+		GribMessage msg = file.First();
 
-	Console.WriteLine("Grid Type: " + msg.GridType)
-	double lat = msg["latitudeOfFirstGridPointInDegrees"].AsDouble();
-	
-	// all values are also accessible as strings
-	Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPointInDegrees"].AsString());
-}
+		Console.WriteLine("Grid Type: " + msg.GridType);
+		double lat = msg["latitudeOfFirstGridPoint"].AsDouble();
+		
+		// all values are also accessible as strings
+		Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPointInDegrees"].AsString());
+	}
 ```
 
 Iterating multiple messages:
 ```csharp
-using (GribFile file = new GribFile("mygrib.grb"))
-{
-	foreach (GribMessage msg in file)
+	using (GribFile file = new GribFile("mygrib.grb"))
 	{
-		// do something
+		foreach (GribMessage msg in file)
+		{
+			// do something
+		}
 	}
-}
 ```
 
 Iterating Lat/Lon/Value:
@@ -49,12 +49,37 @@ Iterating Lat/Lon/Value:
 	}
 ```
 
-GribApi.NET loads GRIB 1 and 2 messages transparently, but you can determine the GRIB edition at runtime:
+Editing a single message and saving to a new file:
 ```csharp
-using (GribFile file = new GribFile("somegribver.grb"))
-{
-	ver ed = file.First()["GRIBEditionNumber"].AsString();
-}
+	string outPath = "out.grb";
+	string readPath = "some.grb";
+	
+	using (GribFile readFile = new GribFile(readPath))
+	{
+		Console.WriteLine("Writing 1 message from {0} to {1}", readPath, outPath);
+
+		var msg = readFile.First();
+		msg["latitudeOfFirstGridPoint"].AsDouble(42);
+		GribFile.Write(outPath, msg);
+	}
+```
+
+Appending multiple messages to an existing file:
+```csharp
+	using (GribFile readFile = new GribFile(readPath))
+	{                
+		Console.WriteLine("Appending {0} messages from {1} to {2}", readFile.MessageCount, readPath, outPath);
+
+		GribFile.Write(outPath, readFile as IEnumerable<GribMessage>, FileMode.Append);
+	}
+```
+
+GribApi.NET loads GRIB 1 and 2 messages transparently, but you can determine a message's GRIB edition at runtime:
+```csharp
+	using (GribFile file = new GribFile("somegribver.grb"))
+	{
+		string ed = file.First()["GRIBEditionNumber"].AsString();
+	}
 ```
 
 For more examples, checkout the tests.
@@ -75,10 +100,14 @@ After you've built libjasper and grib_api_lib once, you should only need to buil
 
 ## Running Tests
 1. Install [NUnit](http://www.nunit.org/) and expose it on PATH.
-2. Run `build/run_tests <bitness> <configuration> [optional "1" to break the tests on start]`, eg
+2. Run `build/run_tests <architecture> <configuration> [optional "1" to break the tests on start]`, e.g.
 ```shell
 build/run_tests x64 Debug
 ```
+or
+```shell
+build/run_tests x86 Debug 1
+```
 
-## A note about SWIG
-Most of the interop interfaces are generated using SWIG and included in the repository. If you run SWIG yourself, you can use `build/swig_gen.cmd`.
+## Running SWIG
+Most of the interop interfaces are generated using SWIG and included in the repository. If you want generate the interfaces yourself, you'll need SWIG installed and available on PATH. Then run `build/swig_gen.cmd`.

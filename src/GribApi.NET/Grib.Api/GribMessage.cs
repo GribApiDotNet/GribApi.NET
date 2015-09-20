@@ -174,6 +174,23 @@ namespace Grib.Api
             }
         }
 
+        public byte[] Buffer
+        {
+            get
+            {
+                uint s = 0;
+                GribApiProxy.GribGetMessageSize(this.Handle, ref s);
+                // grib_api returns the data buffer pointer, but continues to own the memory, so no de/allocation is necessary 
+                IntPtr p = IntPtr.Zero;
+                GribApiProxy.GribGetMessage(this.Handle, ref p, out s);
+
+                int tl = (int) s;
+                byte[] bytes = new byte[tl];
+                Marshal.Copy(p, bytes, 0, tl);
+
+                return bytes;
+            }
+        }
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -208,32 +225,6 @@ namespace Grib.Api
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Save this message to file.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        public void SaveAs(string path)
-        {
-            var tl = this["totalLength"].AsInt();
-            byte[] bytes = new byte[tl];
-            IntPtr p = Marshal.AllocHGlobal(tl);
-            uint s = 0;
-            GribApiProxy.GribGetMessage(this.Handle, out p, ref s);
-            Marshal.Copy(p, bytes, 0, tl);
-
-            File.WriteAllBytes(path, bytes);
-            Debug.Assert(File.Exists(path));
-
-           try
-           {
-               // why does this throw BadImgFormatException? IIUC, that should only occur
-               // if we're calling a 32 bit assembly from 64 bit process. Bug in .NET?
-               Marshal.FreeHGlobal(p);
-           } catch (BadImageFormatException e) {
-               Console.WriteLine(e.Message);
-           }
         }
 
         /// <summary>

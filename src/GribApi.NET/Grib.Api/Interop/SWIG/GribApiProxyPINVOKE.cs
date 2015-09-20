@@ -422,7 +422,7 @@ class GribApiProxyPINVOKE {
   public static extern int GribMultiHandleWrite(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetMessage")]
-  public static extern int GribGetMessage(global::System.Runtime.InteropServices.HandleRef jarg1, out System.IntPtr jarg2, ref uint jarg3);
+  public static extern int GribGetMessage(global::System.Runtime.InteropServices.HandleRef jarg1, ref System.IntPtr jarg2, out uint jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetMessageCopy")]
   public static extern int GribGetMessageCopy(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, ref uint jarg3);

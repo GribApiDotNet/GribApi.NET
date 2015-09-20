@@ -21,28 +21,52 @@ namespace Grib.Api.Tests
             {
                 using (var msg = file.First())
                 {
+                    // "InDegrees" is a magic token that converts coordinate double values to degrees
 
-                    double latitudeOfFirstGridPointInDegrees = msg["latitudeOfFirstGridPointInDegrees"].AsDouble();
+                    Assert.IsTrue(msg["latitudeOfFirstGridPointInDegrees"].CanConvertToDegrees);
+                    // explicit degree conversion via key name
+                    double latitudeOfFirstGridPointInDegrees = msg["latitudeOfFirstGridPointInDegrees"].AsDouble(true /* default value */);
                     Assert.AreEqual(latitudeOfFirstGridPointInDegrees, 90);
+                    // accessor override key name degree conversion
+                    Assert.AreNotEqual(msg["latitudeOfFirstGridPointInDegrees"].AsDouble(false), latitudeOfFirstGridPointInDegrees);
                     Assert.AreEqual(msg["latitudeOfFirstGridPointInDegrees"].NativeType, GribValueType.Double);
 
-                    double longitudeOfFirstGridPointInDegrees = msg["longitudeOfFirstGridPointInDegrees"].AsDouble();
+                    Assert.IsTrue(msg["longitudeOfFirstGridPoint"].CanConvertToDegrees);
+                    // degree conversion via accessor
+                    double longitudeOfFirstGridPointInDegrees = msg["longitudeOfFirstGridPoint"].AsDouble(/* inDegrees == true */);
                     Assert.AreEqual(longitudeOfFirstGridPointInDegrees, 0);
-                    double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPointInDegrees"].AsDouble();
-                    Assert.AreEqual(latitudeOfLastGridPointInDegrees, -90);
-                    double longitudeOfLastGridPointInDegrees = msg["longitudeOfLastGridPointInDegrees"].AsDouble();
-                    Assert.AreEqual(longitudeOfLastGridPointInDegrees, 359.64);
 
-                    double jDirectionIncrementInDegrees = msg["jDirectionIncrementInDegrees"].AsDouble();
+                    Assert.IsTrue(msg["latitudeOfLastGridPoint"].CanConvertToDegrees);
+                    // degree conversion via accessor
+                    double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPoint"].AsDouble(/* inDegrees == true */);
+                    Assert.AreEqual(latitudeOfLastGridPointInDegrees, -90);
+
+                    Assert.IsTrue(msg["latitudeOfLastGridPoint"].CanConvertToDegrees);
+                    // degree conversion via accessor
+                    double longitudeOfLastGridPointInDegrees = msg["longitudeOfLastGridPoint"].AsDouble(/* inDegrees == true */);
+                    Assert.AreEqual(longitudeOfLastGridPointInDegrees, 359.64);
+                    // access without degree conversion
+                    Assert.AreNotEqual(longitudeOfLastGridPointInDegrees, msg["longitudeOfLastGridPoint"].AsDouble(false));
+
+                    Assert.IsTrue(msg["jDirectionIncrement"].CanConvertToDegrees);
+                    // degree conversion via accessor
+                    double jDirectionIncrementInDegrees = msg["jDirectionIncrement"].AsDouble(/* inDegrees == true */);
                     Assert.AreEqual(jDirectionIncrementInDegrees, 0.36);
-                    double iDirectionIncrementInDegrees = msg["iDirectionIncrementInDegrees"].AsDouble();
+
+                    Assert.IsTrue(msg["iDirectionIncrement"].CanConvertToDegrees);
+                    // degree conversion via accessor
+                    double iDirectionIncrementInDegrees = msg["iDirectionIncrement"].AsDouble(/* inDegrees == true */);
                     Assert.AreEqual(iDirectionIncrementInDegrees, -1.0E+100);
 
+                    Assert.IsFalse(msg["numberOfPointsAlongAParallel"].CanConvertToDegrees);
                     int numberOfPointsAlongAParallel = msg["numberOfPointsAlongAParallel"].AsInt();
                     Assert.AreEqual(numberOfPointsAlongAParallel, -1);
+
+                    Assert.IsFalse(msg["numberOfPointsAlongAMeridian"].CanConvertToDegrees);
                     int numberOfPointsAlongAMeridian = msg["numberOfPointsAlongAMeridian"].AsInt();
                     Assert.AreEqual(numberOfPointsAlongAMeridian, 501);
 
+                    Assert.IsFalse(msg["packingType"].CanConvertToDegrees);
                     string packingType = msg["packingType"].AsString();
                     Assert.AreEqual("grid_simple", packingType);
                     Assert.AreEqual(msg["packingType"].NativeType, GribValueType.String);

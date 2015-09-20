@@ -100,12 +100,14 @@ namespace Grib.Api
         /// <summary>
         /// Gets the key's value.
         /// </summary>
+        /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will return the value [in degrees] when possible.</param>
         /// <returns></returns>
-        public double AsDouble()
+        public double AsDouble(bool inDegrees = true)
         {
             double val;
+            string valueKey = BuildTokenForDouble(inDegrees);
 
-            GribApiProxy.GribGetDouble(_handle, Key, out val);
+            GribApiProxy.GribGetDouble(_handle, valueKey, out val);
 
             return val;
         }
@@ -114,9 +116,12 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        public void AsDouble(double newValue)
+        /// <param name="inDegrees">if set to <c>true</c> [in degrees], GribApi.NET will set the value [in degrees] when possible..</param>
+        public void AsDouble(double newValue, bool inDegrees = true)
         {
-            GribApiProxy.GribSetDouble(_handle, Key, newValue);
+            string valueKey = BuildTokenForDouble(inDegrees);
+
+            GribApiProxy.GribSetDouble(_handle, valueKey, newValue);
         }
 
         /// <summary>
@@ -150,6 +155,41 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// Builds the token for accesing/mutating double values, accounting for degree conversions.
+        /// </summary>
+        /// <param name="inDegrees">if set to <c>true</c> [in degrees].</param>
+        /// <returns></returns>
+        private string BuildTokenForDouble (bool inDegrees)
+        {
+            string valueKey = Key;
+
+            if (inDegrees && !Key.EndsWith("InDegrees") && CanConvertToDegrees)
+            {
+                valueKey += "InDegrees";
+            } else if (!inDegrees && Key.EndsWith("InDegrees"))
+            {
+                valueKey = valueKey.Substring(0, Key.Length - "InDegrees".Length);
+            }
+
+            return valueKey;
+        }
+
+        /// <summary>
+        /// Determines whether this instance's value [can convert to degrees]. The ECMWF's grib_api
+        /// documentation states degree conversion should be used whenever possible. Only relevant
+        /// to coordinates.
+        /// </summary>
+        /// <returns></returns>
+        public bool CanConvertToDegrees
+        {
+            get
+            {
+                string degreeToken = Key.EndsWith("InDegrees") ? Key : Key + "InDegrees";
+
+                return GribApiProxy.GribIsDefined(_handle, degreeToken);
+            }
+        }
 
         /// <summary>
         /// Gets the key name for this value.
