@@ -10,7 +10,7 @@ Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definition
 
 You're ready to go!
 
-##
+### Examples
 Getting grid information from a GRIB message:
 ```csharp
 	using (GribFile file = new GribFile("mygrib.grb"))
@@ -98,6 +98,9 @@ Build the projects in this order:
 
 After you've built libjasper and grib_api_lib once, you should only need to build GribApi.sln thenceforth.
 
+### Running SWIG
+Most of the interop interfaces are generated using SWIG and included in the repository. If you want generate the interfaces yourself, you'll need SWIG installed and available on PATH. Then run `build/swig_gen.cmd`.
+
 ## Running Tests
 1. Install [NUnit](http://www.nunit.org/) and expose it on PATH.
 2. Run `build/run_tests <architecture> <configuration> [optional "1" to break the tests on start]`, e.g.
@@ -108,6 +111,3 @@ or
 ```shell
 build/run_tests x86 Debug 1
 ```
-
-## Running SWIG
-Most of the interop interfaces are generated using SWIG and included in the repository. If you want generate the interfaces yourself, you'll need SWIG installed and available on PATH. Then run `build/swig_gen.cmd`.

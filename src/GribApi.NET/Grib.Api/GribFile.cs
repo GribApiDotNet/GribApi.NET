@@ -94,6 +94,10 @@ namespace Grib.Api
             {
                 msg = new GribMessage(handle, File, Context);
             }
+            else if (err != 0)
+            {
+                throw GribApiException.Create(err);
+            }
 
             return msg != null;
         }

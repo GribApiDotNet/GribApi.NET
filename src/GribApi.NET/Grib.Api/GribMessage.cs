@@ -38,7 +38,7 @@ namespace Grib.Api
             Handle = handle;
             Context = context ?? GribApiProxy.GribContextGetDefault();
             Namespace = Namespaces[0];
-            KeyFilters |= (uint) GribApiProxy.GRIB_KEYS_ITERATOR_ALL_KEYS;
+            KeyFilters = Interop.KeyFilters.SkipDuplicates;
             MissingValue = this["missingValue"].AsDouble();
         }
 
@@ -48,6 +48,55 @@ namespace Grib.Api
         protected override void OnDispose ()
         {
             GribApiProxy.GribHandleDelete(Handle);
+        }
+
+
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<GribValue> GetEnumerator ()
+        {
+            // null returns keys from all namespaces
+            string nspace = Namespace == "all" ? null : Namespace;
+            string name = "";
+
+            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace);
+
+            while (GribApiProxy.GribKeysIteratorNext(keyIter) != 0)
+            {
+                name = GribApiProxy.GribKeysIteratorGetName(keyIter);
+                yield return this[name];
+            }
+
+            GribApiProxy.GribKeysIteratorDelete(keyIter);
+        }
+
+        /// <summary>
+        /// NOT IMPLEMENTED.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets the <see cref="GribValue"/> with the specified key name.
+        /// </summary>
+        /// <value>
+        /// The <see cref="GribValue"/>.
+        /// </value>
+        /// <param name="keyName">Name of the key.</param>
+        /// <returns></returns>
+        public GribValue this[string keyName]
+        {
+            get { return new GribValue(Handle, keyName); }
         }
 
         /// <summary>
@@ -84,7 +133,13 @@ namespace Grib.Api
         /// </value>
         public string Namespace { get; set; }
 
-        public uint KeyFilters { get; set; }
+        /// <summary>
+        /// Gets or sets the key filters. The default is KeyFilters::SkipDuplicates.
+        /// </summary>
+        /// <value>
+        /// The key filter flags. They are bitwise OR-able.
+        /// </value>
+        public KeyFilters KeyFilters { get; set; }
 
         /// <summary>
         /// Gets the type of the grid.
@@ -121,8 +176,8 @@ namespace Grib.Api
         /// <value>
         /// The geo spatial values.
         /// </value>
-        public IEnumerable<GeoSpatialValue> GeoSpatialValues 
-        { 
+        public IEnumerable<GeoSpatialValue> GeoSpatialValues
+        {
             get
             {
                 int err = 0;
@@ -168,12 +223,19 @@ namespace Grib.Api
             get
             {
                 uint sz = 0;
+
                 GribApiProxy.GribGetMessageSize(Handle, ref sz);
 
                 return sz;
             }
         }
 
+        /// <summary>
+        /// Gets the message's buffer.
+        /// </summary>
+        /// <value>
+        /// The buffer.
+        /// </value>
         public byte[] Buffer
         {
             get
@@ -190,54 +252,6 @@ namespace Grib.Api
 
                 return bytes;
             }
-        }
-
-        /// <summary>
-        /// Returns an enumerator that iterates through the collection.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
-        /// </returns>
-        public IEnumerator<GribValue> GetEnumerator ()
-        {
-            // null returns keys from all namespaces
-            string nspace = Namespace == "all" ? null : Namespace;
-            string name = "";
-
-            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, KeyFilters, nspace);
-
-            while (GribApiProxy.GribKeysIteratorNext(keyIter) != 0)
-            {
-                name = GribApiProxy.GribKeysIteratorGetName(keyIter);
-                yield return this[name];
-            }
-
-            GribApiProxy.GribKeysIteratorDelete(keyIter);
-        }
-
-        /// <summary>
-        /// NOT IMPLEMENTED.
-        /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
-        /// </returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Gets the <see cref="GribValue"/> with the specified key name.
-        /// </summary>
-        /// <value>
-        /// The <see cref="GribValue"/>.
-        /// </value>
-        /// <param name="keyName">Name of the key.</param>
-        /// <returns></returns>
-        public GribValue this[string keyName]
-        {
-            get { return new GribValue(Handle, keyName); }
         }
 
 
