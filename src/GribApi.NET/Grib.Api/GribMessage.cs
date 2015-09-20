@@ -38,7 +38,7 @@ namespace Grib.Api
             Handle = handle;
             Context = context ?? GribApiProxy.GribContextGetDefault();
             Namespace = Namespaces[0];
-            KeyFilters = Interop.KeyFilters.SkipDuplicates;
+            KeyFilters |= Interop.KeyFilters.All;
             MissingValue = this["missingValue"].AsDouble();
         }
 
@@ -65,13 +65,18 @@ namespace Grib.Api
 
             var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace);
 
-            while (GribApiProxy.GribKeysIteratorNext(keyIter) != 0)
+            try
             {
-                name = GribApiProxy.GribKeysIteratorGetName(keyIter);
-                yield return this[name];
+                while (GribApiProxy.GribKeysIteratorNext(keyIter) != 0)
+                {
+                    name = GribApiProxy.GribKeysIteratorGetName(keyIter);
+                    yield return this[name];
+                }
             }
-
-            GribApiProxy.GribKeysIteratorDelete(keyIter);
+            finally
+            {
+                GribApiProxy.GribKeysIteratorDelete(keyIter);
+            }
         }
 
         /// <summary>
@@ -134,7 +139,7 @@ namespace Grib.Api
         public string Namespace { get; set; }
 
         /// <summary>
-        /// Gets or sets the key filters. The default is KeyFilters::SkipDuplicates.
+        /// Gets or sets the key filters. The default is KeyFilters::All.
         /// </summary>
         /// <value>
         /// The key filter flags. They are bitwise OR-able.
