@@ -142,7 +142,7 @@ namespace Grib.Api
         /// Gets or sets the key filters. The default is KeyFilters::All.
         /// </summary>
         /// <value>
-        /// The key filter flags. They are bitwise OR-able.
+        /// The key filter flags. They are OR-able bitflags.
         /// </value>
         public KeyFilters KeyFilters { get; set; }
 

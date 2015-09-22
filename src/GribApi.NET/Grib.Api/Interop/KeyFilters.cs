@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Grib.Api.Interop
 {
     /// <summary>
-    /// Bitwise OR-able flags used to filter message keys when iterating.
+    /// Bitwise OR-able bitflags used to filter message keys when iterating.
     /// </summary>
     public enum KeyFilters : uint
     {

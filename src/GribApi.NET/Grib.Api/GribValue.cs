@@ -116,7 +116,7 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        /// <param name="inDegrees">if set to <c>true</c> [in degrees], GribApi.NET will set the value [in degrees] when possible..</param>
+        /// <param name="inDegrees">if set to <c>true</c> [in degrees], GribApi.NET will set the value [in degrees] when possible.</param>
         public void AsDouble(double newValue, bool inDegrees = true)
         {
             string valueKey = BuildTokenForDouble(inDegrees);
