@@ -199,11 +199,6 @@ namespace Grib.Api
         {
             get
             {
-                if (NativeType != GribValueType.Double)
-                {
-                    return false;
-                }
-
                 string degreeToken = Key.EndsWith("InDegrees") ? Key : Key + "InDegrees";
 
                 return GribApiProxy.GribIsDefined(_handle, degreeToken);
