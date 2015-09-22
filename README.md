@@ -18,10 +18,16 @@ Getting grid information from a GRIB message:
 		GribMessage msg = file.First();
 
 		Console.WriteLine("Grid Type: " + msg.GridType);
-		double lat = msg["latitudeOfFirstGridPoint"].AsDouble();
+		
+		double latInDegrees = msg["latitudeOfFirstGridPoint"].AsDouble();
+		// GribApi.NET automatically converts coordinate values to degrees. This follows the best practice
+		// advised by ECMWF and normalizes the values returned by the API. You can opt-out of degree
+		// conversion by calling `AsDouble(false)`, e.g.:
+		//     double rawValue = msg["latitudeOfFirstGridPoint"].AsDouble(false);
+		// Only values capable of degree conversion are affected.
 		
 		// all values are also accessible as strings
-		Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPointInDegrees"].AsString());
+		Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPoint"].AsString());
 	}
 ```
 
@@ -71,7 +77,7 @@ Appending multiple messages to an existing file:
 		Console.WriteLine("Appending {0} messages from {1} to {2}", readFile.MessageCount, readPath, outPath);
 
 		GribFile.Write(outPath, readFile as IEnumerable<GribMessage>, FileMode.Append);
-		// or via overload:
+		// or, more simply:
 		// GribFile.Write(outPath, readFile, FileMode.Append);
 	}
 ```

@@ -11,6 +11,9 @@ using System.Diagnostics;
 
 namespace Grib.Api
 {
+    /// <summary>
+    /// Encapsulates logic for reading and writing GRIB messages.
+    /// </summary>
     public class GribMessage: AutoCleanup, IEnumerable<GribValue>
     {
         private SWIGTYPE_p_FILE _file;
@@ -49,7 +52,6 @@ namespace Grib.Api
         {
             GribApiProxy.GribHandleDelete(Handle);
         }
-
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -189,6 +191,11 @@ namespace Grib.Api
                 double lat, lon, val;
 
                 var iter = GribApiProxy.GribIteratorNew(Handle, 0, out err);
+
+                if (err != 0)
+                {
+                    throw GribApiException.Create(err);
+                }
 
                 while (GribApiProxy.GribIteratorNext(iter, out lat, out lon, out val) != 0)
                 {

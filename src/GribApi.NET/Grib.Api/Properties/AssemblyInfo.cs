@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GribApi.NET")]
+[assembly: AssemblyTitle("Grib.Api.dll")]
 [assembly: AssemblyDescription("A powerful .NET library for reading and writing GRIB 1 and 2 files.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Eric Millin")]

@@ -9,6 +9,9 @@ using Grib.Api.Interop;
 
 namespace Grib.Api
 {
+    /// <summary>
+    /// Encapsulates logic for encoding and decoding a value within a GRIB message.
+    /// </summary>
     public class GribValue
     {
         const uint MAX_KEY_LEN = 255;
@@ -16,7 +19,11 @@ namespace Grib.Api
 
         private SWIGTYPE_p_grib_handle _handle;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribValue"/> class.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="keyName">Name of the key.</param>
         internal GribValue(SWIGTYPE_p_grib_handle handle, string keyName)
         {
             _handle = handle;
@@ -26,19 +33,26 @@ namespace Grib.Api
         /// <summary>
         /// Gets the key's value.
         /// </summary>
+        /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will convert the value to degrees when possible.</param>
         /// <returns></returns>
-        public string AsString()
+        public string AsString(bool inDegrees = true)
         {
             uint len = MAX_VAL_LEN;
             uint ptLen = 0;
+            string valueKey = Key;
+
+            if (CanConvertToDegrees)
+            {
+                valueKey = BuildTokenForDouble(inDegrees);
+            }
 
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
-            GribApiProxy.GribGetLength(_handle, Key, ref ptLen);
-            StringBuilder val = new StringBuilder((int) ptLen);
-            
-            GribApiProxy.GribGetString(_handle, Key, val, ref len);
+            GribApiProxy.GribGetLength(_handle, valueKey, ref ptLen);
+            StringBuilder msg = new StringBuilder((int) ptLen);
 
-            return val.ToString();
+            GribApiProxy.GribGetString(_handle, valueKey, msg, ref len);
+
+            return msg.ToString();
         }
 
         /// <summary>
@@ -185,6 +199,11 @@ namespace Grib.Api
         {
             get
             {
+                if (NativeType != GribValueType.Double)
+                {
+                    return false;
+                }
+
                 string degreeToken = Key.EndsWith("InDegrees") ? Key : Key + "InDegrees";
 
                 return GribApiProxy.GribIsDefined(_handle, degreeToken);
@@ -212,7 +231,7 @@ namespace Grib.Api
             {
                 if (!value)
                 {
-                    throw new GribApiException("To set a value as not missing, simply set the value.");
+                    throw new GribApiException("To mark a value as not missing, simply set the value.");
                 }
 
                 GribApiProxy.GribSetMissing(_handle, Key);
@@ -221,7 +240,15 @@ namespace Grib.Api
             get
             {
                 int err;
-                return GribApiProxy.GribIsMissing(_handle, Key, out err);
+
+                bool isMissing = GribApiProxy.GribIsMissing(_handle, Key, out err);
+                
+                if (err != 0)
+                {
+                    throw GribApiException.Create(err);
+                }
+
+                return isMissing;
             }
         }
 

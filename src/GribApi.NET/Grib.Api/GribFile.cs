@@ -13,6 +13,9 @@ using System.ComponentModel;
 
 namespace Grib.Api
 {
+    /// <summary>
+    /// Encapsulates logic for reading and writing GRIB messages in files.
+    /// </summary>
     public class GribFile: AutoCleanup, IEnumerable<GribMessage>
     {
 
@@ -88,15 +91,17 @@ namespace Grib.Api
         {
             msg = null;
             int err = 0;
+
             var handle = GribApiProxy.GribHandleNewFromFile(Context, this.File, out err);
 
-            if((err == 0) && (SWIGTYPE_p_grib_handle.getCPtr(handle).Handle != IntPtr.Zero))
-            {
-                msg = new GribMessage(handle, File, Context);
-            }
-            else if (err != 0)
+            if (err != 0)
             {
                 throw GribApiException.Create(err);
+            }
+
+            if(SWIGTYPE_p_grib_handle.getCPtr(handle).Handle != IntPtr.Zero)
+            {
+                msg = new GribMessage(handle, File, Context);
             }
 
             return msg != null;
