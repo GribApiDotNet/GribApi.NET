@@ -49,89 +49,84 @@ public class GribPoints : global::System.IDisposable {
     } 
   }
 
-  public SWIGTYPE_p_double latitudes {
+  public double[] latitudes {
     set {
-      GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, SWIGTYPE_p_double.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
-      SWIGTYPE_p_double ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_double(cPtr, false);
-      return ret;
-    } 
+	get
+	{
+		return GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
+	} 
   }
 
-  public SWIGTYPE_p_double longitudes {
+  public double[] longitudes {
     set {
-      GribApiProxyPINVOKE.GribPoints_longitudes_set(swigCPtr, SWIGTYPE_p_double.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_longitudes_set(swigCPtr, value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
-      SWIGTYPE_p_double ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_double(cPtr, false);
-      return ret;
-    } 
+	get
+	{
+		return GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
+	} 
   }
 
-  public SWIGTYPE_p_size_t indexes {
+  public SizeT indexes {
     set {
-      GribApiProxyPINVOKE.GribPoints_indexes_set(swigCPtr, SWIGTYPE_p_size_t.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_indexes_set(swigCPtr, ref  value.Value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_indexes_get(swigCPtr);
-      SWIGTYPE_p_size_t ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_size_t(cPtr, false);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_indexes_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
-  public SWIGTYPE_p_size_t groupStart {
+  public SizeT groupStart {
     set {
-      GribApiProxyPINVOKE.GribPoints_groupStart_set(swigCPtr, SWIGTYPE_p_size_t.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_groupStart_set(swigCPtr, ref  value.Value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_groupStart_get(swigCPtr);
-      SWIGTYPE_p_size_t ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_size_t(cPtr, false);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_groupStart_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
-  public SWIGTYPE_p_size_t groupLen {
+  public SizeT groupLen {
     set {
-      GribApiProxyPINVOKE.GribPoints_groupLen_set(swigCPtr, SWIGTYPE_p_size_t.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_groupLen_set(swigCPtr, ref  value.Value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_groupLen_get(swigCPtr);
-      SWIGTYPE_p_size_t ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_size_t(cPtr, false);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_groupLen_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
-  public uint nGroups {
+  public SizeT nGroups {
     set {
-      GribApiProxyPINVOKE.GribPoints_nGroups_set(swigCPtr, value);
+      GribApiProxyPINVOKE.GribPoints_nGroups_set(swigCPtr, value.Value);
     } 
-    get {
-      uint ret = GribApiProxyPINVOKE.GribPoints_nGroups_get(swigCPtr);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_nGroups_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
-  public uint n {
+  public SizeT n {
     set {
-      GribApiProxyPINVOKE.GribPoints_n_set(swigCPtr, value);
+      GribApiProxyPINVOKE.GribPoints_n_set(swigCPtr, value.Value);
     } 
-    get {
-      uint ret = GribApiProxyPINVOKE.GribPoints_n_get(swigCPtr);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_n_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
-  public uint size {
+  public SizeT size {
     set {
-      GribApiProxyPINVOKE.GribPoints_size_set(swigCPtr, value);
+      GribApiProxyPINVOKE.GribPoints_size_set(swigCPtr, value.Value);
     } 
-    get {
-      uint ret = GribApiProxyPINVOKE.GribPoints_size_get(swigCPtr);
-      return ret;
-    } 
+	get {
+		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_size_get(swigCPtr);
+		return new SizeT(val);
+	} 
   }
 
   public GribPoints() : this(GribApiProxyPINVOKE.new_GribPoints(), true) {

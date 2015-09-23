@@ -234,9 +234,9 @@ namespace Grib.Api
         {
             get
             {
-                uint sz = 0;
+                SizeT sz = new SizeT();
 
-                GribApiProxy.GribGetMessageSize(Handle, ref sz);
+                GribApiProxy.GribGetMessageSize(Handle, sz);
 
                 return sz;
             }
@@ -252,13 +252,13 @@ namespace Grib.Api
         {
             get
             {
-                uint s = 0;
-                GribApiProxy.GribGetMessageSize(this.Handle, ref s);
+                SizeT sz = new SizeT();
+                GribApiProxy.GribGetMessageSize(this.Handle, sz);
                 // grib_api returns the data buffer pointer, but continues to own the memory, so no de/allocation is necessary 
                 IntPtr p = IntPtr.Zero;
-                GribApiProxy.GribGetMessage(this.Handle, ref p, out s);
+                GribApiProxy.GribGetMessage(this.Handle, out p, sz);
 
-                int tl = (int) s;
+                int tl = (int) sz;
                 byte[] bytes = new byte[tl];
                 Marshal.Copy(p, bytes, 0, tl);
 

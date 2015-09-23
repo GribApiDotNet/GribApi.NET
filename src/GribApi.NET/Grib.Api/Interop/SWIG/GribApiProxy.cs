@@ -92,8 +92,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribIndexGetSize(SWIGTYPE_p_grib_index index, string key, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribIndexGetSize(SWIGTYPE_p_grib_index.getCPtr(index), key, ref  size);
+  public static void GribIndexGetSize(SWIGTYPE_p_grib_index index, string key, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribIndexGetSize(SWIGTYPE_p_grib_index.getCPtr(index), key, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -101,8 +101,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIndexGetLong(SWIGTYPE_p_grib_index index, string key, int[] values, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribIndexGetLong(SWIGTYPE_p_grib_index.getCPtr(index), key, values, ref  size);
+  public static void GribIndexGetLong(SWIGTYPE_p_grib_index index, string key, int[] values, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribIndexGetLong(SWIGTYPE_p_grib_index.getCPtr(index), key, values, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -110,8 +110,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIndexGetDouble(SWIGTYPE_p_grib_index index, string key, double[] values, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribIndexGetDouble(SWIGTYPE_p_grib_index.getCPtr(index), key, values, ref  size);
+  public static void GribIndexGetDouble(SWIGTYPE_p_grib_index index, string key, double[] values, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribIndexGetDouble(SWIGTYPE_p_grib_index.getCPtr(index), key, values, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -119,8 +119,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIndexGetString(SWIGTYPE_p_grib_index index, string key, SWIGTYPE_p_p_char values, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribIndexGetString(SWIGTYPE_p_grib_index.getCPtr(index), key, SWIGTYPE_p_p_char.getCPtr(values), ref  size);
+  public static void GribIndexGetString(SWIGTYPE_p_grib_index index, string key, out System.Text.StringBuilder values, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribIndexGetString(SWIGTYPE_p_grib_index.getCPtr(index), key, out values, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -207,20 +207,20 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static SWIGTYPE_p_grib_handle GribHandleNewFromMessage(SWIGTYPE_p_grib_context c, SWIGTYPE_p_void data, uint data_len) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMessage(SWIGTYPE_p_grib_context.getCPtr(c), SWIGTYPE_p_void.getCPtr(data), data_len);
+  public static SWIGTYPE_p_grib_handle GribHandleNewFromMessage(SWIGTYPE_p_grib_context c, byte[] data, SizeT data_len) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMessage(SWIGTYPE_p_grib_context.getCPtr(c), data, data_len.Value);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
 
-  public static SWIGTYPE_p_grib_handle GribHandleNewFromMultiMessage(SWIGTYPE_p_grib_context c, out System.IntPtr data, SWIGTYPE_p_size_t data_len, out int error) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMultiMessage(SWIGTYPE_p_grib_context.getCPtr(c), out data, SWIGTYPE_p_size_t.getCPtr(data_len), out error);
+  public static SWIGTYPE_p_grib_handle GribHandleNewFromMultiMessage(SWIGTYPE_p_grib_context c, out System.IntPtr data, SizeT data_len, out int error) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMultiMessage(SWIGTYPE_p_grib_context.getCPtr(c), out data, ref  data_len.Value, out error);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
 
-  public static SWIGTYPE_p_grib_handle GribHandleNewFromMessageCopy(SWIGTYPE_p_grib_context c, SWIGTYPE_p_void data, uint data_len) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMessageCopy(SWIGTYPE_p_grib_context.getCPtr(c), SWIGTYPE_p_void.getCPtr(data), data_len);
+  public static SWIGTYPE_p_grib_handle GribHandleNewFromMessageCopy(SWIGTYPE_p_grib_context c, byte[] data, SizeT data_len) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromMessageCopy(SWIGTYPE_p_grib_context.getCPtr(c), data, data_len.Value);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
@@ -285,8 +285,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetMessage(SWIGTYPE_p_grib_handle h, ref System.IntPtr message, out uint message_length) {
-    int ret = GribApiProxyPINVOKE.GribGetMessage(SWIGTYPE_p_grib_handle.getCPtr(h), ref message, out  message_length);
+  public static void GribGetMessage(SWIGTYPE_p_grib_handle h, out System.IntPtr message, SizeT message_length) {
+    int ret = GribApiProxyPINVOKE.GribGetMessage(SWIGTYPE_p_grib_handle.getCPtr(h), out message, ref  message_length.Value);
 	
 	if (ret != 0)
 	{
@@ -294,8 +294,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetMessageCopy(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_void message, ref uint message_length) {
-    int ret = GribApiProxyPINVOKE.GribGetMessageCopy(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_void.getCPtr(message), ref  message_length);
+  public static void GribGetMessageCopy(SWIGTYPE_p_grib_handle h, byte[] message, SizeT message_length) {
+    int ret = GribApiProxyPINVOKE.GribGetMessageCopy(SWIGTYPE_p_grib_handle.getCPtr(h), message, ref  message_length.Value);
 	
 	if (ret != 0)
 	{
@@ -309,8 +309,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribGetData(SWIGTYPE_p_grib_handle h, double[] lats, double[] lons, double[] values, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribGetData(SWIGTYPE_p_grib_handle.getCPtr(h), lats, lons, values, ref  size);
+  public static void GribGetData(SWIGTYPE_p_grib_handle h, double[] lats, double[] lons, double[] values, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribGetData(SWIGTYPE_p_grib_handle.getCPtr(h), lats, lons, values, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -364,8 +364,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribNearestFind(SWIGTYPE_p_grib_nearest nearest, SWIGTYPE_p_grib_handle h, double inlat, double inlon, uint flags, double[] outlats, double[] outlons, double[] values, double[] distances, int[] indexes, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.GribNearestFind(SWIGTYPE_p_grib_nearest.getCPtr(nearest), SWIGTYPE_p_grib_handle.getCPtr(h), inlat, inlon, flags, outlats, outlons, values, distances, indexes, SWIGTYPE_p_size_t.getCPtr(len));
+  public static void GribNearestFind(SWIGTYPE_p_grib_nearest nearest, SWIGTYPE_p_grib_handle h, double inlat, double inlon, uint flags, double[] outlats, double[] outlons, double[] values, double[] distances, int[] indexes, SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribNearestFind(SWIGTYPE_p_grib_nearest.getCPtr(nearest), SWIGTYPE_p_grib_handle.getCPtr(h), inlat, inlon, flags, outlats, outlons, values, distances, indexes, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -391,8 +391,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetOffset(SWIGTYPE_p_grib_handle h, string key, out uint offset) {
-    int ret = GribApiProxyPINVOKE.GribGetOffset(SWIGTYPE_p_grib_handle.getCPtr(h), key, out offset);
+  public static void GribGetOffset(SWIGTYPE_p_grib_handle h, string key, SizeT offset) {
+    int ret = GribApiProxyPINVOKE.GribGetOffset(SWIGTYPE_p_grib_handle.getCPtr(h), key, ref  offset.Value);
 	
 	if (ret != 0)
 	{
@@ -400,8 +400,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetSize(SWIGTYPE_p_grib_handle h, string key, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribGetSize(SWIGTYPE_p_grib_handle.getCPtr(h), key, ref  size);
+  public static void GribGetSize(SWIGTYPE_p_grib_handle h, string key, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribGetSize(SWIGTYPE_p_grib_handle.getCPtr(h), key, ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -409,8 +409,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetLength(SWIGTYPE_p_grib_handle h, string key, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribGetLength(SWIGTYPE_p_grib_handle.getCPtr(h), key, ref  length);
+  public static void GribGetLength(SWIGTYPE_p_grib_handle h, string key, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribGetLength(SWIGTYPE_p_grib_handle.getCPtr(h), key, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -454,8 +454,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetString(SWIGTYPE_p_grib_handle h, string key, System.Text.StringBuilder mesg, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribGetString(SWIGTYPE_p_grib_handle.getCPtr(h), key, mesg, ref  length);
+  public static void GribGetString(SWIGTYPE_p_grib_handle h, string key, System.Text.StringBuilder mesg, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribGetString(SWIGTYPE_p_grib_handle.getCPtr(h), key, mesg, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -463,8 +463,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetBytes(SWIGTYPE_p_grib_handle h, string key, byte[] bytes, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribGetBytes(SWIGTYPE_p_grib_handle.getCPtr(h), key, bytes, ref  length);
+  public static void GribGetBytes(SWIGTYPE_p_grib_handle h, string key, byte[] bytes, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribGetBytes(SWIGTYPE_p_grib_handle.getCPtr(h), key, bytes, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -472,8 +472,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribGetDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, ref  length);
+  public static void GribGetDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribGetDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -481,8 +481,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetLongArray(SWIGTYPE_p_grib_handle h, string key, int[] vals, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribGetLongArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, ref  length);
+  public static void GribGetLongArray(SWIGTYPE_p_grib_handle h, string key, int[] vals, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribGetLongArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -517,8 +517,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribSetString(SWIGTYPE_p_grib_handle h, string key, string mesg, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribSetString(SWIGTYPE_p_grib_handle.getCPtr(h), key, mesg, ref  length);
+  public static void GribSetString(SWIGTYPE_p_grib_handle h, string key, string mesg, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribSetString(SWIGTYPE_p_grib_handle.getCPtr(h), key, mesg, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -526,8 +526,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribSetBytes(SWIGTYPE_p_grib_handle h, string key, byte[] bytes, ref uint length) {
-    int ret = GribApiProxyPINVOKE.GribSetBytes(SWIGTYPE_p_grib_handle.getCPtr(h), key, bytes, ref  length);
+  public static void GribSetBytes(SWIGTYPE_p_grib_handle h, string key, byte[] bytes, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribSetBytes(SWIGTYPE_p_grib_handle.getCPtr(h), key, bytes, ref  length.Value);
 	
 	if (ret != 0)
 	{
@@ -535,8 +535,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribSetDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, uint length) {
-    int ret = GribApiProxyPINVOKE.GribSetDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length);
+  public static void GribSetDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribSetDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length.Value);
 	
 	if (ret != 0)
 	{
@@ -544,8 +544,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribSetForceDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, uint length) {
-    int ret = GribApiProxyPINVOKE.GribSetForceDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length);
+  public static void GribSetForceDoubleArray(SWIGTYPE_p_grib_handle h, string key, double[] vals, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribSetForceDoubleArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length.Value);
 	
 	if (ret != 0)
 	{
@@ -553,8 +553,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribSetLongArray(SWIGTYPE_p_grib_handle h, string key, int[] vals, uint length) {
-    int ret = GribApiProxyPINVOKE.GribSetLongArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length);
+  public static void GribSetLongArray(SWIGTYPE_p_grib_handle h, string key, int[] vals, SizeT length) {
+    int ret = GribApiProxyPINVOKE.GribSetLongArray(SWIGTYPE_p_grib_handle.getCPtr(h), key, vals, length.Value);
 	
 	if (ret != 0)
 	{
@@ -562,8 +562,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribDumpContent(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_FILE arg1, string mode, uint option_flags, SWIGTYPE_p_void arg) {
-    GribApiProxyPINVOKE.GribDumpContent(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_FILE.getCPtr(arg1), mode, option_flags, SWIGTYPE_p_void.getCPtr(arg));
+  public static void GribDumpContent(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_FILE arg1, string mode, uint option_flags, byte[] arg) {
+    GribApiProxyPINVOKE.GribDumpContent(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_FILE.getCPtr(arg1), mode, option_flags, arg);
   }
 
   public static void GribDumpActionTree(SWIGTYPE_p_grib_context c, SWIGTYPE_p_FILE f) {
@@ -704,8 +704,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator kiter, SWIGTYPE_p_long v, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), SWIGTYPE_p_long.getCPtr(v), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator kiter, out int v, SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), out v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -713,8 +713,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator kiter, SWIGTYPE_p_double v, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), SWIGTYPE_p_double.getCPtr(v), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator kiter, out double v, SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), out v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -722,8 +722,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator kiter, string v, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), v, SWIGTYPE_p_size_t.getCPtr(len));
+  public static void GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator kiter, System.Text.StringBuilder v, SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -731,8 +731,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator kiter, SWIGTYPE_p_unsigned_char v, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), SWIGTYPE_p_unsigned_char.getCPtr(v), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator kiter, byte[] v, SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -767,8 +767,8 @@ public class GribApiProxy {
     GribApiProxyPINVOKE.GribCheck(call, file, line, e, msg);
   }
 
-  public static void GribSetValues(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_grib_values grib_values, uint arg_count) {
-    int ret = GribApiProxyPINVOKE.GribSetValues(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_grib_values.getCPtr(grib_values), arg_count);
+  public static void GribSetValues(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_grib_values grib_values, SizeT arg_count) {
+    int ret = GribApiProxyPINVOKE.GribSetValues(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_grib_values.getCPtr(grib_values), arg_count.Value);
 	
 	if (ret != 0)
 	{
@@ -776,14 +776,14 @@ public class GribApiProxy {
 	}
   }
 
-  public static SWIGTYPE_p_grib_handle GribHandleNewFromPartialMessageCopy(SWIGTYPE_p_grib_context c, SWIGTYPE_p_void data, uint size) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromPartialMessageCopy(SWIGTYPE_p_grib_context.getCPtr(c), SWIGTYPE_p_void.getCPtr(data), size);
+  public static SWIGTYPE_p_grib_handle GribHandleNewFromPartialMessageCopy(SWIGTYPE_p_grib_context c, byte[] data, SizeT size) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromPartialMessageCopy(SWIGTYPE_p_grib_context.getCPtr(c), data, size.Value);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
 
-  public static SWIGTYPE_p_grib_handle GribHandleNewFromPartialMessage(SWIGTYPE_p_grib_context c, SWIGTYPE_p_void data, uint buflen) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromPartialMessage(SWIGTYPE_p_grib_context.getCPtr(c), SWIGTYPE_p_void.getCPtr(data), buflen);
+  public static SWIGTYPE_p_grib_handle GribHandleNewFromPartialMessage(SWIGTYPE_p_grib_context c, byte[] data, SizeT buflen) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribHandleNewFromPartialMessage(SWIGTYPE_p_grib_context.getCPtr(c), data, buflen.Value);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
@@ -814,8 +814,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetGaussianLatitudes(int truncation, SWIGTYPE_p_double latitudes) {
-    int ret = GribApiProxyPINVOKE.GribGetGaussianLatitudes(truncation, SWIGTYPE_p_double.getCPtr(latitudes));
+  public static void GribGetGaussianLatitudes(int truncation, double[] latitudes) {
+    int ret = GribApiProxyPINVOKE.GribGetGaussianLatitudes(truncation, latitudes);
 	
 	if (ret != 0)
 	{
@@ -855,8 +855,8 @@ public class GribApiProxy {
     GribApiProxyPINVOKE.GribGetReducedRow(pl, lon_first, lon_last, SWIGTYPE_p_long.getCPtr(npoints), SWIGTYPE_p_long.getCPtr(ilon_first), SWIGTYPE_p_long.getCPtr(ilon_last));
   }
 
-  public static void WmoReadAnyFromFile(SWIGTYPE_p_FILE f, SWIGTYPE_p_void buffer, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.WmoReadAnyFromFile(SWIGTYPE_p_FILE.getCPtr(f), SWIGTYPE_p_void.getCPtr(buffer), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void WmoReadAnyFromFile(SWIGTYPE_p_FILE f, byte[] buffer, SizeT len) {
+    int ret = GribApiProxyPINVOKE.WmoReadAnyFromFile(SWIGTYPE_p_FILE.getCPtr(f), buffer, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -864,8 +864,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void WmoReadGribFromFile(SWIGTYPE_p_FILE f, SWIGTYPE_p_void buffer, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.WmoReadGribFromFile(SWIGTYPE_p_FILE.getCPtr(f), SWIGTYPE_p_void.getCPtr(buffer), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void WmoReadGribFromFile(SWIGTYPE_p_FILE f, byte[] buffer, SizeT len) {
+    int ret = GribApiProxyPINVOKE.WmoReadGribFromFile(SWIGTYPE_p_FILE.getCPtr(f), buffer, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -873,8 +873,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void WmoReadBufrFromFile(SWIGTYPE_p_FILE f, SWIGTYPE_p_void buffer, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.WmoReadBufrFromFile(SWIGTYPE_p_FILE.getCPtr(f), SWIGTYPE_p_void.getCPtr(buffer), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void WmoReadBufrFromFile(SWIGTYPE_p_FILE f, byte[] buffer, SizeT len) {
+    int ret = GribApiProxyPINVOKE.WmoReadBufrFromFile(SWIGTYPE_p_FILE.getCPtr(f), buffer, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -882,8 +882,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void WmoReadGtsFromFile(SWIGTYPE_p_FILE f, SWIGTYPE_p_void buffer, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.WmoReadGtsFromFile(SWIGTYPE_p_FILE.getCPtr(f), SWIGTYPE_p_void.getCPtr(buffer), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void WmoReadGtsFromFile(SWIGTYPE_p_FILE f, byte[] buffer, SizeT len) {
+    int ret = GribApiProxyPINVOKE.WmoReadGtsFromFile(SWIGTYPE_p_FILE.getCPtr(f), buffer, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -891,8 +891,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void WmoReadAnyFromStream(SWIGTYPE_p_void stream_data, SWIGTYPE_p_f_p_void_p_void_long__long stream_proc, SWIGTYPE_p_void buffer, SWIGTYPE_p_size_t len) {
-    int ret = GribApiProxyPINVOKE.WmoReadAnyFromStream(SWIGTYPE_p_void.getCPtr(stream_data), SWIGTYPE_p_f_p_void_p_void_long__long.getCPtr(stream_proc), SWIGTYPE_p_void.getCPtr(buffer), SWIGTYPE_p_size_t.getCPtr(len));
+  public static void WmoReadAnyFromStream(byte[] stream_data, SWIGTYPE_p_f_p_void_p_void_long__long stream_proc, byte[] buffer, SizeT len) {
+    int ret = GribApiProxyPINVOKE.WmoReadAnyFromStream(stream_data, SWIGTYPE_p_f_p_void_p_void_long__long.getCPtr(stream_proc), buffer, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -900,23 +900,17 @@ public class GribApiProxy {
 	}
   }
 
-  public static SWIGTYPE_p_void WmoReadAnyFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, ref uint size, SWIGTYPE_p_off_t offset, out int err) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.WmoReadAnyFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size, SWIGTYPE_p_off_t.getCPtr(offset), out err);
-    SWIGTYPE_p_void ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_void(cPtr, false);
-    return ret;
-  }
+  public static byte[] WmoReadAnyFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, SizeT size, SizeT offset, out int err) {
+    return GribApiProxyPINVOKE.WmoReadAnyFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size.Value, ref  offset.Value, out err);
+}
 
-  public static SWIGTYPE_p_void WmoReadGtsFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, ref uint size, SWIGTYPE_p_off_t offset, out int err) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.WmoReadGtsFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size, SWIGTYPE_p_off_t.getCPtr(offset), out err);
-    SWIGTYPE_p_void ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_void(cPtr, false);
-    return ret;
-  }
+  public static byte[] WmoReadGtsFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, SizeT size, SizeT offset, out int err) {
+    return GribApiProxyPINVOKE.WmoReadGtsFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size.Value, ref  offset.Value, out err);
+}
 
-  public static SWIGTYPE_p_void WmoReadBufrFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, ref uint size, SWIGTYPE_p_off_t offset, out int err) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.WmoReadBufrFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size, SWIGTYPE_p_off_t.getCPtr(offset), out err);
-    SWIGTYPE_p_void ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_void(cPtr, false);
-    return ret;
-  }
+  public static byte[] WmoReadBufrFromFileMalloc(SWIGTYPE_p_FILE f, int headers_only, SizeT size, SizeT offset, out int err) {
+    return GribApiProxyPINVOKE.WmoReadBufrFromFileMalloc(SWIGTYPE_p_FILE.getCPtr(f), headers_only, ref  size.Value, ref  offset.Value, out err);
+}
 
   public static SWIGTYPE_p_grib_handle EccodeGtsNewFromFile(SWIGTYPE_p_grib_context c, SWIGTYPE_p_FILE f, int headers_only, out int error) {
     global::System.IntPtr cPtr = GribApiProxyPINVOKE.EccodeGtsNewFromFile(SWIGTYPE_p_grib_context.getCPtr(c), SWIGTYPE_p_FILE.getCPtr(f), headers_only, out error);
@@ -936,8 +930,8 @@ public class GribApiProxy {
     return ret;
   }
 
-  public static void GribGetMessageOffset(SWIGTYPE_p_grib_handle h, SWIGTYPE_p_off_t offset) {
-    int ret = GribApiProxyPINVOKE.GribGetMessageOffset(SWIGTYPE_p_grib_handle.getCPtr(h), SWIGTYPE_p_off_t.getCPtr(offset));
+  public static void GribGetMessageOffset(SWIGTYPE_p_grib_handle h, SizeT offset) {
+    int ret = GribApiProxyPINVOKE.GribGetMessageOffset(SWIGTYPE_p_grib_handle.getCPtr(h), ref  offset.Value);
 	
 	if (ret != 0)
 	{
@@ -945,8 +939,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribGetMessageSize(SWIGTYPE_p_grib_handle h, ref uint size) {
-    int ret = GribApiProxyPINVOKE.GribGetMessageSize(SWIGTYPE_p_grib_handle.getCPtr(h), ref  size);
+  public static void GribGetMessageSize(SWIGTYPE_p_grib_handle h, SizeT size) {
+    int ret = GribApiProxyPINVOKE.GribGetMessageSize(SWIGTYPE_p_grib_handle.getCPtr(h), ref  size.Value);
 	
 	if (ret != 0)
 	{
@@ -975,8 +969,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static SWIGTYPE_p_grib_handle GribUtilSetSpec(SWIGTYPE_p_grib_handle h, GribUtilGridSpec grid_spec, GribUtilPackingSpec packing_spec, int flags, SWIGTYPE_p_double data_values, uint data_values_count, out int err) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribUtilSetSpec(SWIGTYPE_p_grib_handle.getCPtr(h), GribUtilGridSpec.getCPtr(grid_spec), GribUtilPackingSpec.getCPtr(packing_spec), flags, SWIGTYPE_p_double.getCPtr(data_values), data_values_count, out err);
+  public static SWIGTYPE_p_grib_handle GribUtilSetSpec(SWIGTYPE_p_grib_handle h, GribUtilGridSpec grid_spec, GribUtilPackingSpec packing_spec, int flags, double[] data_values, SizeT data_values_count, out int err) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribUtilSetSpec(SWIGTYPE_p_grib_handle.getCPtr(h), GribUtilGridSpec.getCPtr(grid_spec), GribUtilPackingSpec.getCPtr(packing_spec), flags, data_values, data_values_count.Value, out err);
     SWIGTYPE_p_grib_handle ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_handle(cPtr, false);
     return ret;
   }
@@ -1007,14 +1001,6 @@ public class GribApiProxy {
   public static readonly int GRIB_NEAREST_SAME_GRID = GribApiProxyPINVOKE.GRIB_NEAREST_SAME_GRID_get();
   public static readonly int GRIB_NEAREST_SAME_DATA = GribApiProxyPINVOKE.GRIB_NEAREST_SAME_DATA_get();
   public static readonly int GRIB_NEAREST_SAME_POINT = GribApiProxyPINVOKE.GRIB_NEAREST_SAME_POINT_get();
-  public static readonly int GRIB_KEYS_ITERATOR_ALL_KEYS = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_ALL_KEYS_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_READ_ONLY = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_READ_ONLY_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_OPTIONAL = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_OPTIONAL_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_EDITION_SPECIFIC = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_EDITION_SPECIFIC_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_CODED = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_CODED_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_COMPUTED = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_COMPUTED_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_DUPLICATES = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_DUPLICATES_get();
-  public static readonly int GRIB_KEYS_ITERATOR_SKIP_FUNCTION = GribApiProxyPINVOKE.GRIB_KEYS_ITERATOR_SKIP_FUNCTION_get();
   public static readonly int GRIB_UTIL_GRID_SPEC_REGULAR_LL = GribApiProxyPINVOKE.GRIB_UTIL_GRID_SPEC_REGULAR_LL_get();
   public static readonly int GRIB_UTIL_GRID_SPEC_ROTATED_LL = GribApiProxyPINVOKE.GRIB_UTIL_GRID_SPEC_ROTATED_LL_get();
   public static readonly int GRIB_UTIL_GRID_SPEC_REGULAR_GG = GribApiProxyPINVOKE.GRIB_UTIL_GRID_SPEC_REGULAR_GG_get();

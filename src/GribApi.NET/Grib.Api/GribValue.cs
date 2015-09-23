@@ -37,8 +37,8 @@ namespace Grib.Api
         /// <returns></returns>
         public string AsString(bool inDegrees = true)
         {
-            uint len = MAX_VAL_LEN;
-            uint ptLen = 0;
+            SizeT len = new SizeT(MAX_VAL_LEN);
+            SizeT ptLen = new SizeT();
             string valueKey = Key;
 
             if (CanConvertToDegrees)
@@ -47,10 +47,10 @@ namespace Grib.Api
             }
 
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
-            GribApiProxy.GribGetLength(_handle, valueKey, ref ptLen);
+            GribApiProxy.GribGetLength(_handle, valueKey, ptLen);
             StringBuilder msg = new StringBuilder((int) ptLen);
 
-            GribApiProxy.GribGetString(_handle, valueKey, msg, ref len);
+            GribApiProxy.GribGetString(_handle, valueKey, msg, len);
 
             return msg.ToString();
         }
@@ -61,8 +61,8 @@ namespace Grib.Api
         /// <param name="newValue">The new value.</param>
         public void AsString(string newValue)
         {
-            uint len = (uint)newValue.Length;
-            GribApiProxy.GribSetString(_handle, Key, newValue, ref len);
+            SizeT len = new SizeT((uint)newValue.Length);
+            GribApiProxy.GribSetString(_handle, Key, newValue, len);
         }
 
         /// <summary>
@@ -93,11 +93,11 @@ namespace Grib.Api
         /// <returns></returns>
         public int[] AsIntArray ()
         {
-            uint sz = 0;
-            GribApiProxy.GribGetSize(_handle, Key, ref sz);
+            SizeT sz = new SizeT();
+            GribApiProxy.GribGetSize(_handle, Key, sz);
 
             int[] values = new int[sz];
-            GribApiProxy.GribGetLongArray(_handle, Key, values, ref sz);
+            GribApiProxy.GribGetLongArray(_handle, Key, values, sz);
 
             return values;
         }
@@ -108,7 +108,7 @@ namespace Grib.Api
         /// <param name="newValues">The new values.</param>
         public void AsIntArray(int[] newValues)
         {
-            GribApiProxy.GribSetLongArray(_handle, Key, newValues, (uint) newValues.Length);
+            GribApiProxy.GribSetLongArray(_handle, Key, newValues, new SizeT(newValues.Length));
         }
 
         /// <summary>
@@ -144,11 +144,11 @@ namespace Grib.Api
         /// <returns></returns>
         public double[] AsDoubleArray ()
         {
-            uint sz = 0;
-            GribApiProxy.GribGetSize(_handle, Key, ref sz);
+            SizeT sz = new SizeT();
+            GribApiProxy.GribGetSize(_handle, Key, sz);
 
             double[] values = new double[sz];
-            GribApiProxy.GribGetDoubleArray(_handle, Key, values, ref sz);
+            GribApiProxy.GribGetDoubleArray(_handle, Key, values, sz);
 
             return values;
         }
@@ -162,10 +162,10 @@ namespace Grib.Api
         {
             if (force)
             {
-                GribApiProxy.GribSetForceDoubleArray(_handle, Key, newValues, (uint) newValues.Length);
+                GribApiProxy.GribSetForceDoubleArray(_handle, Key, newValues, new SizeT(newValues.Length));
             } else
             {
-                GribApiProxy.GribSetDoubleArray(_handle, Key, newValues, (uint) newValues.Length);
+                GribApiProxy.GribSetDoubleArray(_handle, Key, newValues, new SizeT(newValues.Length));
             }
         }
 

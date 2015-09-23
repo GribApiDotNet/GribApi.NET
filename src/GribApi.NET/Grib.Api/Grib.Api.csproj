@@ -121,6 +121,7 @@
     <Compile Include="GribValue.cs" />
     <Compile Include="Interop\GribValueType.cs" />
     <Compile Include="Interop\KeyFilters.cs" />
+    <Compile Include="Interop\SizeT.cs" />
     <Compile Include="Interop\SWIG\GribUtilGridSpec.cs" />
     <Compile Include="Interop\SWIG\GribUtilPackingSpec.cs" />
     <Compile Include="Interop\SWIG\GribApiProxy.cs" />

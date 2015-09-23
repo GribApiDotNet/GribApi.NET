@@ -280,13 +280,11 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_GribApiProxy(SWIG_CSharpS
 #define SWIG_contract_assert(nullreturn, expr, msg) if (!(expr)) {SWIG_CSharpSetPendingExceptionArgument(SWIG_CSharpArgumentOutOfRangeException, msg, ""); return nullreturn; } else
 
 
-#include "grib_api.h"
-
-
-
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
+#include "grib_api.h"
+
 extern "C" {
 SWIGEXPORT struct FileHandleProxy
 {
@@ -374,9 +372,9 @@ HANDLE OpenGribFile(char * fn, int access, int mode) {
 
 	return hFile;
 }
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
+
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
 {
-	int err = 0;
     char * fmode = NULL;
 
 	FileHandleProxy* fhp = 0;
@@ -388,6 +386,7 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
     {
         return NULL;
     }
+	
     auto fd = _open_osfhandle((intptr_t)hFile, 0);
 
     if (fd == -1)
@@ -663,86 +662,6 @@ SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_NEAREST_SAME_POINT_get() {
   int result;
   
   result = (int)((1 << 2));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_ALL_KEYS_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)(0);
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_READ_ONLY_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 0));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_OPTIONAL_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 1));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_EDITION_SPECIFIC_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 2));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_CODED_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 3));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_COMPUTED_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 4));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_DUPLICATES_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 5));
-  jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT int SWIGSTDCALL CSharp_GRIB_KEYS_ITERATOR_SKIP_FUNCTION_get() {
-  int jresult ;
-  int result;
-  
-  result = (int)((1 << 6));
   jresult = result; 
   return jresult;
 }
