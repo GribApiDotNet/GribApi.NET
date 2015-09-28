@@ -209,15 +209,14 @@ public class GribUtilGridSpec : global::System.IDisposable {
     } 
   }
 
-  public SWIGTYPE_p_long pl {
+  public int[] pl {
     set {
-      GribApiProxyPINVOKE.GribUtilGridSpec_pl_set(swigCPtr, SWIGTYPE_p_long.getCPtr(value));
+      GribApiProxyPINVOKE.GribUtilGridSpec_pl_set(swigCPtr, value);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribUtilGridSpec_pl_get(swigCPtr);
-      SWIGTYPE_p_long ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_long(cPtr, false);
-      return ret;
-    } 
+	get
+	{
+		return GribApiProxyPINVOKE.GribUtilGridSpec_pl_get(swigCPtr);
+	} 
   }
 
   public int plSize {

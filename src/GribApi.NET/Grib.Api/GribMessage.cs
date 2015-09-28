@@ -1,4 +1,18 @@
-﻿using Grib.Api.Interop.SWIG;
+﻿// Copyright 2015 Eric Millin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using Grib.Api.Interop.SWIG;
 using Grib.Api.Interop;
 using System;
 using System.Collections.Generic;
@@ -14,10 +28,8 @@ namespace Grib.Api
     /// <summary>
     /// Encapsulates logic for reading and writing GRIB messages.
     /// </summary>
-    public class GribMessage: AutoCleanup, IEnumerable<GribValue>
+    public class GribMessage: IEnumerable<GribValue>
     {
-        private SWIGTYPE_p_FILE _file;
-
         /// <summary>
         /// The key namespaces. Set the <see cref="Namespace"/> property with these values to
         /// filter the keys return when iterating this message. Default value is [all].
@@ -27,30 +39,17 @@ namespace Grib.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage"/> class.
         /// </summary>
-        internal GribMessage () { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GribMessage"/> class.
-        /// </summary>
         /// <param name="handle">The handle.</param>
         /// <param name="file">The file.</param>
         /// <param name="context">The context.</param>
-        internal GribMessage(SWIGTYPE_p_grib_handle handle, SWIGTYPE_p_FILE file, SWIGTYPE_p_grib_context context = null):base()
+        internal GribMessage (GribHandle handle, GribContext context = null, int index = 0)
+            : base()
         {
-            _file = file;
             Handle = handle;
             Context = context ?? GribApiProxy.GribContextGetDefault();
             Namespace = Namespaces[0];
             KeyFilters |= Interop.KeyFilters.All;
-            MissingValue = this["missingValue"].AsDouble();
-        }
-
-        /// <summary>
-        /// Called when [dispose].
-        /// </summary>
-        protected override void OnDispose ()
-        {
-            GribApiProxy.GribHandleDelete(Handle);
+            Index = index;
         }
 
         /// <summary>
@@ -94,17 +93,233 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Gets the <see cref="GribValue"/> with the specified key name.
+        /// Clones this instance.
+        /// </summary>
+        /// <returns></returns>
+        public GribMessage Clone()
+        {
+            var newHandle = GribApiProxy.GribHandleClone(this.Handle);
+            return new GribMessage(newHandle, this.Context);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> containing metadata about this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> containing metadata about this instance.
+        /// </returns>
+        //public override string ToString ()
+        //{
+        //    //{Index}:{parameterName} ({stepType }):{grid_type}:{typeOfLevel} {level}:fcst time {stepRange} hrs {if ({stepType == 'avg'})}:from {dataDate}{dataTime}
+        //    string stepType = this["stepType"].AsString();
+        //    string timeQaulifier = stepType == "avg" ? String.Format("({0})", stepType) : "";
+
+        //    return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
+        //}
+
+        /// <summary>
+        /// Gets the parameter name.
         /// </summary>
         /// <value>
-        /// The <see cref="GribValue"/>.
+        /// The name.
         /// </value>
-        /// <param name="keyName">Name of the key.</param>
-        /// <returns></returns>
-        public GribValue this[string keyName]
+        public string Name
         {
-            get { return new GribValue(Handle, keyName); }
+            get { return this["parameterName"].AsString(); }
         }
+
+        /// <summary>
+        /// Gets the parameter's short name.
+        /// </summary>
+        /// <value>
+        /// The short name.
+        /// </value>
+        public string ShortName
+        {
+            get { return this["shortName"].AsString(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the parameter number.
+        /// </summary>
+        /// <value>
+        /// The parameter number.
+        /// </value>
+        public int ParameterNumber
+        {
+            get { return this["parameterNumber"].AsInt(); }
+            set { this["parameterNumber"].AsInt(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the parameter units.
+        /// </summary>
+        /// <value>
+        /// The units.
+        /// </value>
+        public string Units
+        {
+            get { return this["parameterUnits"].AsString(); }
+        }
+
+        /// <summary>
+        /// Gets or sets the pressure units.
+        /// </summary>
+        /// <value>
+        /// The pressure units.
+        /// </value>
+        public string PressureUnits
+        {
+            get { return this["pressureUnits"].AsString(); }
+            set { this["pressureUnits"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the type of the step.
+        /// </summary>
+        /// <value>
+        /// The type of the step.
+        /// </value>
+        public string StepType
+        {
+            get { return this["stepType"].AsString(); }
+            set { this["stepType"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the step range.
+        /// </summary>
+        /// <value>
+        /// The step range.
+        /// </value>
+        public string StepRange
+        {
+            get { return this["stepRange"].AsString(); }
+            set { this["stepRange"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the start step.
+        /// </summary>
+        /// <value>
+        /// The start step.
+        /// </value>
+        public string StartStep
+        {
+            get { return this["startStep"].AsString(); }
+            set { this["startStep"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the end step.
+        /// </summary>
+        /// <value>
+        /// The end step.
+        /// </value>
+        public string EndStep
+        {
+            get { return this["endStep"].AsString(); }
+            set { this["endStep"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the type of level.
+        /// </summary>
+        /// <value>
+        /// The type of level.
+        /// </value>
+        public string TypeOfLevel
+        {
+            get { return this["typeOfLevel"].AsString(); }
+            set { this["typeOfLevel"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the level.
+        /// </summary>
+        /// <value>
+        /// The level.
+        /// </value>
+        public int Level
+        {
+            get { return this["level"].AsInt(); }
+            set { this["level"].AsInt(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the time range unit.
+        /// </summary>
+        /// <value>
+        /// The time range unit.
+        /// </value>
+        public string TimeRangeUnit
+        {
+            get { return this["unitOfTimeRange"].AsString(); }
+            set { this["unitOfTimeRange"].AsString(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets p1.
+        /// </summary>
+        /// <value>
+        /// The p1.
+        /// </value>
+        public int P1
+        {
+            get
+            {
+                return this["P1"].AsInt();
+            }
+            set { this["P1"].AsInt(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets p2.
+        /// </summary>
+        /// <value>
+        /// The p2.
+        /// </value>
+        public int P2
+        {
+            get {
+                return this["P2"].AsInt();
+            }
+            set { this["P2"].AsInt(value); }
+        }
+
+        /// <summary>
+        /// Gets or set the time of the measurement. Time is UTC.
+        /// </summary>
+        /// <value>
+        /// The time.
+        /// </value>
+        public DateTime Time
+        {
+            get
+            {
+                return new DateTime(this["year"].AsInt(), this["month"].AsInt(), this["day"].AsInt(),
+                                    this["hour"].AsInt(), this["minute"].AsInt(), this["second"].AsInt(),
+                                    DateTimeKind.Utc);
+            }
+
+            set
+            {
+                this["year"].AsInt(value.Year);
+                this["month"].AsInt(value.Month);
+                this["day"].AsInt(value.Day);
+                this["hour"].AsInt(value.Hour);
+                this["minute"].AsInt(value.Minute);
+                this["second"].AsInt(value.Second);
+            }
+        }
+
+        /// <summary>
+        /// Gets the index of the message within the file.
+        /// </summary>
+        /// <value>
+        /// The index.
+        /// </value>
+        public int Index { get; protected set; }
 
         /// <summary>
         /// Gets or sets the grib_handle.
@@ -112,7 +327,7 @@ namespace Grib.Api
         /// <value>
         /// The handle.
         /// </value>
-        internal SWIGTYPE_p_grib_handle Handle { get; set; }
+        protected GribHandle Handle { get; set; }
 
         /// <summary>
         /// Gets or sets the grib_context.
@@ -120,16 +335,58 @@ namespace Grib.Api
         /// <value>
         /// The context.
         /// </value>
-        internal SWIGTYPE_p_grib_context Context { get; set; }
+        protected GribContext Context { get; set; }
 
         /// <summary>
-        /// Gets the value used to represent a missing value. This value is provided by grib_api,
-        /// not the file itself.
+        /// Gets the GRIB edition for this message.
+        /// </summary>
+        /// <value>
+        /// The edition.
+        /// </value>
+        public string Edition
+        {
+            get
+            {
+                return this["GRIBEditionNumber"].AsString();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the value used to represent a missing value. This value is used by grib_api,
+        /// does not exist in the message itself.
         /// </summary>
         /// <value>
         /// The missing value.
         /// </value>
-        public double MissingValue { get; private set; }
+        public double MissingValue 
+        { 
+            get
+            {
+                return this["missingValue"].AsDouble(); 
+            }
+            set
+            {
+                this["missingValue"].AsDouble(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has a bitmap.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has bitmap; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasBitmap
+        {
+            get
+            {
+                return this["bitmapPresent"].AsInt() == 1;
+            }
+            set
+            {
+                this["bitmapPresent"].AsInt(value ? 1 : 0);
+            }
+        }
 
         /// <summary>
         /// Set this property with a value in <see cref="Namespaces"/> to
@@ -158,19 +415,26 @@ namespace Grib.Api
 
         /// <summary>
         /// Gets or sets the decimal precision. Setting this value currently
-        /// updates all packed values to the new precision.
+        /// updates all packed values to the new precision. This key is only
+        /// valid for simple packing.
         /// </summary>
         /// <value>
         /// The decimal precision.
         /// </value>
+        /// <exception cref="GribApiException">You may only change decimal precision on messages that use simple packing.</exception>
         public int DecimalPrecision
         {
             get
             {
-                return this["decimalPrecision"].AsInt();
+                return this["changeDecimalPrecision"].AsInt();
             }
             set
             {
+                if (this["packingType"].AsString() != "grid_simple")
+                {
+                    throw new GribApiException("You may only change decimal precision on messages that use simple packing.");
+                }
+
                 // 'changeDecimalPrecision' updates all packed values to the new precision;
                 // 'decimalPrecision' does not -- should offer way to toggle
                 this["changeDecimalPrecision"].AsInt(value);
@@ -189,8 +453,8 @@ namespace Grib.Api
             {
                 int err = 0;
                 double lat, lon, val;
-
-                var iter = GribApiProxy.GribIteratorNew(Handle, 0, out err);
+                
+                var iter = GribApiProxy.GribIteratorNew(Handle, (uint) KeyFilters, out err);
 
                 if (err != 0)
                 {
@@ -207,7 +471,14 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Gets or sets the mesage values.
+        /// Gets or sets the mesage values. This property returna a *copy* of the message's value array.
+        /// Set this explicitly to ensure changes are reflected in the message.
+        /// E.g.,
+        /// <code>
+        /// double[] vals = msg.Values;
+        /// vals[0] = 42;
+        /// msg.Values = vals;
+        /// </code>
         /// </summary>
         /// <value>
         /// The values.
@@ -230,20 +501,20 @@ namespace Grib.Api
         /// <value>
         /// The size.
         /// </value>
-        public uint Size
+        public ulong Size
         {
             get
             {
-                SizeT sz = new SizeT();
+                SizeT sz = 0;
 
-                GribApiProxy.GribGetMessageSize(Handle, sz);
+                GribApiProxy.GribGetMessageSize(Handle, ref sz);
 
                 return sz;
             }
         }
 
         /// <summary>
-        /// Gets the message's buffer.
+        /// Gets a copy of the message's buffer.
         /// </summary>
         /// <value>
         /// The buffer.
@@ -252,319 +523,30 @@ namespace Grib.Api
         {
             get
             {
-                SizeT sz = new SizeT();
-                GribApiProxy.GribGetMessageSize(this.Handle, sz);
+                SizeT sz = 0;
+                GribApiProxy.GribGetMessageSize(this.Handle, ref sz);
                 // grib_api returns the data buffer pointer, but continues to own the memory, so no de/allocation is necessary 
                 IntPtr p = IntPtr.Zero;
-                GribApiProxy.GribGetMessage(this.Handle, out p, sz);
+                GribApiProxy.GribGetMessage(this.Handle, out p, ref sz);
 
-                int tl = (int) sz;
-                byte[] bytes = new byte[tl];
-                Marshal.Copy(p, bytes, 0, tl);
+                byte[] bytes = new byte[sz];
+                Marshal.Copy(p, bytes, 0, (int)sz);
 
                 return bytes;
             }
         }
 
-
-        //public void gridType
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_gridType_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_gridType_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int ni
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_ni_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_ni_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int nj
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_nj_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_nj_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double iDirectionIncrementInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_iDirectionIncrementInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_iDirectionIncrementInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double jDirectionIncrementInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_jDirectionIncrementInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_jDirectionIncrementInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double longitudeOfFirstGridPointInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfFirstGridPointInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfFirstGridPointInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double longitudeOfLastGridPointInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfLastGridPointInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfLastGridPointInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double latitudeOfFirstGridPointInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfFirstGridPointInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfFirstGridPointInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double latitudeOfLastGridPointInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfLastGridPointInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfLastGridPointInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int uvRelativeToGrid
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_uvRelativeToGrid_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_uvRelativeToGrid_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double latitudeOfSouthernPoleInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfSouthernPoleInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_latitudeOfSouthernPoleInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double longitudeOfSouthernPoleInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfSouthernPoleInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_longitudeOfSouthernPoleInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int iScansNegatively
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_iScansNegatively_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_iScansNegatively_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int jScansPositively
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_jScansPositively_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_jScansPositively_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int n
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_n_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_n_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int bitmapPresent
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_bitmapPresent_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_bitmapPresent_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double missingValue
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_missingValue_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_missingValue_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public SWIGTYPE_p_long pl
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_pl_set(swigCPtr, SWIGTYPE_p_long.getCPtr(value));
-        //    }
-        //    get
-        //    {
-        //        global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribUtilGridSpec_pl_get(swigCPtr);
-        //        SWIGTYPE_p_long ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_long(cPtr, false);
-        //        return ret;
-        //    }
-        //}
-
-        //public int plSize
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_plSize_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_plSize_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int truncation
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_truncation_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_truncation_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public double orientationOfTheGridInDegrees
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_orientationOfTheGridInDegrees_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        double ret = GribApiProxyPINVOKE.GribUtilGridSpec_orientationOfTheGridInDegrees_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int dyInMetres
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_dyInMetres_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_dyInMetres_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
-
-        //public int dxInMetres
-        //{
-        //    set
-        //    {
-        //        GribApiProxyPINVOKE.GribUtilGridSpec_dxInMetres_set(swigCPtr, value);
-        //    }
-        //    get
-        //    {
-        //        int ret = GribApiProxyPINVOKE.GribUtilGridSpec_dxInMetres_get(swigCPtr);
-        //        return ret;
-        //    }
-        //}
+        /// <summary>
+        /// Gets the <see cref="GribValue"/> with the specified key name.
+        /// </summary>
+        /// <value>
+        /// The <see cref="GribValue"/>.
+        /// </value>
+        /// <param name="keyName">Name of the key.</param>
+        /// <returns></returns>
+        public GribValue this[string keyName]
+        {
+            get { return new GribValue(Handle, keyName); }
+        }
     }
 }

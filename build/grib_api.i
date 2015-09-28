@@ -1,3 +1,17 @@
+// Copyright 2015 Eric Millin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 %module GribApiProxy
 
 %rename("%(strip:[grib])s") ""; 
@@ -12,14 +26,72 @@
 %rename("%(camelcase)s", %$isenum) "";
 %rename("%(camelcase)s", %$isenumitem) "";
 
+
+%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* "System.Runtime.InteropServices.HandleRef"
+%typemap(csin) FILE*, grib_handle*, grib_context* "$csinput.Reference"
+%typemap(cstype) FILE* "GribFile"
+%typemap(csout, out="GribFile", excode=SWIGEXCODE) FILE* %{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribFile(pVal);
+ %}
+ 
+ %typemap(cstype) grib_context* "GribContext"
+ %typemap(cstype) grib_handle* "GribHandle"
+
+ %typemap(csvarout, out="GribContext", excode=SWIGEXCODE2) grib_context* %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribContext(pVal);
+	} %}
+ %typemap(csout, out="GribContext", excode=SWIGEXCODE) grib_context* %{{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribContext(pVal);
+	}%}
+ 
+ %typemap(csvarout, out="GribHandle", excode=SWIGEXCODE2) grib_handle* %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribHandle(pVal);
+	} %}
+%typemap(csout, out="GribHandle", excode=SWIGEXCODE) grib_handle* %{{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribHandle(pVal);
+	}%}
+
+
 %typemap(imtype, out="System.UIntPtr") off_t, size_t "System.UIntPtr"
 %typemap(csin) off_t, size_t "$csinput.Value"
-%typemap(imtype, out="System.UIntPtr") off_t*, size_t * "ref System.UIntPtr"
+%typemap(cstype) off_t, size_t "SizeT"
+%typemap(imtype, out="System.IntPtr") off_t*, size_t * "ref System.UIntPtr"
+//%typemap(imout, out="System.UIntPtr") off_t*, size_t * "System.UIntPtr"
 %typemap(csin) off_t*, size_t * "ref  $csinput.Value"
-%typemap(cstype) off_t, size_t, off_t*, size_t * "SizeT"
-%typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t, size_t, off_t*, size_t * %{
+%typemap(cstype, out="SizeT") off_t*, size_t * "ref SizeT"
+%typemap(csout, out="SizeT", excode=SWIGEXCODE) off_t*, size_t * %{
+		System.IntPtr pVal = $imcall;$excode
+		
+		// dereference the pointer
+		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
+		
+		return new SizeT(val);
+ %}
+%typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t*, size_t * %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+		
+		// dereference the pointer
+		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
+		
+		return new SizeT(val);
+	} %}
+%typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t, size_t %{
 	get {
 		System.UIntPtr val = $imcall;$excode
+		
 		return new SizeT(val);
 	} %}
 
@@ -35,9 +107,9 @@
 %typemap(cstype) float * value "out float"
 %typemap(csin) float * value "out $csinput"
 
-%typemap(csin) long * vals, long * values, int * indexes "$csinput"
-%typemap(cstype) long * vals, long * values, int * indexes "int[]"
-%typemap(imtype) long * vals, long * values, int * indexes "int[]"
+%typemap(csin) long * vals, long * values, int * indexes, long * pl "$csinput"
+%typemap(cstype) long * vals, long * values, int * indexes, long * pl "int[]"
+%typemap(imtype) long * vals, long * values, int * indexes, long * pl "int[]"
 
 %typemap(csin) double * data_values, double * vals, double * values, double * latitudes, double * longitudes, double * lats, double * lons, double * outlats, double * outlons, double * inlats, double * inlons, double * distances "$csinput"
 %typemap(cstype) double * data_values, double * vals, double * values, double * latitudes, double * longitudes, double * lats, double * lons, double * outlats, double * outlons, double * inlats, double * inlons, double * distances "double[]"
@@ -75,6 +147,12 @@
 %typemap(csout, excode=SWIGEXCODE) int grib_iterator_next, int grib_keys_iterator_next {
     return $imcall;$excode
 }
+
+%typemap(csvarout, out="int[]", excode=SWIGEXCODE2) long * pl %{
+	get
+	{
+		return $imcall;$excode
+	} %}
 
 %typemap(csvarout, out="double[]", excode=SWIGEXCODE2) double * latitudes,double * longitudes %{
 	get

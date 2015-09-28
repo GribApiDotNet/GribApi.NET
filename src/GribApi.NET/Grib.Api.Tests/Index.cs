@@ -20,9 +20,9 @@ namespace Grib.Api.Tests
             var index = GribApiProxy.GribIndexNew(c, "shortName,level,number,step", out err);
             GribApiProxy.GribIndexAddFile(index, Settings.GRIB);
             SizeT sz = new SizeT();
-            GribApiProxy.GribIndexGetSize(index, "step", sz);
+            GribApiProxy.GribIndexGetSize(index, "step", ref sz);
             int[] values = new int[sz];
-            GribApiProxy.GribIndexGetLong(index, "step", values, sz);
+            GribApiProxy.GribIndexGetLong(index, "step", values, ref sz);
         }
     }
 }

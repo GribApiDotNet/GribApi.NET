@@ -38,15 +38,15 @@ public class GribPoints : global::System.IDisposable {
     }
   }
 
-  public SWIGTYPE_p_grib_context context {
+  public GribContext context {
     set {
-      GribApiProxyPINVOKE.GribPoints_context_set(swigCPtr, SWIGTYPE_p_grib_context.getCPtr(value));
+      GribApiProxyPINVOKE.GribPoints_context_set(swigCPtr, value.Reference);
     } 
-    get {
-      global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribPoints_context_get(swigCPtr);
-      SWIGTYPE_p_grib_context ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_context(cPtr, false);
-      return ret;
-    } 
+	get {
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribPoints_context_get(swigCPtr);
+
+		return pVal == System.IntPtr.Zero ? null : new GribContext(pVal);
+	} 
   }
 
   public double[] latitudes {
@@ -74,7 +74,11 @@ public class GribPoints : global::System.IDisposable {
       GribApiProxyPINVOKE.GribPoints_indexes_set(swigCPtr, ref  value.Value);
     } 
 	get {
-		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_indexes_get(swigCPtr);
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribPoints_indexes_get(swigCPtr);
+		
+		// dereference the pointer
+		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
+		
 		return new SizeT(val);
 	} 
   }
@@ -84,7 +88,11 @@ public class GribPoints : global::System.IDisposable {
       GribApiProxyPINVOKE.GribPoints_groupStart_set(swigCPtr, ref  value.Value);
     } 
 	get {
-		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_groupStart_get(swigCPtr);
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribPoints_groupStart_get(swigCPtr);
+		
+		// dereference the pointer
+		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
+		
 		return new SizeT(val);
 	} 
   }
@@ -94,7 +102,11 @@ public class GribPoints : global::System.IDisposable {
       GribApiProxyPINVOKE.GribPoints_groupLen_set(swigCPtr, ref  value.Value);
     } 
 	get {
-		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_groupLen_get(swigCPtr);
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribPoints_groupLen_get(swigCPtr);
+		
+		// dereference the pointer
+		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
+		
 		return new SizeT(val);
 	} 
   }
@@ -105,6 +117,7 @@ public class GribPoints : global::System.IDisposable {
     } 
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_nGroups_get(swigCPtr);
+		
 		return new SizeT(val);
 	} 
   }
@@ -115,6 +128,7 @@ public class GribPoints : global::System.IDisposable {
     } 
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_n_get(swigCPtr);
+		
 		return new SizeT(val);
 	} 
   }
@@ -125,6 +139,7 @@ public class GribPoints : global::System.IDisposable {
     } 
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_size_get(swigCPtr);
+		
 		return new SizeT(val);
 	} 
   }

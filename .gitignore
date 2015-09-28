@@ -195,3 +195,7 @@ FakesAssemblies/
 *.opt
 
 lib/*
+nuget.package/definitions
+nuget.package/**/*.dll
+nuget.package/**/*.pdb
+nuget.package/**/*.xml

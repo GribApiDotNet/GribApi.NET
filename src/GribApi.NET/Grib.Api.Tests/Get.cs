@@ -19,8 +19,8 @@ namespace Grib.Api.Tests
         {
             using (GribFile file = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
-                using (var msg = file.First())
-                {
+                var msg = file.First();
+                
                     // "InDegrees" is a magic token that converts coordinate double values to degrees
 
                     Assert.IsTrue(msg["latitudeOfFirstGridPointInDegrees"].CanConvertToDegrees);
@@ -70,7 +70,7 @@ namespace Grib.Api.Tests
                     string packingType = msg["packingType"].AsString();
                     Assert.AreEqual("grid_simple", packingType);
                     Assert.AreEqual(msg["packingType"].NativeType, GribValueType.String);
-                }
+                
             }
         }
     }

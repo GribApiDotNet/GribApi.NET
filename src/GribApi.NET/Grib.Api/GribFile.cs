@@ -1,4 +1,18 @@
-﻿using Grib.Api.Interop.SWIG;
+﻿// Copyright 2015 Eric Millin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using Grib.Api.Interop.SWIG;
 using Grib.Api.Interop;
 using System;
 using System.Collections.Generic;
@@ -16,7 +30,7 @@ namespace Grib.Api
     /// <summary>
     /// Encapsulates logic for reading and writing GRIB messages in files.
     /// </summary>
-    public class GribFile: AutoCleanup, IEnumerable<GribMessage>
+    public class GribFile: GribRef, IEnumerable<GribMessage>
     {
 
         [DllImport("Grib.Api.Native.dll")]
@@ -26,7 +40,7 @@ namespace Grib.Api
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
 
         private IntPtr _pFileHandleProxy;
-        protected FileHandleProxy _fileHandleProxy;
+        private FileHandleProxy _fileHandleProxy;
 
         /// <summary>
         /// Initializes the <see cref="GribFile"/> class.
@@ -43,7 +57,6 @@ namespace Grib.Api
         /// <exception cref="System.IO.IOException">Could not open file. See inner exception for more detail.</exception>
         /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
         public GribFile (string fileName)
-            : base()
         {
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
@@ -66,11 +79,11 @@ namespace Grib.Api
             _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
 
             FileName = fileName;
-            File = new SWIGTYPE_p_FILE(_fileHandleProxy.File, false);
+            Reference = new HandleRef(this, _fileHandleProxy.File);
             Context = GribApiProxy.GribContextGetDefault();
 
             int count = 0;
-            GribApiProxy.GribCountInFile(Context, File, out count);
+            GribApiProxy.GribCountInFile(Context, this, out count);
             MessageCount = count;
         }
 
@@ -87,21 +100,21 @@ namespace Grib.Api
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <returns></returns>
-        protected bool TryGetMessage(out GribMessage msg)
+        protected bool TryGetMessage(out GribMessage msg, int index)
         {
             msg = null;
             int err = 0;
 
-            var handle = GribApiProxy.GribHandleNewFromFile(Context, this.File, out err);
+            GribHandle handle = GribApiProxy.GribHandleNewFromFile(Context, this, out err);
 
             if (err != 0)
             {
                 throw GribApiException.Create(err);
             }
 
-            if(SWIGTYPE_p_grib_handle.getCPtr(handle).Handle != IntPtr.Zero)
+            if(handle != null)
             {
-                msg = new GribMessage(handle, File, Context);
+                msg = new GribMessage(handle, Context, index);
             }
 
             return msg != null;
@@ -116,8 +129,9 @@ namespace Grib.Api
         public IEnumerator<GribMessage> GetEnumerator ()
         {
             GribMessage msg;
+            int i = 0;
 
-            while (TryGetMessage(out msg))
+            while (TryGetMessage(out msg, i++))
             {
                 yield return msg;
             }
@@ -197,7 +211,7 @@ namespace Grib.Api
         /// <value>
         /// The context.
         /// </value>
-        internal SWIGTYPE_p_grib_context Context { get; set; }
+        public GribContext Context { get; protected set; }
 
         /// <summary>
         /// Gets or sets the file.
@@ -205,6 +219,6 @@ namespace Grib.Api
         /// <value>
         /// The file.
         /// </value>
-        internal SWIGTYPE_p_FILE File { get; set; }
+        //internal GribRef File { get; set; }
     }
 }

@@ -78,7 +78,7 @@ Appending multiple messages to an existing file:
 
 		GribFile.Write(outPath, readFile as IEnumerable<GribMessage>, FileMode.Append);
 		// or, more simply:
-		// GribFile.Write(outPath, readFile, FileMode.Append);
+		//   GribFile.Write(outPath, readFile, FileMode.Append);
 	}
 ```
 
@@ -86,7 +86,7 @@ GribApi.NET loads GRIB 1 and 2 messages transparently, but you can determine a m
 ```csharp
 	using (GribFile file = new GribFile("somegrib.grb"))
 	{
-		string ed = file.First()["GRIBEditionNumber"].AsString();
+		string ed = file.First().Edition;
 	}
 ```
 

@@ -1,4 +1,18 @@
-﻿using System;
+﻿// Copyright 2015 Eric Millin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,14 +31,25 @@ namespace Grib.Api
         const uint MAX_KEY_LEN = 255;
         const uint MAX_VAL_LEN = 1024;
 
-        private SWIGTYPE_p_grib_handle _handle;
+        private GribHandle _handle;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribValue"/> class.
         /// </summary>
         /// <param name="handle">The handle.</param>
         /// <param name="keyName">Name of the key.</param>
-        internal GribValue(SWIGTYPE_p_grib_handle handle, string keyName)
+        internal GribValue (string keyName)
+        {
+            Key = keyName;
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribValue"/> class.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="keyName">Name of the key.</param>
+        internal GribValue (GribHandle handle, string keyName)
         {
             _handle = handle;
             Key = keyName;
@@ -35,10 +60,12 @@ namespace Grib.Api
         /// </summary>
         /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will convert the value to degrees when possible.</param>
         /// <returns></returns>
-        public string AsString(bool inDegrees = true)
+        public virtual string AsString (bool inDegrees = true)
         {
+            if (!IsDefined) { return String.Empty; }
+
             SizeT len = new SizeT(MAX_VAL_LEN);
-            SizeT ptLen = new SizeT();
+            SizeT ptLen = 0;
             string valueKey = Key;
 
             if (CanConvertToDegrees)
@@ -47,10 +74,10 @@ namespace Grib.Api
             }
 
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
-            GribApiProxy.GribGetLength(_handle, valueKey, ptLen);
+            GribApiProxy.GribGetLength(_handle, valueKey, ref ptLen);
             StringBuilder msg = new StringBuilder((int) ptLen);
 
-            GribApiProxy.GribGetString(_handle, valueKey, msg, len);
+            GribApiProxy.GribGetString(_handle, valueKey, msg, ref len);
 
             return msg.ToString();
         }
@@ -59,18 +86,20 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        public void AsString(string newValue)
+        public virtual void AsString (string newValue)
         {
             SizeT len = new SizeT((uint)newValue.Length);
-            GribApiProxy.GribSetString(_handle, Key, newValue, len);
+            GribApiProxy.GribSetString(_handle, Key, newValue, ref len);
         }
 
         /// <summary>
         /// Gets the key's value.
         /// </summary>
         /// <returns></returns>
-        public int AsInt()
+        public virtual int AsInt ()
         {
+            if (!IsDefined) { return 0; }
+
             int val;
 
             GribApiProxy.GribGetLong(_handle, Key, out val);
@@ -82,22 +111,25 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        public void AsInt(int newValue)
+        public virtual void AsInt (int newValue)
         {
             GribApiProxy.GribSetLong(_handle, Key, newValue);
         }
 
         /// <summary>
-        /// Gets the key's value.
+        /// Gets a copy of the key's array value. Changing the values of this array does not affect the owning message.
+        /// Call ::AsXArray(alteredArray) to set new values.
         /// </summary>
-        /// <returns></returns>
-        public int[] AsIntArray ()
+        /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns empty array.</returns>
+        public virtual int[] AsIntArray ()
         {
-            SizeT sz = new SizeT();
-            GribApiProxy.GribGetSize(_handle, Key, sz);
+            if (!IsDefined) { return new int[0]; }
+
+            SizeT sz = 0;
+            GribApiProxy.GribGetSize(_handle, Key, ref sz);
 
             int[] values = new int[sz];
-            GribApiProxy.GribGetLongArray(_handle, Key, values, sz);
+            GribApiProxy.GribGetLongArray(_handle, Key, values, ref sz);
 
             return values;
         }
@@ -106,7 +138,7 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValues">The new values.</param>
-        public void AsIntArray(int[] newValues)
+        public virtual void AsIntArray(int[] newValues)
         {
             GribApiProxy.GribSetLongArray(_handle, Key, newValues, new SizeT(newValues.Length));
         }
@@ -116,8 +148,10 @@ namespace Grib.Api
         /// </summary>
         /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will return the value [in degrees] when possible.</param>
         /// <returns></returns>
-        public double AsDouble(bool inDegrees = true)
+        public virtual double AsDouble (bool inDegrees = true)
         {
+            if (!IsDefined) { return 0; }
+
             double val;
             string valueKey = BuildTokenForDouble(inDegrees);
 
@@ -131,7 +165,7 @@ namespace Grib.Api
         /// </summary>
         /// <param name="newValue">The new value.</param>
         /// <param name="inDegrees">if set to <c>true</c> [in degrees], GribApi.NET will set the value [in degrees] when possible.</param>
-        public void AsDouble(double newValue, bool inDegrees = true)
+        public virtual void AsDouble (double newValue, bool inDegrees = true)
         {
             string valueKey = BuildTokenForDouble(inDegrees);
 
@@ -139,16 +173,19 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Gets the key's value.
+        /// Gets a copy of the key's array value. Changing the values of this array does not affect the owning message.
+        /// Call ::AsXArray(alteredArray) to set new values.
         /// </summary>
-        /// <returns></returns>
-        public double[] AsDoubleArray ()
+        /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns 0-length array.</returns>
+        public virtual double[] AsDoubleArray ()
         {
-            SizeT sz = new SizeT();
-            GribApiProxy.GribGetSize(_handle, Key, sz);
+            if (!IsDefined) { return new double[0]; }
+
+            SizeT sz = 0;
+            GribApiProxy.GribGetSize(_handle, Key, ref sz);
 
             double[] values = new double[sz];
-            GribApiProxy.GribGetDoubleArray(_handle, Key, values, sz);
+            GribApiProxy.GribGetDoubleArray(_handle, Key, values, ref sz);
 
             return values;
         }
@@ -158,7 +195,7 @@ namespace Grib.Api
         /// </summary>
         /// <param name="newValues">The new values.</param>
         /// <param name="force">if set to <c>true</c> [force].</param>
-        public void AsDoubleArray (double[] newValues, bool force = false)
+        public virtual void AsDoubleArray (double[] newValues, bool force = false)
         {
             if (force)
             {
@@ -174,7 +211,7 @@ namespace Grib.Api
         /// </summary>
         /// <param name="inDegrees">if set to <c>true</c> [in degrees].</param>
         /// <returns></returns>
-        private string BuildTokenForDouble (bool inDegrees)
+        protected string BuildTokenForDouble (bool inDegrees)
         {
             string valueKey = Key;
 
@@ -187,6 +224,17 @@ namespace Grib.Api
             }
 
             return valueKey;
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents the value as a string.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents the value as a string.
+        /// </returns>
+        public override string ToString ()
+        {
+            return this.AsString();
         }
 
         /// <summary>
@@ -211,14 +259,14 @@ namespace Grib.Api
         /// <value>
         /// The key name.
         /// </value>
-        public string Key { get; private set; }
+        public string Key { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the value associated with this key is missing.
         /// Setting to <c>false</c> throws a <see cref="GribApiException"/>.
         /// </summary>
         /// <value>
-        /// 	<c>true</c> if this value is missing; otherwise, <c>false</c>.
+        /// <c>true</c> if this value is missing; otherwise, <c>false</c>.
         /// </value>
         public bool IsMissing
         {
@@ -267,7 +315,7 @@ namespace Grib.Api
         /// <value>
         /// The type of the native.
         /// </value>
-        public GribValueType NativeType
+        public virtual GribValueType NativeType
         {
             get
             {
