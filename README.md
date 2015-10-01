@@ -85,9 +85,9 @@ Appending multiple messages to an existing file:
 For more examples, checkout the tests.
 
 ## Building
-The current build is only designed for Windows and Visual Studio 2013. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
+The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
-To build, run `build_gribapi.cmd`.
+To build, you can use `build/Grib.Api.Master.sln`. The native projects are set to use the v110 (Visual Studio 2012) Cpp build tools. However, you can change these to match your version of VS in the native projects' `Properties > General > Platform Toolset` field.
 
 ### Running SWIG
 Most of the interop interfaces are generated using SWIG and included in the repository. If you want generate the interfaces yourself, you'll need SWIG installed and available on PATH. Then run `build/swig_gen.cmd`.
