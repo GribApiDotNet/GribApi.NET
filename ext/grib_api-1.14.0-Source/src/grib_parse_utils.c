@@ -493,9 +493,9 @@ extern int grib_yyparse(void);
 static int parse(grib_context* gc, const char* filename)
 {
     int err = 0;
-    GRIB_PTHREAD_ONCE(&once,&init);
-    GRIB_MUTEX_LOCK(&mutex_parse);
-    char* fullpath[256];
+   // GRIB_PTHREAD_ONCE(&once,&init);
+   // GRIB_MUTEX_LOCK(&mutex_parse);
+    char fullpath[256];
 #ifdef YYDEBUG
     {
       extern int grib_yydebug;
