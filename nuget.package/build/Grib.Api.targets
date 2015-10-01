@@ -2,11 +2,11 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <ItemGroup>
         <None Include="$(MSBuildThisFileDirectory)$(Platform)\Grib.Api.Native.dll">
-            <Link>Grib.Api.Native.dll</Link>
+            <Link>Grib.Api\lib\win\$(Platform)\Grib.Api.Native.dll</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
 		<None Include="$(MSBuildThisFileDirectory)$(Platform)\Grib.Api.Native.pdb">
-            <Link>Grib.Api.Native.pdb</Link>
+            <Link>Grib.Api\lib\win\$(Platform)\Grib.Api.Native.pdb</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
@@ -15,7 +15,7 @@
 			<_Definitions Include="$(MSBuildThisFileDirectory)..\definitions\**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(_Definitions)" 
-		  DestinationFiles="@(_Definitions->'$(TargetPath)definitions\%(RecursiveDir)%(Filename)%(Extension)')"
+		  DestinationFiles="@(_Definitions->'$(TargetPath)Grib.Api\definitions\%(RecursiveDir)%(Filename)%(Extension)')"
 		  UseHardlinksIfPossible="true" 
 		  SkipUnchangedFiles="true" />
 	</Target>

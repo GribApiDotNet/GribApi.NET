@@ -61,6 +61,8 @@ namespace Grib.Api
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
+            fileName = fileName.Replace("\\", "/");
+
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check

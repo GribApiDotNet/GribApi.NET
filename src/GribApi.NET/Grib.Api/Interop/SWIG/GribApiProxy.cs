@@ -9,8 +9,8 @@
 namespace Grib.Api.Interop.SWIG {
 
 public class GribApiProxy {
-  public static SWIGTYPE_p_grib_fieldset GribFieldsetNewFromFiles(GribContext c, SWIGTYPE_p_p_char filenames, int nfiles, SWIGTYPE_p_p_char keys, int nkeys, string where_string, string order_by_string, out int err) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribFieldsetNewFromFiles(c.Reference, SWIGTYPE_p_p_char.getCPtr(filenames), nfiles, SWIGTYPE_p_p_char.getCPtr(keys), nkeys, where_string, order_by_string, out err);
+  public static SWIGTYPE_p_grib_fieldset GribFieldsetNewFromFiles(GribContext c, string[] filenames, int nfiles, string[] keys, int nkeys, string where_string, string order_by_string, out int err) {
+    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribFieldsetNewFromFiles(c.Reference, filenames, nfiles, keys, nkeys, where_string, order_by_string, out err);
     SWIGTYPE_p_grib_fieldset ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_fieldset(cPtr, false);
     return ret;
   }
@@ -662,23 +662,23 @@ public class GribApiProxy {
     GribApiProxyPINVOKE.GribPrintApiVersion(arg0.Reference);
   }
 
-  public static SWIGTYPE_p_grib_keys_iterator GribKeysIteratorNew(GribHandle h, uint filter_flags, string name_space) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribKeysIteratorNew(h.Reference, filter_flags, name_space);
-    SWIGTYPE_p_grib_keys_iterator ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_keys_iterator(cPtr, false);
-    return ret;
-  }
+  public static GribKeysIterator GribKeysIteratorNew(GribHandle h, uint filter_flags, string name_space) {
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribKeysIteratorNew(h.Reference, filter_flags, name_space);
 
-  public static int GribKeysIteratorNext(SWIGTYPE_p_grib_keys_iterator kiter) {
-    return GribApiProxyPINVOKE.GribKeysIteratorNext(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter));
+		return pVal == System.IntPtr.Zero ? null : new GribKeysIterator(pVal);
+	}
+
+  public static int GribKeysIteratorNext(GribKeysIterator kiter) {
+    return GribApiProxyPINVOKE.GribKeysIteratorNext(kiter.Reference);
 }
 
-  public static string GribKeysIteratorGetName(SWIGTYPE_p_grib_keys_iterator kiter) {
-    string ret = GribApiProxyPINVOKE.GribKeysIteratorGetName(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter));
+  public static string GribKeysIteratorGetName(GribKeysIterator kiter) {
+    string ret = GribApiProxyPINVOKE.GribKeysIteratorGetName(kiter.Reference);
     return ret;
   }
 
-  public static void GribKeysIteratorDelete(SWIGTYPE_p_grib_keys_iterator kiter) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorDelete(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter));
+  public static void GribKeysIteratorDelete(GribKeysIterator kiter) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorDelete(kiter.Reference);
 	
 	if (ret != 0)
 	{
@@ -686,8 +686,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorRewind(SWIGTYPE_p_grib_keys_iterator kiter) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorRewind(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter));
+  public static void GribKeysIteratorRewind(GribKeysIterator kiter) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorRewind(kiter.Reference);
 	
 	if (ret != 0)
 	{
@@ -695,8 +695,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorSetFlags(SWIGTYPE_p_grib_keys_iterator kiter, uint flags) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorSetFlags(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), flags);
+  public static void GribKeysIteratorSetFlags(GribKeysIterator kiter, uint flags) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorSetFlags(kiter.Reference, flags);
 	
 	if (ret != 0)
 	{
@@ -704,8 +704,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator kiter, out int v, ref SizeT len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetLong(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), out v, ref  len.Value);
+  public static void GribKeysIteratorGetLong(GribKeysIterator kiter, out int v, ref SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetLong(kiter.Reference, out v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -713,8 +713,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator kiter, out double v, ref SizeT len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetDouble(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), out v, ref  len.Value);
+  public static void GribKeysIteratorGetDouble(GribKeysIterator kiter, out double v, ref SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetDouble(kiter.Reference, out v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -722,8 +722,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator kiter, System.Text.StringBuilder v, ref SizeT len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetString(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), v, ref  len.Value);
+  public static void GribKeysIteratorGetString(GribKeysIterator kiter, System.Text.StringBuilder v, ref SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetString(kiter.Reference, v, ref  len.Value);
 	
 	if (ret != 0)
 	{
@@ -731,8 +731,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator kiter, byte[] v, ref SizeT len) {
-    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetBytes(SWIGTYPE_p_grib_keys_iterator.getCPtr(kiter), v, ref  len.Value);
+  public static void GribKeysIteratorGetBytes(GribKeysIterator kiter, byte[] v, ref SizeT len) {
+    int ret = GribApiProxyPINVOKE.GribKeysIteratorGetBytes(kiter.Reference, v, ref  len.Value);
 	
 	if (ret != 0)
 	{

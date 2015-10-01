@@ -82,26 +82,12 @@ Appending multiple messages to an existing file:
 	}
 ```
 
-GribApi.NET loads GRIB 1 and 2 messages transparently, but you can determine a message's GRIB edition at runtime:
-```csharp
-	using (GribFile file = new GribFile("somegrib.grb"))
-	{
-		string ed = file.First().Edition;
-	}
-```
-
 For more examples, checkout the tests.
 
 ## Building
-The current build is only designed for Windows and Visual Studio 2013. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
+The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
-Build the projects in this order:
-
-1. ext/jasper-1.900.1/src/msvc/libjasper.vcxproj
-2. ext/grib_api-1.14.0-Source/windows/msvc/grib_api.sln
-3. src/GribApi.NET/GribApi.sln
-
-After you've built libjasper and grib_api_lib once, you should only need to build GribApi.sln thenceforth.
+To build, you can use `build/Grib.Api.Master.sln`. The native projects are set to use the v110 (Visual Studio 2012) Cpp build tools. However, you can change these to match your version of VS in the native projects' `Properties > General > Platform Toolset` field.
 
 ### Running SWIG
 Most of the interop interfaces are generated using SWIG and included in the repository. If you want generate the interfaces yourself, you'll need SWIG installed and available on PATH. Then run `build/swig_gen.cmd`.

@@ -400,6 +400,13 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int acces
 
 	return fhp;
 }
+
+SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator* iter)
+{
+    char* v = NULL;
+    v = (char*)grib_keys_iterator_get_name(iter);
+    strcpy_s(name, 255, v);
+}
 }
 
 
