@@ -1,31 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjasper", "..\..\ext\jasper-1.900.1\src\msvc\libjasper.vcxproj", "{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjasper", "..\ext\jasper-1.900.1\src\msvc\libjasper.vcxproj", "{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grib_api_lib", "..\..\ext\grib_api-1.14.0-Source\windows\msvc\grib_api_lib\grib_api_lib.vcxproj", "{3DE8B13F-7DFE-48ED-9158-B34D774500EC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grib_api_lib", "..\ext\grib_api-1.14.0-Source\windows\msvc\grib_api_lib\grib_api_lib.vcxproj", "{3DE8B13F-7DFE-48ED-9158-B34D774500EC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC} = {5053CD4D-1E0C-4720-8546-2982BDDC9BEC}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grib.Api", "..\..\src\GribApi.NET\Grib.Api\Grib.Api.csproj", "{9CC21630-ACE4-4D14-93BA-E4E801AD2A91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grib.Api", "..\src\GribApi.NET\Grib.Api\Grib.Api.csproj", "{9CC21630-ACE4-4D14-93BA-E4E801AD2A91}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC} = {3DE8B13F-7DFE-48ED-9158-B34D774500EC}
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC} = {5053CD4D-1E0C-4720-8546-2982BDDC9BEC}
 		{204379CD-C266-4A0D-8E18-3B6AF8AE6AA8} = {204379CD-C266-4A0D-8E18-3B6AF8AE6AA8}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grib.Api.Native", "..\..\src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj", "{204379CD-C266-4A0D-8E18-3B6AF8AE6AA8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Grib.Api.Native", "..\src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj", "{204379CD-C266-4A0D-8E18-3B6AF8AE6AA8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC} = {3DE8B13F-7DFE-48ED-9158-B34D774500EC}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{68AC743F-CFA3-4E01-B1B9-58AAE16125F7}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\src\GribApi.NET\.nuget\packages.config = ..\..\src\GribApi.NET\.nuget\packages.config
+		..\src\GribApi.NET\.nuget\packages.config = ..\src\GribApi.NET\.nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grib.Api.Tests", "..\..\src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj", "{D52B30F9-A9C4-4B78-A9FC-A706197417EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grib.Api.Tests", "..\src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj", "{D52B30F9-A9C4-4B78-A9FC-A706197417EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
