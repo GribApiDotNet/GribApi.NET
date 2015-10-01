@@ -36,6 +36,10 @@ namespace Grib.Api
         /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
+
+        [DllImport("Grib.Api.Native.dll")]
+        internal static extern void GetGribKeysIteratorName (StringBuilder name, IntPtr iter);
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage"/> class.
         /// </summary>
@@ -64,19 +68,16 @@ namespace Grib.Api
             string nspace = Namespace == "all" ? null : Namespace;
             string name = "";
 
-            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace);
+            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, 0, nspace);
+           // GribApiProxy.GribKeysIteratorSetFlags(keyIter, (uint) KeyFilters);
 
-            try
+            while (keyIter.Next())
             {
-                while (GribApiProxy.GribKeysIteratorNext(keyIter) != 0)
-                {
-                    name = GribApiProxy.GribKeysIteratorGetName(keyIter);
-                    yield return this[name];
-                }
-            }
-            finally
-            {
-                GribApiProxy.GribKeysIteratorDelete(keyIter);
+                StringBuilder sb = new StringBuilder(255);
+                // release builds throw an AccessViolation with GribKeysIteratorGetName,
+                // but deal with this wrapper ok
+                GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
+                yield return this[sb.ToString()];
             }
         }
 
@@ -259,35 +260,6 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Gets or sets p1.
-        /// </summary>
-        /// <value>
-        /// The p1.
-        /// </value>
-        public int P1
-        {
-            get
-            {
-                return this["P1"].AsInt();
-            }
-            set { this["P1"].AsInt(value); }
-        }
-
-        /// <summary>
-        /// Gets or sets p2.
-        /// </summary>
-        /// <value>
-        /// The p2.
-        /// </value>
-        public int P2
-        {
-            get {
-                return this["P2"].AsInt();
-            }
-            set { this["P2"].AsInt(value); }
-        }
-
-        /// <summary>
         /// Gets or set the time of the measurement. Time is UTC.
         /// </summary>
         /// <value>
@@ -336,20 +308,6 @@ namespace Grib.Api
         /// The context.
         /// </value>
         protected GribContext Context { get; set; }
-
-        /// <summary>
-        /// Gets the GRIB edition for this message.
-        /// </summary>
-        /// <value>
-        /// The edition.
-        /// </value>
-        public string Edition
-        {
-            get
-            {
-                return this["GRIBEditionNumber"].AsString();
-            }
-        }
 
         /// <summary>
         /// Gets or sets the value used to represent a missing value. This value is used by grib_api,

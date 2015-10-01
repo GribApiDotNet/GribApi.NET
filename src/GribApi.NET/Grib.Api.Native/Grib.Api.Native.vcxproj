@@ -93,33 +93,33 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\x86\$(Configuration)\Grib.Api\lib\win\x86</OutDir>
     <TargetExt>.dll</TargetExt>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX64|Win32'">
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\x86\$(Configuration)\Grib.Api\lib\win\x86</OutDir>
     <TargetExt>.dll</TargetExt>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <TargetExt>.dll</TargetExt>
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\Grib.Api\lib\win\\$(PlatformTarget)</OutDir>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugX64|x64'">
     <TargetExt>.dll</TargetExt>
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\Grib.Api\lib\win\\$(PlatformTarget)</OutDir>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\x86\$(Configuration)\Grib.Api\lib\win\x86</OutDir>
     <TargetExt>.dll</TargetExt>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>.dll</TargetExt>
-    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\</OutDir>
+    <OutDir>..\..\..\bin\$(PlatformTarget)\$(Configuration)\Grib.Api\lib\win\\$(PlatformTarget)</OutDir>
     <IntDir>$(PlatformTarget)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -133,7 +133,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\x86\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>grib_api_lib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -148,7 +148,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\x86\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>grib_api_lib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -197,7 +197,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>..\..\..\lib\$(PlatformTarget)\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\lib\x86\$(Configuration)</AdditionalLibraryDirectories>
       <AdditionalDependencies>grib_api_lib.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

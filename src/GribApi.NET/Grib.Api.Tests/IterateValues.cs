@@ -16,36 +16,12 @@ namespace Grib.Api.Tests
         {
             Console.WriteLine();
 
-            using(var file = new GribFile(Settings.REG_LATLON_GRB1))
+            using(var file = new GribFile(Settings.GAUSS))
             {
                 foreach (var val in file.First())
                 {
                     // TODO: some sort of actual test here
                     Console.WriteLine("{0} = {1}", val.Key, val.AsString());
-                }
-            }
-        }
-
-        [Test]
-        public void TestIterateMessagesToString ()
-        {
-            Console.WriteLine();
-
-            using (var file = new GribFile(Settings.GRIB))
-            {
-                foreach (var msg in file)
-                {
-                    // TODO: some sort of actual test here
-                    Console.WriteLine(msg.ToString());
-                }
-            }
-
-            using (var file = new GribFile(Settings.PACIFIC_WIND))
-            {
-                foreach (var msg in file)
-                {
-                    // TODO: some sort of actual test here
-                    Console.WriteLine(msg.ToString());
                 }
             }
         }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Grib.Api.Interop
 {
-    public abstract class GribRef: AutoRef
+    public class GribRef: AutoRef
     {
         public GribRef () : this(IntPtr.Zero) { }
 
@@ -69,5 +69,22 @@ namespace Grib.Api.Interop
             }
         }
         private bool _enableMultipleFieldMessages = false;
+    }
+
+    public class GribKeysIterator : GribRef
+    {
+        public GribKeysIterator(IntPtr h):base(h)
+        {
+        }
+
+        public bool Next()
+        {
+            return GribApiProxy.GribKeysIteratorNext(this) != 0;
+        }
+
+        protected override void OnDispose ()
+        {
+            GribApiProxy.GribKeysIteratorDelete(this);
+        }
     }
 }

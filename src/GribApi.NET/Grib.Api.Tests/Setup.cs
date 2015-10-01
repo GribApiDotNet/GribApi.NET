@@ -18,18 +18,21 @@ namespace Grib.Api.Tests
         {
             if (Environment.GetEnvironmentVariable("_GRIB_BREAK") == "1")
             {
+                bool breakOnStart = true;
                 Console.WriteLine("Breaking on start...");
                 var mre = new ManualResetEvent(false);
-                while (!mre.WaitOne(250)) ;
+                while (!mre.WaitOne(250) && breakOnStart) ;
             }
-
+           // GribEnvironment.Init();
+          //  GribEnvironment.NoAbort = true;
             string dllPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(GribFile)).Location);
-            string path = Environment.GetEnvironmentVariable("PATH");
-            Environment.SetEnvironmentVariable("PATH", dllPath + ";" + path, EnvironmentVariableTarget.Process);
+            //string path = Environment.GetEnvironmentVariable("PATH");
+            //Environment.SetEnvironmentVariable("PATH", dllPath + "/Grib.Api/" + ";" + path, EnvironmentVariableTarget.Process);
+            //GribEnvironment.putenv("PATH");
 
-            Assert.IsTrue(File.Exists("Grib.Api.Native.dll"));
-            Assert.IsTrue(Directory.Exists("TestData"));
-            Assert.IsTrue(Directory.Exists("definitions"));
+            GribEnvironment.DefinitionsPath = dllPath + "/Grib.Api/definitions";
+            Assert.IsTrue(Directory.Exists(GribEnvironment.DefinitionsPath));
+            Assert.IsTrue(Directory.Exists(".\\Grib.Api\\definitions"));
         }
     }
 }

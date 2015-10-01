@@ -14,6 +14,8 @@
 
 %module GribApiProxy
 
+#define SWIG_CSHARP_NO_IMCLASS_STATIC_CONSTRUCTOR
+
 %rename("%(strip:[grib])s") ""; 
 %rename("%(strip:[Grib])s") ""; 
 %rename("%(lowercamelcase)s", %$isvariable) "";
@@ -27,8 +29,8 @@
 %rename("%(camelcase)s", %$isenumitem) "";
 
 
-%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* "System.Runtime.InteropServices.HandleRef"
-%typemap(csin) FILE*, grib_handle*, grib_context* "$csinput.Reference"
+%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator* "System.Runtime.InteropServices.HandleRef"
+%typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator* "$csinput.Reference"
 %typemap(cstype) FILE* "GribFile"
 %typemap(csout, out="GribFile", excode=SWIGEXCODE) FILE* %{
 		System.IntPtr pVal = $imcall;$excode
@@ -38,6 +40,7 @@
  
  %typemap(cstype) grib_context* "GribContext"
  %typemap(cstype) grib_handle* "GribHandle"
+  %typemap(cstype) grib_keys_iterator* "GribKeysIterator"
 
  %typemap(csvarout, out="GribContext", excode=SWIGEXCODE2) grib_context* %{
 	get {
@@ -61,6 +64,18 @@
 		System.IntPtr pVal = $imcall;$excode
 
 		return pVal == System.IntPtr.Zero ? null : new GribHandle(pVal);
+	}%}
+	
+	 %typemap(csvarout, out="GribKeysIterator", excode=SWIGEXCODE2) grib_keys_iterator* %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribKeysIterator(pVal);
+	} %}
+%typemap(csout, out="GribKeysIterator", excode=SWIGEXCODE) grib_keys_iterator* %{{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribKeysIterator(pVal);
 	}%}
 
 
@@ -135,6 +150,10 @@
 %typemap(imtype) const char * mesg "string"
 %typemap(cstype) const char * mesg "string"
 
+%typemap(csin) char **, const char **,  char *[] "$csinput"
+%typemap(imtype) char **, const char **, char *[] "string[]"
+%typemap(cstype) char **, const char **, char *[] "string[]"
+
 %typemap(csin) char ** values "out $csinput"
 %typemap(imtype) char ** values "out System.Text.StringBuilder"
 %typemap(cstype) char ** values "out System.Text.StringBuilder"
@@ -200,6 +219,6 @@
   }
 
 %typemap(imtype, inattributes="[global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]",
-         outattributes="[return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]") char * "string"
-
+         outattributes="[return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]") char * "string"		 
+		 
 %include "grib_api_native.i"
