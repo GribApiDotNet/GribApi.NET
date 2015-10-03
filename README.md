@@ -5,13 +5,18 @@ GribApi.NET is a C# wrapper around the [European Centre for Medium Range Weather
 
 GRIB is a format commonly used in meteorology to store weather data. GribApi.NET makes it easy to encode and decode these data by providing access to both GRIB editions through a set of [GRIB API keys](https://software.ecmwf.int/wiki/display/GRIB/GRIB%20API%20keys). GribApi.NET and grib_api are licensed under the friendly [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
+## Docs
+The documentation is very much a WIP.
+[Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
+[Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
+
 ## Usage
-Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definitions** directory to your project. By default, GribApi.NET assumes the definitions are in the same directory as the library, but you can change the location by setting `Grib::Api::GribEnvironment::DefinitionsPath` or setting the `GRIB_DEFINITION_PATH` environment variable.
+Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definitions** directory to your project.
 
 You're ready to go!
 
 ### Examples
-Getting grid information from a GRIB message:
+#### Getting grid information from a GRIB message:
 ```csharp
 	using (GribFile file = new GribFile("mygrib.grb"))
 	{
@@ -31,7 +36,7 @@ Getting grid information from a GRIB message:
 	}
 ```
 
-Iterating multiple messages:
+#### Iterating multiple messages:
 ```csharp
 	using (GribFile file = new GribFile("mygrib.grb"))
 	{
@@ -42,7 +47,7 @@ Iterating multiple messages:
 	}
 ```
 
-Iterating Lat/Lon/Value:
+#### Iterating Lat/Lon/Value:
 ```csharp
 
 	GribMessage msg = gribFile.First();
@@ -55,7 +60,7 @@ Iterating Lat/Lon/Value:
 	}
 ```
 
-Editing a single message and saving to a new file:
+#### Editing a single message and saving to a new file:
 ```csharp
 	string outPath = "out.grb";
 	string readPath = "some.grb";
@@ -70,7 +75,7 @@ Editing a single message and saving to a new file:
 	}
 ```
 
-Appending multiple messages to an existing file:
+#### Appending multiple messages to an existing file:
 ```csharp
 	using (GribFile readFile = new GribFile(readPath))
 	{                
@@ -89,12 +94,12 @@ The current build is only designed for Windows and Visual Studio. I am eager to 
 
 To build, you can use `build/Grib.Api.Master.sln`. The native projects are set to use the v110 (Visual Studio 2012) Cpp build tools. However, you can change these to match your version of VS in the native projects' `Properties > General > Platform Toolset` field.
 
-To run a full release build and package, you'll need `NUnit` and `Nuget` on PATH. Then run:
+To run a full release build, you'll need `NUnit` and `Nuget` on PATH. Then run:
 ```shell
 build/build_gribapi.cmd [build|rebuild] [VS version, 11|12|14]
 ```
 
-E.g., to build for with Visual Studio 2012 (VS version 11):
+E.g., to build with Visual Studio 2012 (VS version 11):
 ```shell
 build/build_gribapi.cmd build 11
 ```
@@ -112,43 +117,3 @@ or
 ```shell
 build/run_tests x86 Debug 1
 ```
-
-## Concepts
-
-### GRIB API Keys
-GribApi.NET treats GRIB messages as a collection of key-value pairs. 
-
-### Types of Keys
-#### Coded and Computed Keys
-There are two different types of keys: coded and computed. The coded keys are obtained by directly decoding the GRIB file octets. The key names derive from the official WMO documentation on the GRIB 1 and 2 standards. Spaces are removed from the the key description and the words are "camel cased". E.g., the caption `identification of originating generating centre` is transformed to `identificationOfOriginatingGeneratingCentre`. Some aliases are also available. You can find the captions for [most data representations on the WMO's site](http://www.wmo.int/pages/prog/www/WMOCodes/WMO306_vI2/LatestVERSION/LatestVERSION.html).
-
-The computed keys are obtained by combining other keys (coded or computed). When their value is set all related keys are updated in a cascade process. These keys synthesize information contained in the GRIB message and are a safe way to set complex attributes such as the type of grid or the type of packing. They also help interpret octets such as the scanning mode whose bits are related to the way of scanning the grid. In this case the computed keys:
-```
-iScansNegatively
-jScansPositively
-jPointsAreConsecutive
-alternativeRowScanning (available only for edition 2)
-```
-will provide access to single bits of the scanning mode octect hiding its structure from the user.
-
-#### Read-Only Keys
-The keys can also have some attributes as read only, which means that the key cannot be set (e.g. 7777 at the end of the message), or edition specific that is the attribute of all the keys having different values in the two editions (e.g. longitudeOfFirstGridPoint) or being present in one edition only (e.g. alternativeRowScanning).
-
-#### Function Keys
-There are some computed keys that cannot be "get" and can be considered as functions acting on the grib in some way. These keys are always characterised by a predicate in their name (e.g. setDecimalPrecision).
-
-#### InDegrees
-All the angle variables are provided in two versions, a native one with the units coded into the GRIB file and an edition independent one in degrees. It is always better to work with the "in degrees" version that is always provided through the key which has the same name of the native version with the suffix InDegrees
-```
-longitudeOfFirstGridPoint -> longitudeOfFirstGridPointInDegrees
-latitudeOfFirstGridPoint -> latitudeOfFirstGridPointInDegrees
-longitudeOfLastGridPoint -> longitudeOfLastGridPointInDegrees
-latitudeOfFirstGridPoint -> latitudeOfLastGridPointInDegrees
-latitudeOfFirstGridPoint -> latitudeOfFirstGridPointInDegrees
-iDirectionIncrement -> iDirectionIncrementInDegrees
-jDirectionIncrement -> jDirectionIncrementInDegrees
-```
-
-**You do not need to use the suffix "InDegrees" explicitly in GribApi.NET. The library converts key values to degrees by default, though you can disable this functionality.**
-
-You can read more about GRIB API Keys [here](https://software.ecmwf.int/wiki/display/GRIB/GRIB%20API%20keys).
