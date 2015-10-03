@@ -3,7 +3,7 @@
   <metadata>
 	<title>GribApi.NET</title>
     <id>Grib.Api</id>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
     <authors>Eric Millin</authors>
     <owners>Eric Millin</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>

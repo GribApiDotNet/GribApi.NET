@@ -6,14 +6,16 @@ GribApi.NET is a C# wrapper around the [European Centre for Medium Range Weather
 GRIB is a format commonly used in meteorology to store weather data. GribApi.NET makes it easy to encode and decode these data by providing access to both GRIB editions through a set of [GRIB API keys](https://software.ecmwf.int/wiki/display/GRIB/GRIB%20API%20keys). GribApi.NET and grib_api are licensed under the friendly [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
 ## Docs
-The documentation is very much a WIP.
-[Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
-[Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
+The documentation is very much a WIP, but you'll find [grib_api's wiki](https://software.ecmwf.int/wiki/display/GRIB/Home), helpful.
+
+* [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
+*[Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
 
 ## Usage
-Add **Grib.Api.dll**, **Grib.Api.Native.dll**, and the **ext/grib_api/definitions** directory to your project.
-
-You're ready to go!
+Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
+```shell
+PM> Install-Package Grib.Api 
+```
 
 ### Examples
 #### Getting grid information from a GRIB message:
