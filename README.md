@@ -9,7 +9,7 @@ GRIB is a format commonly used in meteorology to store weather data. GribApi.NET
 The documentation is very much a WIP, but you'll find [grib_api's wiki](https://software.ecmwf.int/wiki/display/GRIB/Home), helpful.
 
 * [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
-*[Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
+* [Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
 
 ## Usage
 Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
