@@ -24,8 +24,6 @@ namespace Grib.Api.Tests
                 // after attaching, put a breakpoint here
                 while (!mre.WaitOne(250)) ;
             }
-
-            GribEnvironment.NoAbort = true;
         }
     }
 }

@@ -292,27 +292,15 @@ SWIGEXPORT struct FileHandleProxy
 	FILE* File;
 };
 
-SWIGEXPORT int __stdcall Count(char * fn)
-{
-	int nm = 0;
-	FILE* f = 0;
-
-	f = fopen(fn, "r");
-	rewind(f);
-	auto c = grib_context_get_default();
-	grib_count_in_file(c, f, &nm);
-	return nm;
-}
-
-SWIGEXPORT void __stdcall UpdateEnv(char * n)
-{
-	_putenv(n);
-}
-
 SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 {
-	CloseHandle((HANDLE)fhp->Win32Handle);
-	//fclose(fhp->File);
+    intptr_t h = _get_osfhandle(_fileno(fhp->File));
+
+    if (fhp->Win32Handle != INVALID_HANDLE_VALUE)
+    {
+        assert(CloseHandle((HANDLE)h) != 0);
+    }
+
 	free(fhp);
 }
 

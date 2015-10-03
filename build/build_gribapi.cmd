@@ -36,6 +36,9 @@ if exist "%SystemRoot%\Microsoft.NET\Framework64" (
   SET FrameworkDir="%SystemRoot%\Microsoft.NET\Framework64"
 )
 
+taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"
+taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
+
 ECHO ON
 
 :::::::::: X64 NATIVE
@@ -60,7 +63,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.sln"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%  /t:Clean,Build 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -69,20 +72,20 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% /p:NoWarn="1591"
+
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% 
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS% neq 0 (
 	goto :fail
 )
-ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
 
 :::::::::: X86 NATIVE
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
+ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
@@ -120,7 +123,12 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
+:::::::::: ANYCPU
+
+:: Copy the AnyCPU build to the x86 dir for testing
+xcopy "%BASEDIR%bin\x64\Release\Grib.Api.dll" "%BASEDIR%bin\x86\Release\Grib.Api.dll"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\Release\Grib.Api.xml" "%BASEDIR%bin\x86\Release\Grib.Api.xml"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\Release\Grib.Api.pdb" "%BASEDIR%bin\x86\Release\Grib.Api.pdb"  /S /Y /I /Q
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -128,7 +136,6 @@ if %BUILD_STATUS% neq 0 (
 	goto :fail
 )
 ECHO ON
-:::::::::: ANYCPU
 
 ::ENDLOCAL
 

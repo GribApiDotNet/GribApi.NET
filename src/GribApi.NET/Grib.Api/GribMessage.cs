@@ -67,16 +67,16 @@ namespace Grib.Api
             // null returns keys from all namespaces
             string nspace = Namespace == "all" ? null : Namespace;
 
-            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, 0, nspace);
-            GribApiProxy.GribKeysIteratorSetFlags(keyIter, (uint) KeyFilters);
-
-            while (keyIter.Next())
+            using(var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace))
             {
-                StringBuilder sb = new StringBuilder(255);
-                // release builds throw an AccessViolation with GribKeysIteratorGetName,
-                // but deal with this wrapper ok
-                GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
-                yield return this[sb.ToString()];
+                while (keyIter.Next())
+                {
+                    StringBuilder sb = new StringBuilder(255);
+                    // release builds throw an AccessViolation with GribKeysIteratorGetName,
+                    // but deal with this wrapper ok
+                    GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
+                    yield return this[sb.ToString()];
+                }
             }
         }
 

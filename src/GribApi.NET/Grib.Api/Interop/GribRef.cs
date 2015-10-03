@@ -16,10 +16,6 @@ namespace Grib.Api.Interop
             Reference = new HandleRef(this, handle);
         }
 
-        protected override void OnDispose ()
-        {
-        }
-
         public HandleRef Reference { get; protected set; }
         public IntPtr pReference { get { return Reference.Handle; } }
     }
@@ -30,7 +26,7 @@ namespace Grib.Api.Interop
         {
         }
 
-        protected override void OnDispose ()
+        protected override void OnDispose (bool disposing)
         {
             GribApiProxy.GribHandleDelete(this);
         }
@@ -43,7 +39,7 @@ namespace Grib.Api.Interop
         {
         }
 
-        protected override void OnDispose ()
+        protected override void OnDispose (bool disposing)
         {
             GribApiProxy.GribContextDelete(this);
         }
@@ -82,7 +78,7 @@ namespace Grib.Api.Interop
             return GribApiProxy.GribKeysIteratorNext(this) != 0;
         }
 
-        protected override void OnDispose ()
+        protected override void OnDispose (bool disposing)
         {
             GribApiProxy.GribKeysIteratorDelete(this);
         }

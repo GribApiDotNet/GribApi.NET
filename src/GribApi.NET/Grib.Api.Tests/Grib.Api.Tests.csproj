@@ -126,7 +126,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>
+    <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"
+taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

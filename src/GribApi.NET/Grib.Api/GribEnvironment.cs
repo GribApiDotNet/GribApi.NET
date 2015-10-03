@@ -36,11 +36,9 @@ namespace Grib.Api
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern bool SetDllDirectory(string lpPathName);
 
-        [System.Runtime.InteropServices.DllImport("msvcrt.dll", EntryPoint="_putenv")]
-        public static extern int putenv([MarshalAs(UnmanagedType.LPStr)]string env);
-        
-        [DllImport("Grib.Api.Native.dll")]
-        public static extern int UpdateEnv([MarshalAs(UnmanagedType.LPStr)]string env);
+        [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int _putenv_s (string e, string v);
+
         //class Posix
         //{
         //    [System.Runtime.InteropServices.DllImport("libc.so")]
@@ -79,13 +77,6 @@ namespace Grib.Api
 
             _init = true;
 
-            if (String.IsNullOrWhiteSpace(DefinitionsPath))
-            {
-                string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                DefinitionsPath = Path.Combine(basePath, "Grib.Api\\definitions");
-                Debug.Assert(Directory.Exists(DefinitionsPath));
-            }
-
             const string PATH_TEMPLATE = ".\\Grib.Api\\lib\\win\\{0}\\Grib.Api.Native.{1}";
             string platform = (IntPtr.Size == 8) ? "x64" : "x86";
             string binaryType = "dll";
@@ -93,8 +84,15 @@ namespace Grib.Api
             string libPath = String.Format(PATH_TEMPLATE, platform, binaryType);
             libPath = Path.GetFullPath(libPath);
             SetDllDirectory(Path.GetDirectoryName(libPath));
-            string path = Environment.GetEnvironmentVariable("PATH");
-            Environment.SetEnvironmentVariable("PATH", String.Join(";", libPath, path));
+          //  string path = Environment.GetEnvironmentVariable("PATH");
+          //  Environment.SetEnvironmentVariable("PATH", String.Join(";", libPath, AppDomain.CurrentDomain.BaseDirectory, path));
+
+            if (String.IsNullOrWhiteSpace(DefinitionsPath))
+            {
+                string basePath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
+                DefinitionsPath = Path.Combine(basePath, "Grib.Api\\definitions");
+                Debug.Assert(Directory.Exists(DefinitionsPath));
+            }
 
             IntPtr h = LoadWin32Library(libPath);
             Debug.Assert(h != IntPtr.Zero);
@@ -103,7 +101,13 @@ namespace Grib.Api
         }
         // GRIB_API_LOG_STREAM=stderr
 
-        // GRIB_DUMP_JPG_FILE
+
+        /// <summary>
+        /// Gets or sets the JPEG dump path.
+        /// </summary>
+        /// <value>
+        /// The JPEG dump path.
+        /// </value>
         public static string JpegDumpPath
         {
             get
@@ -114,34 +118,46 @@ namespace Grib.Api
             {
                 Environment.SetEnvironmentVariable("GRIB_DUMP_JPG_FILE", value,
                     EnvironmentVariableTarget.Process);
-                putenv("GRIB_DUMP_JPG_FILE");
+                _putenv_s("GRIB_DUMP_JPG_FILE", value);
             }
         }
 
-        // GRIB_API_NO_ABORT
+        /// <summary>
+        /// Sets a value indicating whether or not grib_api should abort on an assertion failure or error log.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [no abort]; otherwise, <c>false</c>.
+        /// </value>
         public static bool NoAbort
         {
             set
             {
-                Environment.SetEnvironmentVariable("GRIB_API_NO_ABORT", value ? "1" : "0", EnvironmentVariableTarget.Process);
-                putenv("GRIB_API_NO_ABORT");
-                Environment.SetEnvironmentVariable("GRIB_API_FAIL_IF_LOG_MESSAGE", value ? "0" : "1", EnvironmentVariableTarget.Process);
-                putenv("GRIB_API_FAIL_IF_LOG_MESSAGE");
+                string val = value ? "1" : "0";
+                Environment.SetEnvironmentVariable("GRIB_API_NO_ABORT", val, EnvironmentVariableTarget.Process);
+                _putenv_s("GRIB_API_NO_ABORT", val);
+
+                val = value ? "0" : "1";
+                Environment.SetEnvironmentVariable("GRIB_API_FAIL_IF_LOG_MESSAGE", val, EnvironmentVariableTarget.Process);
+                _putenv_s("GRIB_API_FAIL_IF_LOG_MESSAGE", val);
             }
         }
 
-        // GRIB_DEFINITION_PATH
+        /// <summary>
+        /// Gets or sets the location of grib_api's definitions directory. By default, it is located at Grib.Api/definitions.
+        /// </summary>
+        /// <value>
+        /// The definitions path.
+        /// </value>
         public static string DefinitionsPath
         {
             get
             {
                 return Environment.GetEnvironmentVariable("GRIB_DEFINITION_PATH");
             }
-
             set
             {
                 Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", value, EnvironmentVariableTarget.Process);
-                putenv("GRIB_DEFINITION_PATH");
+                _putenv_s("GRIB_DEFINITION_PATH", value);
             }
         }
     }
