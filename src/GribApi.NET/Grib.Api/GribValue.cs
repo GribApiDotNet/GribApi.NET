@@ -32,6 +32,7 @@ namespace Grib.Api
         const uint MAX_VAL_LEN = 1024;
 
         private GribHandle _handle;
+        private readonly static string[] _asStringBlacklist = { "codedValues", "values", "bitmap" };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribValue"/> class.
@@ -42,7 +43,6 @@ namespace Grib.Api
         {
             Key = keyName;
         }
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribValue"/> class.
@@ -62,9 +62,8 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual string AsString (bool inDegrees = true)
         {
-            if (!IsDefined) { return String.Empty; }
+            if (!IsDefined || _asStringBlacklist.Contains(Key)) { return String.Empty; }
 
-            SizeT len = new SizeT(MAX_VAL_LEN);
             SizeT ptLen = 0;
             string valueKey = Key;
 
@@ -77,7 +76,7 @@ namespace Grib.Api
             GribApiProxy.GribGetLength(_handle, valueKey, ref ptLen);
             StringBuilder msg = new StringBuilder((int) ptLen);
 
-            GribApiProxy.GribGetString(_handle, valueKey, msg, ref len);
+            GribApiProxy.GribGetString(_handle, valueKey, msg, ref ptLen);
 
             return msg.ToString();
         }
@@ -150,7 +149,7 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual double AsDouble (bool inDegrees = true)
         {
-            if (!IsDefined) { return 0; }
+            if (!IsDefined) { return Double.NaN; }
 
             double val;
             string valueKey = BuildTokenForDouble(inDegrees);

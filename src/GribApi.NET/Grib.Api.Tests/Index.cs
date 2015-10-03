@@ -15,14 +15,14 @@ namespace Grib.Api.Tests
         [Test]
         public void IndexTest ()
         {
-            int err = 0;
-            var c = GribApiProxy.GribContextGetDefault();
-            var index = GribApiProxy.GribIndexNew(c, "shortName,level,number,step", out err);
-            GribApiProxy.GribIndexAddFile(index, Settings.GRIB);
-            SizeT sz = new SizeT();
-            GribApiProxy.GribIndexGetSize(index, "step", ref sz);
-            int[] values = new int[sz];
-            GribApiProxy.GribIndexGetLong(index, "step", values, ref sz);
+            //int err = 0;
+            //var c = GribApiProxy.GribContextGetDefault();
+            //var index = GribApiProxy.GribIndexNew(c, "shortName,level,number,step", out err);
+            //GribApiProxy.GribIndexAddFile(index, Settings.GRIB);
+            //SizeT sz = new SizeT();
+            //GribApiProxy.GribIndexGetSize(index, "step", ref sz);
+            //int[] values = new int[sz];
+            //GribApiProxy.GribIndexGetLong(index, "step", values, ref sz);
         }
     }
 }

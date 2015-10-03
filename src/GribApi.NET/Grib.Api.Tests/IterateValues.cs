@@ -16,7 +16,7 @@ namespace Grib.Api.Tests
         {
             Console.WriteLine();
 
-            using(var file = new GribFile(Settings.GAUSS))
+            using(var file = new GribFile(Settings.BIN))
             {
                 foreach (var val in file.First())
                 {
@@ -33,8 +33,6 @@ namespace Grib.Api.Tests
 
             using (var file = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
-                int j = 0;
-
                 foreach (var msg in file)
                 {
                     Console.WriteLine();

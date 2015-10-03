@@ -304,10 +304,15 @@ SWIGEXPORT int __stdcall Count(char * fn)
 	return nm;
 }
 
+SWIGEXPORT void __stdcall UpdateEnv(char * n)
+{
+	_putenv(n);
+}
+
 SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 {
-	assert(CloseHandle((HANDLE)fhp->Win32Handle) == TRUE);
-	fclose(fhp->File);
+	CloseHandle((HANDLE)fhp->Win32Handle);
+	//fclose(fhp->File);
 	free(fhp);
 }
 

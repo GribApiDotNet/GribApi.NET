@@ -21,18 +21,12 @@ namespace Grib.Api.Tests
                 bool breakOnStart = true;
                 Console.WriteLine("Breaking on start...");
                 var mre = new ManualResetEvent(false);
+
+                // after attaching, put a breakpoint here and set breakOnStart=false to continue
                 while (!mre.WaitOne(250) && breakOnStart) ;
             }
-           // GribEnvironment.Init();
-          //  GribEnvironment.NoAbort = true;
-            string dllPath = Path.GetDirectoryName(Assembly.GetAssembly(typeof(GribFile)).Location);
-            //string path = Environment.GetEnvironmentVariable("PATH");
-            //Environment.SetEnvironmentVariable("PATH", dllPath + "/Grib.Api/" + ";" + path, EnvironmentVariableTarget.Process);
-            //GribEnvironment.putenv("PATH");
 
-            GribEnvironment.DefinitionsPath = dllPath + "/Grib.Api/definitions";
-            Assert.IsTrue(Directory.Exists(GribEnvironment.DefinitionsPath));
-            Assert.IsTrue(Directory.Exists(".\\Grib.Api\\definitions"));
+            GribEnvironment.NoAbort = true;
         }
     }
 }

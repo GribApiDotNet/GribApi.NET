@@ -94,7 +94,12 @@ namespace Grib.Api
         /// </summary>
         protected override void OnDispose ()
         {
-            DestroyFileHandleProxy(_pFileHandleProxy);
+            try
+            {
+                DestroyFileHandleProxy(_pFileHandleProxy);
+            } catch (SEHException) {
+                // happens in some apps when debugging, but not other times--hm
+            }
         }
 
         /// <summary>

@@ -33,10 +33,14 @@ namespace Grib.Api
     {
         static GribRef _libHandle;
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool SetDllDirectory(string lpPathName);
 
-        [System.Runtime.InteropServices.DllImport("msvcrt.dll", EntryPoint="_putenv", CharSet=CharSet.Ansi)]
-        public static extern int putenv (string env);
-
+        [System.Runtime.InteropServices.DllImport("msvcrt.dll", EntryPoint="_putenv")]
+        public static extern int putenv([MarshalAs(UnmanagedType.LPStr)]string env);
+        
+        [DllImport("Grib.Api.Native.dll")]
+        public static extern int UpdateEnv([MarshalAs(UnmanagedType.LPStr)]string env);
         //class Posix
         //{
         //    [System.Runtime.InteropServices.DllImport("libc.so")]
@@ -72,24 +76,28 @@ namespace Grib.Api
         public static void Init()
         {
             if (_init) { return; }
+
             _init = true;
-            // if GRIB_DEFINITION_PATH is not defined, set it
+
             if (String.IsNullOrWhiteSpace(DefinitionsPath))
             {
-                string basePath = Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
-                DefinitionsPath = Path.Combine(basePath, "Grib.Api/definitions");
+                string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                DefinitionsPath = Path.Combine(basePath, "Grib.Api\\definitions");
+                Debug.Assert(Directory.Exists(DefinitionsPath));
             }
 
             const string PATH_TEMPLATE = ".\\Grib.Api\\lib\\win\\{0}\\Grib.Api.Native.{1}";
-            string platform = (Marshal.SizeOf(typeof(IntPtr)) == 8) ? "x64" : "x86";
+            string platform = (IntPtr.Size == 8) ? "x64" : "x86";
             string binaryType = "dll";
 
             string libPath = String.Format(PATH_TEMPLATE, platform, binaryType);
+            libPath = Path.GetFullPath(libPath);
+            SetDllDirectory(Path.GetDirectoryName(libPath));
 
             IntPtr h = LoadWin32Library(libPath);
-            _libHandle = new GribRef(h);
+            Debug.Assert(h != IntPtr.Zero);
 
-            Debug.Assert(Directory.Exists(DefinitionsPath));
+            _libHandle = new GribRef(h);
         }
         // GRIB_API_LOG_STREAM=stderr
 
@@ -102,13 +110,7 @@ namespace Grib.Api
             }
             set
             {
-                string val = value;
-                if (!String.IsNullOrWhiteSpace(value))
-                {
-                    // grib_api_lib assumes POSIX-style paths
-                    val = value.Replace("\\", "/");
-                }
-                Environment.SetEnvironmentVariable("GRIB_DUMP_JPG_FILE", val,
+                Environment.SetEnvironmentVariable("GRIB_DUMP_JPG_FILE", value,
                     EnvironmentVariableTarget.Process);
                 putenv("GRIB_DUMP_JPG_FILE");
             }
@@ -136,14 +138,7 @@ namespace Grib.Api
 
             set
             {
-                string val = value;
-                if (!String.IsNullOrWhiteSpace(value))
-                {
-                    // grib_api_lib assumes POSIX-style paths
-                    val = value.Replace("\\", "/");
-                }
-                
-                Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", val, EnvironmentVariableTarget.Process);
+                Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", value, EnvironmentVariableTarget.Process);
                 putenv("GRIB_DEFINITION_PATH");
             }
         }

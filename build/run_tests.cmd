@@ -4,7 +4,7 @@
 taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"
 
 set _CONSOLE=nunit-console
-if "%1"=="x86" set _CONSOLE=nunit-console-x86
+if "%1"=="x86" (set _CONSOLE=nunit-console-x86)
 
 :: if 3rd param == 1, break on start, otherwise ignored
 set _GRIB_BREAK=%3

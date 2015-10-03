@@ -66,10 +66,9 @@ namespace Grib.Api
         {
             // null returns keys from all namespaces
             string nspace = Namespace == "all" ? null : Namespace;
-            string name = "";
 
             var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, 0, nspace);
-           // GribApiProxy.GribKeysIteratorSetFlags(keyIter, (uint) KeyFilters);
+            GribApiProxy.GribKeysIteratorSetFlags(keyIter, (uint) KeyFilters);
 
             while (keyIter.Next())
             {
