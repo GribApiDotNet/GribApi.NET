@@ -35,9 +35,8 @@ namespace Grib.Api
         private readonly static string[] _asStringBlacklist = { "codedValues", "values", "bitmap" };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GribValue"/> class.
+        /// Initializes a new instance of the <see cref="GribValue" /> class.
         /// </summary>
-        /// <param name="handle">The handle.</param>
         /// <param name="keyName">Name of the key.</param>
         internal GribValue (string keyName)
         {

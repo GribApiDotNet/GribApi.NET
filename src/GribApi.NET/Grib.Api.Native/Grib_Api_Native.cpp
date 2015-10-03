@@ -378,7 +378,7 @@ HANDLE OpenGribFile(char * fn, int access, int mode) {
 	return hFile;
 }
 
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 {
     char * fmode = NULL;
 

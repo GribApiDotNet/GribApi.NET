@@ -106,6 +106,7 @@ namespace Grib.Api
         /// Tries the get message.
         /// </summary>
         /// <param name="msg">The MSG.</param>
+        /// <param name="index">The index.</param>
         /// <returns></returns>
         protected bool TryGetMessage(out GribMessage msg, int index)
         {
@@ -219,13 +220,5 @@ namespace Grib.Api
         /// The context.
         /// </value>
         public GribContext Context { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the file.
-        /// </summary>
-        /// <value>
-        /// The file.
-        /// </value>
-        //internal GribRef File { get; set; }
     }
 }

@@ -40,7 +40,7 @@ ECHO ON
 
 :::::::::: X64 NATIVE
 
-SET _OUT=/p:OutputPath="%BASEDIR%bin\x64\Release\"
+SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
@@ -69,7 +69,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -78,9 +78,11 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
+
 :::::::::: X86 NATIVE
 
-SET _OUT=/p:OutputPath="%BASEDIR%bin\x86\Release\"
+SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
@@ -109,9 +111,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-:::::::::: ANYCPU
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -122,15 +122,14 @@ ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%
 
-xcopy "%BASEDIR%bin\x64\Release\Grib.Api.dll" "%BASEDIR%bin\x86\Release\Grib.Api.dll" /S /Y /I /Q
-xcopy "%BASEDIR%bin\x64\Release\Grib.Api.pdb" "%BASEDIR%bin\x86\Release\Grib.Api.pdb" /S /Y /I /Q
-
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS% neq 0 (
 	goto :fail
 )
 ECHO ON
+:::::::::: ANYCPU
+
 ::ENDLOCAL
 
 call build_nuget.cmd
@@ -140,7 +139,7 @@ if %BUILD_STATUS% neq 0 (
 )
 
 call run_tests.cmd x64 Release
-
+call run_tests.cmd x86 Release
 
 goto end
 

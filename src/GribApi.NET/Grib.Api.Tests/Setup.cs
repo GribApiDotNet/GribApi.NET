@@ -18,12 +18,11 @@ namespace Grib.Api.Tests
         {
             if (Environment.GetEnvironmentVariable("_GRIB_BREAK") == "1")
             {
-                bool breakOnStart = true;
                 Console.WriteLine("Breaking on start...");
                 var mre = new ManualResetEvent(false);
 
-                // after attaching, put a breakpoint here and set breakOnStart=false to continue
-                while (!mre.WaitOne(250) && breakOnStart) ;
+                // after attaching, put a breakpoint here
+                while (!mre.WaitOne(250)) ;
             }
 
             GribEnvironment.NoAbort = true;

@@ -93,6 +93,8 @@ namespace Grib.Api
             string libPath = String.Format(PATH_TEMPLATE, platform, binaryType);
             libPath = Path.GetFullPath(libPath);
             SetDllDirectory(Path.GetDirectoryName(libPath));
+            string path = Environment.GetEnvironmentVariable("PATH");
+            Environment.SetEnvironmentVariable("PATH", String.Join(";", libPath, path));
 
             IntPtr h = LoadWin32Library(libPath);
             Debug.Assert(h != IntPtr.Zero);
