@@ -21,35 +21,47 @@ using System.Threading.Tasks;
 
 namespace Grib.Api.Interop
 {
+    /// <summary>
+    /// RAII-patterned wrapper for unmanaged references.
+    /// </summary>
     public abstract class AutoRef : IDisposable
     {
         // to detect redundant calls
-        private bool _disposed = false; 
+        private bool _disposed = false;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoRef"/> class.
+        /// </summary>
         public AutoRef ()
         {
         }
 
+        /// <summary>
+        /// Finalizes an instance of the <see cref="AutoRef"/> class.
+        /// </summary>
         ~AutoRef ()
         {
             Dispose(false);
         }
 
+        /// <summary>
+        /// Releases unmanaged and - optionally - managed resources.
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected void Dispose (bool disposing)
         {
             if (!_disposed)
             {
-                if (disposing)
-                {
-                    OnDispose();
-                }
-
-                // shared cleanup logic
                 _disposed = true;
+                OnDispose(disposing);
             }
         }
 
-        protected virtual void OnDispose ()
+        /// <summary>
+        /// Called when [dispose].
+        /// </summary>
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>  
+        protected virtual void OnDispose (bool disposing)
         {
         }
 

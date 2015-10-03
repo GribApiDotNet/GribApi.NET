@@ -92,21 +92,31 @@ namespace Grib.Api
         /// <summary>
         /// Called when [dispose].
         /// </summary>
-        protected override void OnDispose ()
+        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+        protected override void OnDispose (bool disposing)
         {
-            DestroyFileHandleProxy(_pFileHandleProxy);
+            try
+            {
+                DestroyFileHandleProxy(_pFileHandleProxy);
+            } catch (SEHException) {
+                // this exception is no longer occuring afaict, but handling this just the same.
+                // see http://stackoverflow.com/a/10073774/347155
+            }
         }
 
         /// <summary>
-        /// Tries the get message.
+        /// Tries to get the next message in a file.
         /// </summary>
         /// <param name="msg">The MSG.</param>
+        /// <param name="index">The index.</param>
         /// <returns></returns>
         protected bool TryGetMessage(out GribMessage msg, int index)
         {
             msg = null;
             int err = 0;
 
+            // grib_api moves to the next message in a stream for each new handle. returns null when
+            // nothing to return.
             GribHandle handle = GribApiProxy.GribHandleNewFromFile(Context, this, out err);
 
             if (err != 0)
@@ -214,13 +224,5 @@ namespace Grib.Api
         /// The context.
         /// </value>
         public GribContext Context { get; protected set; }
-
-        /// <summary>
-        /// Gets or sets the file.
-        /// </summary>
-        /// <value>
-        /// The file.
-        /// </value>
-        //internal GribRef File { get; set; }
     }
 }

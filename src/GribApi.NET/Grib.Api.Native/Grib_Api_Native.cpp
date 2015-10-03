@@ -292,22 +292,15 @@ SWIGEXPORT struct FileHandleProxy
 	FILE* File;
 };
 
-SWIGEXPORT int __stdcall Count(char * fn)
-{
-	int nm = 0;
-	FILE* f = 0;
-
-	f = fopen(fn, "r");
-	rewind(f);
-	auto c = grib_context_get_default();
-	grib_count_in_file(c, f, &nm);
-	return nm;
-}
-
 SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 {
-	assert(CloseHandle((HANDLE)fhp->Win32Handle) == TRUE);
-	fclose(fhp->File);
+    intptr_t h = _get_osfhandle(_fileno(fhp->File));
+
+    if (fhp->Win32Handle != INVALID_HANDLE_VALUE)
+    {
+        assert(CloseHandle((HANDLE)h) != 0);
+    }
+
 	free(fhp);
 }
 
@@ -373,7 +366,7 @@ HANDLE OpenGribFile(char * fn, int access, int mode) {
 	return hFile;
 }
 
-SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn, int access, int mode)
+SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 {
     char * fmode = NULL;
 

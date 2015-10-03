@@ -27,6 +27,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{68AC74
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grib.Api.Tests", "..\src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj", "{D52B30F9-A9C4-4B78-A9FC-A706197417EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{5A75D594-5032-4033-8821-093ED43015DA}"
+	ProjectSection(SolutionItems) = preProject
+		Build.proj = Build.proj
+		.build\MSBuild.Community.Tasks.dll = .build\MSBuild.Community.Tasks.dll
+		.build\MSBuild.Community.Tasks.targets = .build\MSBuild.Community.Tasks.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,8 +170,8 @@ Global
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|Win32.ActiveCfg = Debug|x86
-		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x64.ActiveCfg = Debug|x64
-		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x64.Build.0 = Debug|x64
+		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x64.Build.0 = Debug|Any CPU
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x86.ActiveCfg = Debug|x86
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.Debug|x86.Build.0 = Debug|x86
 		{D52B30F9-A9C4-4B78-A9FC-A706197417EB}.DebugX64|Any CPU.ActiveCfg = Debug|Any CPU

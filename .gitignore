@@ -195,6 +195,7 @@ FakesAssemblies/
 *.opt
 
 lib/*
+nuget.package/Grib.Api
 nuget.package/definitions
 nuget.package/**/*.dll
 nuget.package/**/*.pdb

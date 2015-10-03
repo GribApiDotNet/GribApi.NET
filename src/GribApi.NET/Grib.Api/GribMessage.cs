@@ -37,15 +37,15 @@ namespace Grib.Api
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
 
-        [DllImport("Grib.Api.Native.dll")]
+        [DllImport("Grib.Api.Native.dll", CharSet = CharSet.Ansi)]
         internal static extern void GetGribKeysIteratorName (StringBuilder name, IntPtr iter);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GribMessage"/> class.
+        /// Initializes a new instance of the <see cref="GribMessage" /> class.
         /// </summary>
         /// <param name="handle">The handle.</param>
-        /// <param name="file">The file.</param>
         /// <param name="context">The context.</param>
+        /// <param name="index">The index.</param>
         internal GribMessage (GribHandle handle, GribContext context = null, int index = 0)
             : base()
         {
@@ -66,18 +66,17 @@ namespace Grib.Api
         {
             // null returns keys from all namespaces
             string nspace = Namespace == "all" ? null : Namespace;
-            string name = "";
 
-            var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, 0, nspace);
-           // GribApiProxy.GribKeysIteratorSetFlags(keyIter, (uint) KeyFilters);
-
-            while (keyIter.Next())
+            using(var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace))
             {
-                StringBuilder sb = new StringBuilder(255);
-                // release builds throw an AccessViolation with GribKeysIteratorGetName,
-                // but deal with this wrapper ok
-                GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
-                yield return this[sb.ToString()];
+                while (keyIter.Next())
+                {
+                    StringBuilder sb = new StringBuilder(255);
+                    // release builds throw an AccessViolation with GribKeysIteratorGetName,
+                    // but deal with this wrapper ok
+                    GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
+                    yield return this[sb.ToString()];
+                }
             }
         }
 
@@ -109,14 +108,14 @@ namespace Grib.Api
         /// <returns>
         /// A <see cref="System.String" /> containing metadata about this instance.
         /// </returns>
-        //public override string ToString ()
-        //{
-        //    //{Index}:{parameterName} ({stepType }):{grid_type}:{typeOfLevel} {level}:fcst time {stepRange} hrs {if ({stepType == 'avg'})}:from {dataDate}{dataTime}
-        //    string stepType = this["stepType"].AsString();
-        //    string timeQaulifier = stepType == "avg" ? String.Format("({0})", stepType) : "";
+        public override string ToString ()
+        {
+            //{Index}:{parameterName} ({stepType }):{grid_type}:{typeOfLevel} {level}:fcst time {stepRange} hrs {if ({stepType == 'avg'})}:from {dataDate}{dataTime}
+            string stepType = this["stepType"].AsString();
+            string timeQaulifier = stepType == "avg" ? String.Format("({0})", stepType) : "";
 
-        //    return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
-        //}
+            return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
+        }
 
         /// <summary>
         /// Gets the parameter name.
