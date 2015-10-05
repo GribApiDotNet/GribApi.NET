@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/0x1mason/GribApi.NET</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/0x1mason/GribApi.NET/master/build/GribApi.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>GribApi.NET is a C# library for reading and writing GRIB 1 and 2 files. It wraps the  European Centre for Medium Range Weather Forecasting's powerful C library, grib_api.</description>
+    <description>GribApi.NET is a C# library for reading and writing GRIB 1 and 2 files. It wraps the European Centre for Medium Range Weather Forecasting's powerful C library, grib_api.</description>
     <copyright>Copyright 2015</copyright>
     <tags>Geospatial Geo GRIB Weather Forecast Meteorology</tags>
   </metadata>

@@ -303,11 +303,11 @@ public class GribApiProxy {
 	}
   }
 
-  public static SWIGTYPE_p_grib_iterator GribIteratorNew(GribHandle h, uint flags, out int error) {
-    global::System.IntPtr cPtr = GribApiProxyPINVOKE.GribIteratorNew(h.Reference, flags, out error);
-    SWIGTYPE_p_grib_iterator ret = (cPtr == global::System.IntPtr.Zero) ? null : new SWIGTYPE_p_grib_iterator(cPtr, false);
-    return ret;
-  }
+  public static GribValuesIterator GribIteratorNew(GribHandle h, uint flags, out int error) {
+		System.IntPtr pVal = GribApiProxyPINVOKE.GribIteratorNew(h.Reference, flags, out error);
+
+		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
+	}
 
   public static void GribGetData(GribHandle h, double[] lats, double[] lons, double[] values, ref SizeT size) {
     int ret = GribApiProxyPINVOKE.GribGetData(h.Reference, lats, lons, values, ref  size.Value);
@@ -318,12 +318,12 @@ public class GribApiProxy {
 	}
   }
 
-  public static int GribIteratorNext(SWIGTYPE_p_grib_iterator i, out double lat, out double lon, out double value) {
-    return GribApiProxyPINVOKE.GribIteratorNext(SWIGTYPE_p_grib_iterator.getCPtr(i), out lat, out lon, out value);
+  public static int GribIteratorNext(GribValuesIterator i, out double lat, out double lon, out double value) {
+    return GribApiProxyPINVOKE.GribIteratorNext(i.Reference, out lat, out lon, out value);
 }
 
-  public static void GribIteratorPrevious(SWIGTYPE_p_grib_iterator i, out double lat, out double lon, out double value) {
-    int ret = GribApiProxyPINVOKE.GribIteratorPrevious(SWIGTYPE_p_grib_iterator.getCPtr(i), out lat, out lon, out value);
+  public static void GribIteratorPrevious(GribValuesIterator i, out double lat, out double lon, out double value) {
+    int ret = GribApiProxyPINVOKE.GribIteratorPrevious(i.Reference, out lat, out lon, out value);
 	
 	if (ret != 0)
 	{
@@ -331,8 +331,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorHasNext(SWIGTYPE_p_grib_iterator i) {
-    int ret = GribApiProxyPINVOKE.GribIteratorHasNext(SWIGTYPE_p_grib_iterator.getCPtr(i));
+  public static void GribIteratorHasNext(GribValuesIterator i) {
+    int ret = GribApiProxyPINVOKE.GribIteratorHasNext(i.Reference);
 	
 	if (ret != 0)
 	{
@@ -340,8 +340,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorReset(SWIGTYPE_p_grib_iterator i) {
-    int ret = GribApiProxyPINVOKE.GribIteratorReset(SWIGTYPE_p_grib_iterator.getCPtr(i));
+  public static void GribIteratorReset(GribValuesIterator i) {
+    int ret = GribApiProxyPINVOKE.GribIteratorReset(i.Reference);
 	
 	if (ret != 0)
 	{
@@ -349,8 +349,8 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorDelete(SWIGTYPE_p_grib_iterator i) {
-    int ret = GribApiProxyPINVOKE.GribIteratorDelete(SWIGTYPE_p_grib_iterator.getCPtr(i));
+  public static void GribIteratorDelete(GribValuesIterator i) {
+    int ret = GribApiProxyPINVOKE.GribIteratorDelete(i.Reference);
 	
 	if (ret != 0)
 	{

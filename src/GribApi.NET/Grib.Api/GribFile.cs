@@ -24,21 +24,17 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
+using Grib.Api.Interop.Util;
 
 namespace Grib.Api
 {
     /// <summary>
-    /// Encapsulates logic for reading and writing GRIB messages in files.
+    /// GRIB file iterator object that provides methods for reading and writing messages. When iterated, returns
+    /// instances of the <see cref="Grib.Api.GribMessage"/> class.
     /// </summary>
+    [ContractClass(typeof(GribFile))]
     public class GribFile: GribRef, IEnumerable<GribMessage>
     {
-
-        [DllImport("Grib.Api.Native.dll")]
-        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
-
-        [DllImport("Grib.Api.Native.dll")]
-        internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
-
         private IntPtr _pFileHandleProxy;
         private FileHandleProxy _fileHandleProxy;
 
@@ -61,8 +57,6 @@ namespace Grib.Api
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
 
-            fileName = fileName.Replace("\\", "/");
-
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check
@@ -71,7 +65,7 @@ namespace Grib.Api
                 throw new FileLoadException("This file is empty.");
             }
 
-            _pFileHandleProxy = CreateFileHandleProxy(fileName);
+            _pFileHandleProxy = GribApiNative.CreateFileHandleProxy(fileName);
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
@@ -97,7 +91,7 @@ namespace Grib.Api
         {
             try
             {
-                DestroyFileHandleProxy(_pFileHandleProxy);
+                GribApiNative.DestroyFileHandleProxy(_pFileHandleProxy);
             } catch (SEHException) {
                 // this exception is no longer occuring afaict, but handling this just the same.
                 // see http://stackoverflow.com/a/10073774/347155
@@ -105,18 +99,17 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Tries to get the next message in a file.
+        /// Tries to get the next message in the file.
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        protected bool TryGetMessage(out GribMessage msg, int index)
+        protected bool Next (out GribMessage msg, int index)
         {
             msg = null;
             int err = 0;
 
-            // grib_api moves to the next message in a stream for each new handle. returns null when
-            // nothing to return.
+            // grib_api moves to the next message in a stream for each new handle
             GribHandle handle = GribApiProxy.GribHandleNewFromFile(Context, this, out err);
 
             if (err != 0)
@@ -143,7 +136,7 @@ namespace Grib.Api
             GribMessage msg;
             int i = 0;
 
-            while (TryGetMessage(out msg, i++))
+            while (Next(out msg, i++))
             {
                 yield return msg;
             }

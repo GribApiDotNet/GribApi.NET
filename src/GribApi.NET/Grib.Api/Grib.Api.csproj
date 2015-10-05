@@ -121,6 +121,7 @@
   <ItemGroup>
     <Compile Include="GribApiException.cs" />
     <Compile Include="GribPackingSpec.cs" />
+    <Compile Include="GribValueTypeException.cs" />
     <Compile Include="IGeoCoordinate.cs" />
     <Compile Include="Interop\AutoRef.cs" />
     <Compile Include="Interop\FileHandleProxy.cs" />
@@ -168,6 +169,8 @@
     <Compile Include="Interop\SWIG\SWIGTYPE_p_size_t.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_unsigned_char.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_void.cs" />
+    <Compile Include="Interop\Util\GribApiNative.cs" />
+    <Compile Include="Interop\Util\Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ParameterNumbers.cs" />
     <Compile Include="Templates\RegularLatLon.cs" />

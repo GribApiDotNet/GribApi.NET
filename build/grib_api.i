@@ -29,8 +29,8 @@
 %rename("%(camelcase)s", %$isenumitem) "";
 
 
-%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator* "System.Runtime.InteropServices.HandleRef"
-%typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator* "$csinput.Reference"
+%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator*, grib_iterator* "System.Runtime.InteropServices.HandleRef"
+%typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator*, grib_iterator* "$csinput.Reference"
 %typemap(cstype) FILE* "GribFile"
 %typemap(csout, out="GribFile", excode=SWIGEXCODE) FILE* %{
 		System.IntPtr pVal = $imcall;$excode
@@ -38,6 +38,7 @@
 		return pVal == System.IntPtr.Zero ? null : new GribFile(pVal);
  %}
  
+  %typemap(cstype) grib_iterator* "GribValuesIterator"
  %typemap(cstype) grib_context* "GribContext"
  %typemap(cstype) grib_handle* "GribHandle"
   %typemap(cstype) grib_keys_iterator* "GribKeysIterator"
@@ -77,6 +78,18 @@
 
 		return pVal == System.IntPtr.Zero ? null : new GribKeysIterator(pVal);
 	}%}
+	
+%typemap(csvarout, out="GribValuesIterator", excode=SWIGEXCODE2) grib_iterator* %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
+	} %}
+%typemap(csout, out="GribValuesIterator", excode=SWIGEXCODE) grib_iterator* %{{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
+	}%}
 
 
 %typemap(imtype, out="System.UIntPtr") off_t, size_t "System.UIntPtr"
@@ -92,7 +105,7 @@
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
  %}
 %typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t*, size_t * %{
 	get {
@@ -101,13 +114,13 @@
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} %}
 %typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t, size_t %{
 	get {
 		System.UIntPtr val = $imcall;$excode
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} %}
 
 %typemap(imtype) long * v, int * n, int * type, long * value, int * err, int * error "out int"
