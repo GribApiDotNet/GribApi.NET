@@ -99,12 +99,12 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Tries to get the next message in a file.
+        /// Tries to get the next message in the file.
         /// </summary>
         /// <param name="msg">The MSG.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        protected bool TryGetMessage(out GribMessage msg, int index)
+        protected bool Next (out GribMessage msg, int index)
         {
             msg = null;
             int err = 0;
@@ -136,7 +136,7 @@ namespace Grib.Api
             GribMessage msg;
             int i = 0;
 
-            while (TryGetMessage(out msg, i++))
+            while (Next(out msg, i++))
             {
                 yield return msg;
             }

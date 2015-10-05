@@ -26,9 +26,9 @@ using System.Diagnostics;
 namespace Grib.Api
 {
     /// <summary>
-    /// Grib message object.
-    /// Each grib message has attributes corresponding to grib message keys for GRIB1 and GRIB2.
-    /// Parameter names are are given by the name, shortName and paramID keys. 
+    /// Grib message object. Each grib message has attributes corresponding to grib message keys for GRIB1 and GRIB2.
+    /// Parameter names are are given by the name, shortName and paramID keys. When iterated, returns instances of the
+    /// <seealso cref="Grib.Api.GribValue"/> class.
     /// </summary>
     public class GribMessage: IEnumerable<GribValue>
     {
@@ -100,6 +100,7 @@ namespace Grib.Api
         public GribMessage Clone()
         {
             var newHandle = GribApiProxy.GribHandleClone(this.Handle);
+
             return new GribMessage(newHandle, this.Context);
         }
 

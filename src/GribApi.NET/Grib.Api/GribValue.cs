@@ -100,7 +100,7 @@ namespace Grib.Api
         {
             if (!IsDefined) { return new byte[0]; }
 
-            TestTypeSafe(GribValueType.Bytes);
+            AssertTypeSafe(GribValueType.Bytes);
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -129,7 +129,7 @@ namespace Grib.Api
         {
             if (!IsDefined) { return 0; }
 
-            TestTypeSafe(GribValueType.Int);
+            AssertTypeSafe(GribValueType.Int);
 
             int val;
 
@@ -156,7 +156,7 @@ namespace Grib.Api
         {
             if (!IsDefined) { return new int[0]; }
 
-            TestTypeSafe(GribValueType.IntArray);
+            AssertTypeSafe(GribValueType.IntArray);
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -188,7 +188,7 @@ namespace Grib.Api
             double val;
             string valueKey = BuildTokenForDouble(inDegrees);
 
-            TestTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
+            AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
             GribApiProxy.GribGetDouble(_handle, valueKey, out val);
 
@@ -216,7 +216,7 @@ namespace Grib.Api
         {
             if (!IsDefined) { return new double[0]; }
 
-            TestTypeSafe(GribValueType.DoubleArray);
+            AssertTypeSafe(GribValueType.DoubleArray);
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -386,9 +386,9 @@ namespace Grib.Api
         /// Tests for type safety when accessing this value.
         /// </summary>
         /// <param name="expectedType">The expected type.</param>
-        private void TestTypeSafe (GribValueType expectedType)
+        private void AssertTypeSafe (GribValueType expectedType)
         {
-            GribValue.TestTypeSafe(Key, expectedType, NativeType);
+            GribValue.AssertTypeSafe(Key, expectedType, NativeType);
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace Grib.Api
         /// <param name="expectedType">The expected type.</param>
         /// <param name="actualType">The actual type.</param>
         /// <exception cref="GribValueTypeException"></exception>
-        private static void TestTypeSafe(string key, GribValueType expectedType, GribValueType actualType)
+        private static void AssertTypeSafe(string key, GribValueType expectedType, GribValueType actualType)
         {
             if (expectedType != actualType)
             {
