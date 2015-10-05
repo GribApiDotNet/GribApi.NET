@@ -40,8 +40,7 @@ namespace Grib.Api
 
         /// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
-        /// to ensure the native libraries are properly bootstrapped and the environment setup
-        /// correctly.
+        /// to ensure the native libraries are bootstrapped and the environment setup correctly.
         /// </summary>
         /// <exception cref="System.ComponentModel.Win32Exception"></exception>
         public static void Init()
@@ -57,13 +56,7 @@ namespace Grib.Api
             string libPath = String.Format(pathTemplate, platform, binaryType);
             libPath = Path.GetFullPath(libPath);
 
-            bool wasSet = Win32.SetDllDirectory(Path.GetDirectoryName(libPath));
-
-            if(!wasSet)
-            {
-                int lastError = Marshal.GetLastWin32Error();
-                throw new Win32Exception(lastError, "SetDllDirectory invocation failed for " + Path.GetDirectoryName(libPath));
-            }
+            Win32.SetDllSearchPath(Path.GetDirectoryName(libPath));
 
             if (String.IsNullOrWhiteSpace(DefinitionsPath))
             {

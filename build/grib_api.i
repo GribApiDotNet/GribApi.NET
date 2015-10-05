@@ -105,7 +105,7 @@
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
  %}
 %typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t*, size_t * %{
 	get {
@@ -114,13 +114,13 @@
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} %}
 %typemap(csvarout, out="SizeT", excode=SWIGEXCODE2) off_t, size_t %{
 	get {
 		System.UIntPtr val = $imcall;$excode
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} %}
 
 %typemap(imtype) long * v, int * n, int * type, long * value, int * err, int * error "out int"

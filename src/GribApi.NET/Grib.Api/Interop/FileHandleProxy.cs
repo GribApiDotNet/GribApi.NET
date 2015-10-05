@@ -23,6 +23,7 @@ namespace Grib.Api.Interop
     [StructLayout(LayoutKind.Sequential)]
     public class FileHandleProxy
     {
+        // TODO: remove this
         public IntPtr Win32Handle;
 
         /// <summary>

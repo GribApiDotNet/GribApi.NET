@@ -79,7 +79,7 @@ public class GribPoints : global::System.IDisposable {
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 
@@ -93,7 +93,7 @@ public class GribPoints : global::System.IDisposable {
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 
@@ -107,7 +107,7 @@ public class GribPoints : global::System.IDisposable {
 		// dereference the pointer
 		System.UIntPtr val = (System.UIntPtr)System.Runtime.InteropServices.Marshal.PtrToStructure(pVal, typeof(System.UIntPtr));
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 
@@ -118,7 +118,7 @@ public class GribPoints : global::System.IDisposable {
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_nGroups_get(swigCPtr);
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 
@@ -129,7 +129,7 @@ public class GribPoints : global::System.IDisposable {
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_n_get(swigCPtr);
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 
@@ -140,7 +140,7 @@ public class GribPoints : global::System.IDisposable {
 	get {
 		System.UIntPtr val = GribApiProxyPINVOKE.GribPoints_size_get(swigCPtr);
 		
-		return new SizeT(val);
+		return (SizeT)val;
 	} 
   }
 

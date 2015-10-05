@@ -10,7 +10,7 @@ namespace Grib.Api.Interop.Util
     internal static class Win32
     {
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern bool SetDllDirectory (string lpPathName);
+        private static extern bool SetDllDirectory (string lpPathName);
 
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
         internal static extern int _putenv_s (string e, string v);
@@ -37,6 +37,15 @@ namespace Grib.Api.Interop.Util
             }
 
             return moduleHandle;
+        }
+
+        internal static void SetDllSearchPath (string pathName)
+        {
+            if (!Win32.SetDllDirectory(pathName))
+            {
+                int lastError = Marshal.GetLastWin32Error();
+                throw new Win32Exception(lastError, "SetDllDirectory invocation failed for " + pathName);
+            }
         }
     }
 }

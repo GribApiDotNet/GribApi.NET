@@ -41,10 +41,6 @@ namespace Grib.Api
         /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
-
-        [DllImport("Grib.Api.Native.dll", CharSet = CharSet.Ansi)]
-        internal static extern void GetGribKeysIteratorName (StringBuilder name, IntPtr iter);
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage" /> class.
         /// </summary>

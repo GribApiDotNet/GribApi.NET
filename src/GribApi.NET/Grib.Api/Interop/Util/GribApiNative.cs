@@ -10,5 +10,11 @@ namespace Grib.Api.Interop.Util
     {
         [DllImport("Grib.Api.Native.dll", CharSet = CharSet.Ansi)]
         internal static extern void GetGribKeysIteratorName (StringBuilder name, IntPtr iter);
+
+        [DllImport("Grib.Api.Native.dll")]
+        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
+
+        [DllImport("Grib.Api.Native.dll")]
+        internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
     }
 }

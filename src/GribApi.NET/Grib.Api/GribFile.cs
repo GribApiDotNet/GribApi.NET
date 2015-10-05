@@ -24,6 +24,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
+using Grib.Api.Interop.Util;
 
 namespace Grib.Api
 {
@@ -34,12 +35,6 @@ namespace Grib.Api
     [ContractClass(typeof(GribFile))]
     public class GribFile: GribRef, IEnumerable<GribMessage>
     {
-        [DllImport("Grib.Api.Native.dll")]
-        internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
-
-        [DllImport("Grib.Api.Native.dll")]
-        internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
-
         private IntPtr _pFileHandleProxy;
         private FileHandleProxy _fileHandleProxy;
 
@@ -70,7 +65,7 @@ namespace Grib.Api
                 throw new FileLoadException("This file is empty.");
             }
 
-            _pFileHandleProxy = CreateFileHandleProxy(fileName);
+            _pFileHandleProxy = GribApiNative.CreateFileHandleProxy(fileName);
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
@@ -96,7 +91,7 @@ namespace Grib.Api
         {
             try
             {
-                DestroyFileHandleProxy(_pFileHandleProxy);
+                GribApiNative.DestroyFileHandleProxy(_pFileHandleProxy);
             } catch (SEHException) {
                 // this exception is no longer occuring afaict, but handling this just the same.
                 // see http://stackoverflow.com/a/10073774/347155

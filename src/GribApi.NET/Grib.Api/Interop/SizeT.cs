@@ -26,17 +26,17 @@ namespace Grib.Api.Interop
     {
         public UIntPtr Value;
 
-        public SizeT (UIntPtr val) : this()
+        private SizeT (UIntPtr val) : this()
         {
             Value = val;
         }
 
-        public SizeT (uint val = 0)
+        private SizeT (uint val = 0)
             : this((UIntPtr)val)
         {
         }
 
-        public SizeT (int val)
+        private SizeT (int val)
             : this((UIntPtr)val)
         {
         }
@@ -54,6 +54,16 @@ namespace Grib.Api.Interop
         public static explicit operator SizeT (UInt64 s)
         {
             return new SizeT((UIntPtr)s);
+        }
+
+        public static explicit operator SizeT (Int32 s)
+        {
+            return new SizeT((UIntPtr) s);
+        }
+
+        public static explicit operator SizeT (Int64 s)
+        {
+            return new SizeT((UIntPtr) s);
         }
 
         public static implicit operator UIntPtr (SizeT s)
