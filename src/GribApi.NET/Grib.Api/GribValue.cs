@@ -32,7 +32,9 @@ namespace Grib.Api
         const uint MAX_VAL_LEN = 1024;
 
         private GribHandle _handle;
-        private readonly static string[] _asStringBlacklist = { "codedValues", "values", "bitmap" };
+        private readonly static GribValueType[] _asStringBlacklist = { GribValueType.IntArray, 
+                                                                       GribValueType.DoubleArray,
+                                                                       GribValueType.Bytes };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribValue" /> class.
@@ -61,7 +63,7 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual string AsString (bool inDegrees = true)
         {
-            if (!IsDefined || _asStringBlacklist.Contains(Key)) { return String.Empty; }
+            if (!IsDefined || _asStringBlacklist.Contains(NativeType) ) { return String.Empty; }
 
             SizeT ptLen = 0;
             string valueKey = Key;
@@ -91,12 +93,43 @@ namespace Grib.Api
         }
 
         /// <summary>
+        /// Gets the key's value in bytes.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] AsBytes ()
+        {
+            if (!IsDefined) { return new byte[0]; }
+
+            TestTypeSafe(GribValueType.Bytes);
+
+            SizeT sz = 0;
+            GribApiProxy.GribGetSize(_handle, Key, ref sz);
+            byte[] bytes = new byte[sz];
+
+            GribApiProxy.GribGetBytes(_handle, Key, bytes, ref sz);
+
+            return bytes;
+        }
+
+        /// <summary>
+        /// Sets the key's value in bytes.
+        /// </summary>
+        /// <param name="newBytes">The new bytes.</param>
+        public void AsBytes(byte[] newBytes)
+        {
+            SizeT sz = new SizeT(newBytes.Length);
+            GribApiProxy.GribSetBytes(_handle, Key, newBytes, ref sz);
+        }
+
+        /// <summary>
         /// Gets the key's value.
         /// </summary>
         /// <returns></returns>
         public virtual int AsInt ()
         {
             if (!IsDefined) { return 0; }
+
+            TestTypeSafe(GribValueType.Int);
 
             int val;
 
@@ -122,6 +155,8 @@ namespace Grib.Api
         public virtual int[] AsIntArray ()
         {
             if (!IsDefined) { return new int[0]; }
+
+            TestTypeSafe(GribValueType.IntArray);
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -153,6 +188,8 @@ namespace Grib.Api
             double val;
             string valueKey = BuildTokenForDouble(inDegrees);
 
+            TestTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
+
             GribApiProxy.GribGetDouble(_handle, valueKey, out val);
 
             return val;
@@ -178,6 +215,8 @@ namespace Grib.Api
         public virtual double[] AsDoubleArray ()
         {
             if (!IsDefined) { return new double[0]; }
+
+            TestTypeSafe(GribValueType.DoubleArray);
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -261,23 +300,12 @@ namespace Grib.Api
 
         /// <summary>
         /// Gets or sets a value indicating whether the value associated with this key is missing.
-        /// Setting to <c>false</c> throws a <see cref="GribApiException"/>.
         /// </summary>
         /// <value>
         /// <c>true</c> if this value is missing; otherwise, <c>false</c>.
         /// </value>
         public bool IsMissing
         {
-            set
-            {
-                if (!value)
-                {
-                    throw new GribApiException("To mark a value as not missing, simply set the value.");
-                }
-
-                GribApiProxy.GribSetMissing(_handle, Key);
-            }
-
             get
             {
                 int err;
@@ -317,11 +345,65 @@ namespace Grib.Api
         {
             get
             {
-                int type = 0;
+                GribValueType nativeType = NativeTypeForKey(Key);
 
-                GribApiProxy.GribGetNativeType(_handle, Key, out type);
-                
-                return (GribValueType) type;
+                // int[] and double[] values are return as int and double, so
+                // determine if the value is an array
+                if (nativeType == GribValueType.Int ||
+                    nativeType == GribValueType.Double)
+                {
+                    SizeT sz = 0;
+                    GribApiProxy.GribGetSize(_handle, Key, ref sz);
+
+                    if (sz > 1)
+                    {
+                        nativeType = (nativeType == GribValueType.Int) ?
+                                        GribValueType.IntArray :
+                                        GribValueType.DoubleArray;
+                    }
+
+                }
+
+                return nativeType;
+            }
+        }
+
+        /// <summary>
+        /// Gets an enum describing a key's representation within the message.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        private GribValueType NativeTypeForKey(string key)
+        {
+            int type = 0;
+
+            GribApiProxy.GribGetNativeType(_handle, key, out type);
+
+            return (GribValueType) type;
+        }
+
+        /// <summary>
+        /// Tests for type safety when accessing this value.
+        /// </summary>
+        /// <param name="expectedType">The expected type.</param>
+        private void TestTypeSafe (GribValueType expectedType)
+        {
+            GribValue.TestTypeSafe(Key, expectedType, NativeType);
+        }
+
+        /// <summary>
+        /// Tests for type safety when accessing a GRIB value.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="expectedType">The expected type.</param>
+        /// <param name="actualType">The actual type.</param>
+        /// <exception cref="GribValueTypeException"></exception>
+        private static void TestTypeSafe(string key, GribValueType expectedType, GribValueType actualType)
+        {
+            if (expectedType != actualType)
+            {
+                throw new GribValueTypeException(String.Format("Invalid type conversion. Key {0} is GRIB type {1}",
+                                                                key, expectedType.AsString()));
             }
         }
     }

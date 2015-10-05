@@ -15,7 +15,7 @@ namespace Grib.Api.Tests
             using (GribFile file = new GribFile(Settings.REG_LATLON_GRB1))
             {
                 var msg = file.First();
-                double missing = 3333;
+                int missing = 3333;
                 // set the value used to represent missing data
                 msg.MissingValue = missing;
                 Assert.AreEqual(msg.MissingValue, missing);

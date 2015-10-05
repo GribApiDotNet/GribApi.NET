@@ -26,10 +26,15 @@ using System.Diagnostics;
 namespace Grib.Api
 {
     /// <summary>
-    /// Encapsulates logic for reading and writing GRIB messages.
+    /// Grib message object.
+    /// Each grib message has attributes corresponding to grib message keys for GRIB1 and GRIB2.
+    /// Parameter names are are given by the name, shortName and paramID keys. 
     /// </summary>
     public class GribMessage: IEnumerable<GribValue>
     {
+        private static readonly string[] _ignoreKeys = { "zero","one","eight","eleven","false","thousand","file",
+                       "localDir","7777","oneThousand" };
+
         /// <summary>
         /// The key namespaces. Set the <see cref="Namespace"/> property with these values to
         /// filter the keys return when iterating this message. Default value is [all].
@@ -67,15 +72,15 @@ namespace Grib.Api
             // null returns keys from all namespaces
             string nspace = Namespace == "all" ? null : Namespace;
 
-            using(var keyIter = GribApiProxy.GribKeysIteratorNew(Handle, (uint) KeyFilters, nspace))
+            using (var keyIter = GribKeysIterator.Create(Handle, (uint) KeyFilters, nspace))
             {
                 while (keyIter.Next())
                 {
-                    StringBuilder sb = new StringBuilder(255);
-                    // release builds throw an AccessViolation with GribKeysIteratorGetName,
-                    // but deal with this wrapper ok
-                    GetGribKeysIteratorName(sb, keyIter.Reference.Handle);
-                    yield return this[sb.ToString()];
+                    string key = keyIter.Name;
+
+                    if (_ignoreKeys.Contains(key)) { continue; }
+
+                    yield return this[key];
                 }
             }
         }
@@ -272,7 +277,6 @@ namespace Grib.Api
                                     this["hour"].AsInt(), this["minute"].AsInt(), this["second"].AsInt(),
                                     DateTimeKind.Utc);
             }
-
             set
             {
                 this["year"].AsInt(value.Year);
@@ -281,6 +285,48 @@ namespace Grib.Api
                 this["hour"].AsInt(value.Hour);
                 this["minute"].AsInt(value.Minute);
                 this["second"].AsInt(value.Second);
+            }
+        }
+
+        /// <summary>
+        /// The total number of points on the grid and includes missing as well as 'real' values. DataPointsCount = <see cref="ValuesCount"/> + <see cref="MissingCount"/>.
+        /// </summary>
+        /// <value>
+        /// The data points count.
+        /// </value>
+        public int DataPointsCount
+        {
+            get
+            {
+                return this["numberOfDataPoints"].AsInt();
+            }
+        }
+
+        /// <summary>
+        /// This is the number of 'real' values in the field and excludes the number of missing ones. Identical to 'numberOfCodedValues'
+        /// </summary>
+        /// <value>
+        /// The values count.
+        /// </value>
+        public int ValuesCount
+        {
+            get
+            {
+                return this["numberOfValues"].AsInt();
+            }
+        }
+
+        /// <summary>
+        /// The number of missing values in the field.
+        /// </summary>
+        /// <value>
+        /// The missing count.
+        /// </value>
+        public int MissingCount
+        {
+            get
+            {
+                return this["numberOfMissing"].AsInt();
             }
         }
 
@@ -315,15 +361,15 @@ namespace Grib.Api
         /// <value>
         /// The missing value.
         /// </value>
-        public double MissingValue 
+        public int MissingValue 
         { 
             get
             {
-                return this["missingValue"].AsDouble(); 
+                return this["missingValue"].AsInt(); 
             }
             set
             {
-                this["missingValue"].AsDouble(value);
+                this["missingValue"].AsInt(value);
             }
         }
 
@@ -408,22 +454,15 @@ namespace Grib.Api
         {
             get
             {
-                int err = 0;
-                double lat, lon, val;
-                
-                var iter = GribApiProxy.GribIteratorNew(Handle, (uint) KeyFilters, out err);
+                GeoSpatialValue gsVal;
 
-                if (err != 0)
+                using (GribValuesIterator iter = GribValuesIterator.Create(Handle, (uint) KeyFilters))
                 {
-                    throw GribApiException.Create(err);
+                    while (iter.Next(out gsVal, this.MissingValue))
+                    {
+                        yield return gsVal;
+                    }
                 }
-
-                while (GribApiProxy.GribIteratorNext(iter, out lat, out lon, out val) != 0)
-                {
-                    yield return new GeoSpatialValue(lat, lon, val, val == this.MissingValue);
-                }
-
-                GribApiProxy.GribIteratorDelete(iter);
             }
         }
 

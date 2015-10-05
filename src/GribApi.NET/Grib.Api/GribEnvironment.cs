@@ -14,6 +14,7 @@
 
 using Grib.Api.Interop;
 using Grib.Api.Interop.SWIG;
+using Grib.Api.Interop.Util;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,81 +30,56 @@ namespace Grib.Api
 {
 
     // see https://software.ecmwf.int/wiki/display/GRIB/Environment+variables
+    /// <summary>
+    /// Interface for configuring GribApi.NET's runtime environment.
+    /// </summary>
     public static class GribEnvironment
     {
         static GribRef _libHandle;
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool SetDllDirectory(string lpPathName);
-
-        [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int _putenv_s (string e, string v);
-
-        //class Posix
-        //{
-        //    [System.Runtime.InteropServices.DllImport("libc.so")]
-        //    public static extern int putenv (string env);
-        //}
-
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
-        internal static extern IntPtr LoadLibrary ([MarshalAs(UnmanagedType.LPStr)]string lpFileName);
-
-        internal static IntPtr LoadWin32Library (string libPath)
-        {
-            if (String.IsNullOrEmpty(libPath))
-            {
-                throw new ArgumentNullException("libPath");
-            }
-
-            IntPtr moduleHandle = LoadLibrary(libPath);
-
-            if (moduleHandle == IntPtr.Zero)
-            {
-                var lasterror = Marshal.GetLastWin32Error();
-                var innerEx = new Win32Exception(lasterror);
-                innerEx.Data.Add("LastWin32Error", lasterror);
-
-                throw new Exception("Can't load DLL " + libPath, innerEx);
-            }
-
-            return moduleHandle;
-        }
-
         private static volatile bool _init = false;
 
+        /// <summary>
+        /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
+        /// to ensure the native libraries are properly bootstrapped and the environment setup
+        /// correctly.
+        /// </summary>
+        /// <exception cref="System.ComponentModel.Win32Exception"></exception>
         public static void Init()
         {
             if (_init) { return; }
 
             _init = true;
 
-            const string PATH_TEMPLATE = ".\\Grib.Api\\lib\\win\\{0}\\Grib.Api.Native.{1}";
+            string pathTemplate = ".\\Grib.Api\\lib\\win\\{0}\\Grib.Api.Native.{1}";
             string platform = (IntPtr.Size == 8) ? "x64" : "x86";
             string binaryType = "dll";
 
-            string libPath = String.Format(PATH_TEMPLATE, platform, binaryType);
+            string libPath = String.Format(pathTemplate, platform, binaryType);
             libPath = Path.GetFullPath(libPath);
-            SetDllDirectory(Path.GetDirectoryName(libPath));
-          //  string path = Environment.GetEnvironmentVariable("PATH");
-          //  Environment.SetEnvironmentVariable("PATH", String.Join(";", libPath, AppDomain.CurrentDomain.BaseDirectory, path));
+
+            bool wasSet = Win32.SetDllDirectory(Path.GetDirectoryName(libPath));
+
+            if(!wasSet)
+            {
+                int lastError = Marshal.GetLastWin32Error();
+                throw new Win32Exception(lastError, "SetDllDirectory invocation failed for " + Path.GetDirectoryName(libPath));
+            }
 
             if (String.IsNullOrWhiteSpace(DefinitionsPath))
             {
                 string basePath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory);
-                DefinitionsPath = Path.Combine(basePath, "Grib.Api\\definitions");
+                DefinitionsPath = Path.Combine(basePath, "Grib.Api", "definitions");
                 Debug.Assert(Directory.Exists(DefinitionsPath));
             }
 
-            IntPtr h = LoadWin32Library(libPath);
+            IntPtr h = Win32.LoadWin32Library(libPath);
             Debug.Assert(h != IntPtr.Zero);
 
             _libHandle = new GribRef(h);
         }
-        // GRIB_API_LOG_STREAM=stderr
-
 
         /// <summary>
-        /// Gets or sets the JPEG dump path.
+        /// Gets or sets the JPEG dump path. This is primarily useful during debugging
         /// </summary>
         /// <value>
         /// The JPEG dump path.
@@ -116,29 +92,29 @@ namespace Grib.Api
             }
             set
             {
-                Environment.SetEnvironmentVariable("GRIB_DUMP_JPG_FILE", value,
-                    EnvironmentVariableTarget.Process);
-                _putenv_s("GRIB_DUMP_JPG_FILE", value);
+                PutEnvVar("GRIB_DUMP_JPG_FILE", value);
             }
         }
 
         /// <summary>
-        /// Sets a value indicating whether or not grib_api should abort on an assertion failure or error log.
+        /// Gets or sets a value indicating whether or not grib_api should abort on an assertion failure or error log.
         /// </summary>
         /// <value>
         ///   <c>true</c> if [no abort]; otherwise, <c>false</c>.
         /// </value>
         public static bool NoAbort
         {
+            get
+            {
+                return Environment.GetEnvironmentVariable("GRIB_API_NO_ABORT") == "1";
+            }
             set
             {
                 string val = value ? "1" : "0";
-                Environment.SetEnvironmentVariable("GRIB_API_NO_ABORT", val, EnvironmentVariableTarget.Process);
-                _putenv_s("GRIB_API_NO_ABORT", val);
+                PutEnvVar("GRIB_API_NO_ABORT", val);
 
                 val = value ? "0" : "1";
-                Environment.SetEnvironmentVariable("GRIB_API_FAIL_IF_LOG_MESSAGE", val, EnvironmentVariableTarget.Process);
-                _putenv_s("GRIB_API_FAIL_IF_LOG_MESSAGE", val);
+                PutEnvVar("GRIB_API_FAIL_IF_LOG_MESSAGE", val);
             }
         }
 
@@ -156,9 +132,38 @@ namespace Grib.Api
             }
             set
             {
-                Environment.SetEnvironmentVariable("GRIB_DEFINITION_PATH", value, EnvironmentVariableTarget.Process);
-                _putenv_s("GRIB_DEFINITION_PATH", value);
+                PutEnvVar("GRIB_DEFINITION_PATH", value);
             }
+        }
+
+        /// <summary>
+        /// Gets the grib_api version wrapped by this library.
+        /// </summary>
+        /// <value>
+        /// The grib API version.
+        /// </value>
+        public static string GribApiVersion
+        {
+            get
+            {
+                string version = GribApiProxy.GribGetApiVersion().ToString();
+                string major = version[0].ToString();
+                string minor = Int32.Parse(version.Substring(1, 2)).ToString();
+                string patch = Int32.Parse(version.Substring(3, 2)).ToString();
+
+                return String.Join(".", major, minor, patch);
+            }
+        }
+
+        /// <summary>
+        /// Sets an env variable and notifies the C runtime to update its values.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="val">The value.</param>
+        private static void PutEnvVar(string name, string val)
+        {
+            Environment.SetEnvironmentVariable(name, val, EnvironmentVariableTarget.Process);
+            Win32._putenv_s(name, val);
         }
     }
 }

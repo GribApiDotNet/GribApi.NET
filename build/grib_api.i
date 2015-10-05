@@ -29,8 +29,8 @@
 %rename("%(camelcase)s", %$isenumitem) "";
 
 
-%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator* "System.Runtime.InteropServices.HandleRef"
-%typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator* "$csinput.Reference"
+%typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator*, grib_iterator* "System.Runtime.InteropServices.HandleRef"
+%typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator*, grib_iterator* "$csinput.Reference"
 %typemap(cstype) FILE* "GribFile"
 %typemap(csout, out="GribFile", excode=SWIGEXCODE) FILE* %{
 		System.IntPtr pVal = $imcall;$excode
@@ -38,6 +38,7 @@
 		return pVal == System.IntPtr.Zero ? null : new GribFile(pVal);
  %}
  
+  %typemap(cstype) grib_iterator* "GribValuesIterator"
  %typemap(cstype) grib_context* "GribContext"
  %typemap(cstype) grib_handle* "GribHandle"
   %typemap(cstype) grib_keys_iterator* "GribKeysIterator"
@@ -76,6 +77,18 @@
 		System.IntPtr pVal = $imcall;$excode
 
 		return pVal == System.IntPtr.Zero ? null : new GribKeysIterator(pVal);
+	}%}
+	
+%typemap(csvarout, out="GribValuesIterator", excode=SWIGEXCODE2) grib_iterator* %{
+	get {
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
+	} %}
+%typemap(csout, out="GribValuesIterator", excode=SWIGEXCODE) grib_iterator* %{{
+		System.IntPtr pVal = $imcall;$excode
+
+		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
 	}%}
 
 

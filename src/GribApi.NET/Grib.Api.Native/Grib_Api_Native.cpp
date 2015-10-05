@@ -296,7 +296,7 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 {
     intptr_t h = _get_osfhandle(_fileno(fhp->File));
 
-    if (fhp->Win32Handle != INVALID_HANDLE_VALUE)
+    if (h != (intptr_t)INVALID_HANDLE_VALUE)
     {
         assert(CloseHandle((HANDLE)h) != 0);
     }

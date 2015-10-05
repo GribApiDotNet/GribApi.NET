@@ -28,11 +28,12 @@ using System.ComponentModel;
 namespace Grib.Api
 {
     /// <summary>
-    /// Encapsulates logic for reading and writing GRIB messages in files.
+    /// GRIB file iterator object that provides methods for reading and writing messages. When iterated, returns
+    /// instances of the <see cref="Grib.Api.GribMessage"/> class.
     /// </summary>
+    [ContractClass(typeof(GribFile))]
     public class GribFile: GribRef, IEnumerable<GribMessage>
     {
-
         [DllImport("Grib.Api.Native.dll")]
         internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
 
@@ -60,8 +61,6 @@ namespace Grib.Api
         {
             Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
             Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
-
-            fileName = fileName.Replace("\\", "/");
 
             FileInfo fi = new FileInfo(fileName);
 
@@ -115,8 +114,7 @@ namespace Grib.Api
             msg = null;
             int err = 0;
 
-            // grib_api moves to the next message in a stream for each new handle. returns null when
-            // nothing to return.
+            // grib_api moves to the next message in a stream for each new handle
             GribHandle handle = GribApiProxy.GribHandleNewFromFile(Context, this, out err);
 
             if (err != 0)

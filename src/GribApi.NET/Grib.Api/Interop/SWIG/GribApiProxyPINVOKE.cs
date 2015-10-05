@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-using System.Runtime.InteropServices;
 namespace Grib.Api.Interop.SWIG {
 
 class GribApiProxyPINVOKE {
@@ -401,25 +400,25 @@ class GribApiProxyPINVOKE {
   public static extern int GribGetMessageCopy(System.Runtime.InteropServices.HandleRef jarg1, byte[] jarg2, ref System.UIntPtr jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorNew")]
-  public static extern global::System.IntPtr GribIteratorNew(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2, out int jarg3);
+  public static extern System.IntPtr GribIteratorNew(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2, out int jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetData")]
   public static extern int GribGetData(System.Runtime.InteropServices.HandleRef jarg1, double[] jarg2, double[] jarg3, double[] jarg4, ref System.UIntPtr jarg5);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorNext")]
-  public static extern int GribIteratorNext(global::System.Runtime.InteropServices.HandleRef jarg1, out double jarg2, out double jarg3, out double jarg4);
+  public static extern int GribIteratorNext(System.Runtime.InteropServices.HandleRef jarg1, out double jarg2, out double jarg3, out double jarg4);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorPrevious")]
-  public static extern int GribIteratorPrevious(global::System.Runtime.InteropServices.HandleRef jarg1, out double jarg2, out double jarg3, out double jarg4);
+  public static extern int GribIteratorPrevious(System.Runtime.InteropServices.HandleRef jarg1, out double jarg2, out double jarg3, out double jarg4);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorHasNext")]
-  public static extern int GribIteratorHasNext(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern int GribIteratorHasNext(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorReset")]
-  public static extern int GribIteratorReset(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern int GribIteratorReset(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorDelete")]
-  public static extern int GribIteratorDelete(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern int GribIteratorDelete(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribNearestNew")]
   public static extern global::System.IntPtr GribNearestNew(System.Runtime.InteropServices.HandleRef jarg1, out int jarg2);
@@ -564,7 +563,7 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorNext")]
   public static extern int GribKeysIteratorNext(System.Runtime.InteropServices.HandleRef jarg1);
 
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorGetName", CharSet=CharSet.Ansi)]
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorGetName")]
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribKeysIteratorGetName(System.Runtime.InteropServices.HandleRef jarg1);
 

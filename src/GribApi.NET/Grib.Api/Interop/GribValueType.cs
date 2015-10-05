@@ -52,7 +52,11 @@ namespace Grib.Api.Interop
         Bytes = 4,
         Section = 5,
         Label = 6,
-        Missing = 7
+        Missing = 7,
+
+        // uninque to GribApi.NET
+        IntArray = 1000,
+        DoubleArray = 1001
     }
 
     public static class GribValueTypeExtension
@@ -64,6 +68,11 @@ namespace Grib.Api.Interop
         /// <returns></returns>
         public static string AsString(this GribValueType vt)
         {
+            if ((int)vt >= (int)GribValueType.IntArray)
+            {
+                return vt.ToString();
+            }
+
             return GribApiProxy.GribGetTypeName((int) vt);
         }
     }
