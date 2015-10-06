@@ -51,7 +51,6 @@ namespace Grib.Api
             : base()
         {
             Handle = handle;
-            Context = context ?? GribApiProxy.GribContextGetDefault();
             Namespace = Namespaces[0];
             KeyFilters |= Interop.KeyFilters.All;
             Index = index;
@@ -101,7 +100,7 @@ namespace Grib.Api
         {
             var newHandle = GribApiProxy.GribHandleClone(this.Handle);
 
-            return new GribMessage(newHandle, this.Context);
+            return new GribMessage(newHandle);
         }
 
         /// <summary>
@@ -344,14 +343,6 @@ namespace Grib.Api
         protected GribHandle Handle { get; set; }
 
         /// <summary>
-        /// Gets or sets the grib_context.
-        /// </summary>
-        /// <value>
-        /// The context.
-        /// </value>
-        protected GribContext Context { get; set; }
-
-        /// <summary>
         /// Gets or sets the value used to represent a missing value. This value is used by grib_api,
         /// does not exist in the message itself.
         /// </summary>
@@ -541,5 +532,6 @@ namespace Grib.Api
         {
             get { return new GribValue(Handle, keyName); }
         }
+
     }
 }
