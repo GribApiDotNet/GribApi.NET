@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using Grib.Api.Interop.Util;
 
 namespace Grib.Api
 {
@@ -533,5 +534,37 @@ namespace Grib.Api
             get { return new GribValue(Handle, keyName); }
         }
 
+        /// <summary>
+        /// Returns points cropped to the given north/west/south/east boundaries.
+        /// 
+        /// Boxes are only supported for regular and reduced Gaussian grids.
+        /// </summary>
+        /// <param name="nw">The NW corner of the box.</param>
+        /// <param name="se">The SE corner of the box.</param>
+        /// <returns></returns>
+        public GribPoints GetBox(GeoCoordinate nw, GeoCoordinate se)
+        {
+            if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg"))
+            {
+                throw new GribApiException("Only regular and reduced Gaussian grids support boxes.");
+            }
+
+            int err;
+            var box = GribApiProxy.GribBoxNew(Handle, out err);
+
+            if (err != 0)
+            {
+                throw GribApiException.Create(err);
+            }
+
+            var pts = GribApiProxy.GribBoxGetPoints(box, nw.Latitude, nw.Longitude, se.Latitude, se.Longitude, out err);
+
+            if (err != 0) 
+            {
+                throw GribApiException.Create(err);
+            }
+
+            return new GribPoints(SWIGTYPE_p_grib_points.getCPtr(pts).Handle, true);
+        }
     }
 }

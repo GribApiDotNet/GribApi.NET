@@ -6,6 +6,7 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
+using System.Runtime.InteropServices;
 namespace Grib.Api.Interop.SWIG {
 
 public class GribPoints : global::System.IDisposable {
@@ -49,27 +50,35 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public double[] latitudes {
-    set {
-      GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, value);
-    } 
+  public double[] Latitudes {
+      set {
+          GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, value);
+      } 
 	get
 	{
-		return GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
+	    var p = GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
+        double[] d = new double[this.N];
+        Marshal.Copy(p, d, 0, d.Length);
+
+        return d;
 	} 
   }
 
-  public double[] longitudes {
+  public double[] Longitudes {
     set {
       GribApiProxyPINVOKE.GribPoints_longitudes_set(swigCPtr, value);
     } 
 	get
 	{
-		return GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
+        var p = GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
+        double[] d = new double[this.N];
+        Marshal.Copy(p, d, 0, d.Length);
+
+        return d;
 	} 
   }
 
-  public SizeT indexes {
+  public SizeT Indexes {
     set {
       GribApiProxyPINVOKE.GribPoints_indexes_set(swigCPtr, ref  value.Value);
     } 
@@ -83,7 +92,7 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public SizeT groupStart {
+  public SizeT GroupStart {
     set {
       GribApiProxyPINVOKE.GribPoints_groupStart_set(swigCPtr, ref  value.Value);
     } 
@@ -97,7 +106,7 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public SizeT groupLen {
+  public SizeT GroupLen {
     set {
       GribApiProxyPINVOKE.GribPoints_groupLen_set(swigCPtr, ref  value.Value);
     } 
@@ -111,7 +120,7 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public SizeT nGroups {
+  public SizeT NGroups {
     set {
       GribApiProxyPINVOKE.GribPoints_nGroups_set(swigCPtr, value.Value);
     } 
@@ -122,7 +131,7 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public SizeT n {
+  public SizeT N {
     set {
       GribApiProxyPINVOKE.GribPoints_n_set(swigCPtr, value.Value);
     } 
@@ -133,7 +142,7 @@ public class GribPoints : global::System.IDisposable {
 	} 
   }
 
-  public SizeT size {
+  public SizeT Size {
     set {
       GribApiProxyPINVOKE.GribPoints_size_set(swigCPtr, value.Value);
     } 

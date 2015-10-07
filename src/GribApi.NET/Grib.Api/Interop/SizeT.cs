@@ -21,6 +21,17 @@ namespace Grib.Api.Interop
 {
     /// <summary>
     /// Provides C-like size_t semantics. Implicitly convertable to UInt.
+    /// 
+    /// size_t is a platform-dependent unsigned integer. It can store 
+    /// the maximum size of a theoretically possible object of any type 
+    /// (including array).
+    /// 
+    /// <code>
+    /// SizeT size = 0;
+    /// size = (SizeT)getSomeInt();
+    /// Int64 big = (Int64)size;
+    /// int[] myArray = new int[size];
+    /// </code>
     /// </summary>
     public struct SizeT
     {
@@ -91,5 +102,6 @@ namespace Grib.Api.Interop
             return (Int64) s.Value.ToUInt64();
         }
 
+        // TODO: override equal operator
     }
 }

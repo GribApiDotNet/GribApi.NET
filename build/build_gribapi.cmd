@@ -59,7 +59,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc\grib_api.sln"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -77,7 +77,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% /p:NoWarn="1591"
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% /p:NoWarn="1591" /nowarn:1591
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% 
 
@@ -106,7 +106,7 @@ if %BUILD_STATUS% neq 0 (
 )
 ECHO ON 
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc\grib_api.sln"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 set BUILD_STATUS=%ERRORLEVEL%
@@ -149,7 +149,7 @@ ECHO ON
 
 ::ENDLOCAL
 
-call build_nuget.cmd
+::call build_nuget.cmd
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS% neq 0 (
 	goto :fail

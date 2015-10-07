@@ -43,7 +43,6 @@
 extern "C" {
 SWIGEXPORT struct FileHandleProxy
 {
-	HANDLE Win32Handle;
 	FILE* File;
 };
 
@@ -69,9 +68,6 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 {
     char * fmode = NULL;
 
-	FileHandleProxy* fhp = 0;
-	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
-
     auto hFile = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     
     if (hFile == INVALID_HANDLE_VALUE)
@@ -83,12 +79,12 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 
     if (fd == -1)
     {
-        free(fhp);
         return NULL;
     }
     
+	FileHandleProxy* fhp = 0;
+	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
     fhp->File = _fdopen(fd, "r");
-    fhp->Win32Handle = hFile;
 
 	return fhp;
 }
@@ -98,6 +94,12 @@ SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator
     char* v = NULL;
     v = (char*)grib_keys_iterator_get_name(iter);
     strcpy_s(name, 255, v);
+}
+
+SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)
+{
+	// not exposed by SWIG by default
+    return grib_box_delete(box) == 0;
 }
 }
 %}

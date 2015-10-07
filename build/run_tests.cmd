@@ -11,6 +11,6 @@ set _GRIB_BREAK=%3
 
 @echo on
 
-xcopy %~dp0..\ext\grib_api-1.14.0-Source\definitions %~dp0..\bin\%1\%2\Grib.Api\definitions /S /Y /I /Q
+xcopy %~dp0..\ext\grib_api-1.14.0-Source\definitions %~dp0..\bin\%1\%2\Grib.Api\definitions /S /d /I /Q
 
 %_CONSOLE% /noshadow %~dp0..\bin\%1\%2\Grib.Api.Tests.dll

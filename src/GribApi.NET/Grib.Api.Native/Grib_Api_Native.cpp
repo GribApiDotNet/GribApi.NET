@@ -291,6 +291,11 @@ SWIGEXPORT struct FileHandleProxy
 	FILE* File;
 };
 
+SWIGEXPORT struct GribPointsProxy
+{
+	grib_points* Points;
+};
+
 SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 {
     intptr_t h = _get_osfhandle(_fileno(fhp->File));
@@ -309,13 +314,9 @@ SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * name)
 		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0;
 }
 
-
 SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 {
     char * fmode = NULL;
-
-	FileHandleProxy* fhp = 0;
-	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
 
     auto hFile = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     
@@ -328,10 +329,11 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
 
     if (fd == -1)
     {
-        free(fhp);
         return NULL;
     }
     
+	FileHandleProxy* fhp = 0;
+	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
     fhp->File = _fdopen(fd, "r");
 
 	return fhp;
@@ -343,6 +345,13 @@ SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator
     v = (char*)grib_keys_iterator_get_name(iter);
     strcpy_s(name, 255, v);
 }
+
+SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)
+{
+	// not exposed by SWIG by default
+    return grib_box_delete(box) == 0;
+}
+
 }
 
 
@@ -2682,15 +2691,15 @@ SWIGEXPORT void SWIGSTDCALL CSharp_GribPoints_latitudes_set(void * jarg1, void *
 }
 
 
-SWIGEXPORT void * SWIGSTDCALL CSharp_GribPoints_latitudes_get(void * jarg1) {
+SWIGEXPORT double * SWIGSTDCALL CSharp_GribPoints_latitudes_get(void * jarg1) {
   void * jresult ;
   grib_points *arg1 = (grib_points *) 0 ;
   double *result = 0 ;
   
   arg1 = (grib_points *)jarg1; 
   result = (double *) ((arg1)->latitudes);
-  jresult = (void *)result; 
-  return jresult;
+  //jresult = (void *)result; 
+  return result;
 }
 
 

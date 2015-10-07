@@ -80,7 +80,7 @@ namespace Grib.Api
 
             GribApiProxy.GribGetString(_handle, valueKey, msg, ref ptLen);
 
-            return msg.ToString();
+            return msg.ToString().Trim();
         }
 
         /// <summary>
@@ -369,6 +369,12 @@ namespace Grib.Api
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this value is read only.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is read only; otherwise, <c>false</c>.
+        /// </value>
         public bool IsReadOnly
         {
             get
