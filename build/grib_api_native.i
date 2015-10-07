@@ -38,7 +38,7 @@
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
-#include "grib_api.h"
+#include "grib_api_internal.h"
 
 extern "C" {
 SWIGEXPORT struct FileHandleProxy
@@ -59,66 +59,10 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 	free(fhp);
 }
 
-HANDLE OpenGribFile(char * fn, int access, int mode) {
-	HANDLE hFile;
-
-	int share = FILE_SHARE_READ;
-	int disposition = OPEN_EXISTING;
-
-	// convert System.IO.FileAccess to win32 constants
-	switch (access) {
-		case 1:
-			access = GENERIC_READ;
-			break;
-		case 2:
-			access = GENERIC_WRITE;
-			break;
-		case 3:
-			access = GENERIC_READ | GENERIC_WRITE;
-			break;
-	}
-
-	switch (mode) {
-		// create new
-		case 1:
-			disposition = CREATE_NEW;
-			break;
-		// create
-		case 2:
-			disposition = CREATE_ALWAYS;
-			break;
-		// open
-		case 3:
-			disposition = OPEN_EXISTING;
-			break;
-		// open or create
-		case 4:
-			disposition = OPEN_ALWAYS;
-			break;
-		// truncate
-		case 5:
-			disposition = TRUNCATE_EXISTING;
-			break;
-		// append
-		case 6:
-			access |= FILE_APPEND_DATA;
-			break;
-	}
-
-	hFile = CreateFileA(fn,
-		access, 
-		share,
-		NULL,                     			 // no security
-		disposition,
-		FILE_ATTRIBUTE_NORMAL,    // normal file
-		NULL);                 				  // no attr. template
-
-	if (hFile == INVALID_HANDLE_VALUE)
-	{
-		return NULL;
-	}
-
-	return hFile;
+SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * fn)
+{
+	    grib_accessor* a = grib_find_accessor(h, name);
+		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0 );
 }
 
 SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)

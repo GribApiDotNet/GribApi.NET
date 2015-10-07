@@ -16,5 +16,8 @@ namespace Grib.Api.Interop.Util
 
         [DllImport("Grib.Api.Native.dll")]
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
+
+        [DllImport("Grib.Api.Native.dll")]
+        internal static extern bool GribKeyIsReadOnly(HandleRef gribHandle, [MarshalAs(UnmanagedType.LPStr)]string keyName);
     }
 }

@@ -25,6 +25,7 @@ namespace Grib.Api.Tests
                     Assert.AreNotEqual(msg.DataPointsCount, 0);
                     Assert.AreNotEqual(msg.ValuesCount, 0);
                     Assert.AreEqual(msg.ValuesCount, msg["numberOfCodedValues"].AsInt());
+                    Assert.IsTrue(msg["numberOfCodedValues"].IsReadOnly);
                     Assert.AreEqual(msg.DataPointsCount, msg.ValuesCount + msg.MissingCount);
                 }
             }

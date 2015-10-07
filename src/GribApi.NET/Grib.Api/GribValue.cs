@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using Grib.Api.Interop.SWIG;
 using System.Runtime.InteropServices;
 using Grib.Api.Interop;
+using Grib.Api.Interop.Util;
 
 namespace Grib.Api
 {
@@ -127,9 +128,9 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual int AsInt ()
         {
-            if (!IsDefined) { return 0; }
-
             AssertTypeSafe(GribValueType.Int);
+
+            if (!IsDefined) { return 0; }
 
             int val;
 
@@ -154,9 +155,9 @@ namespace Grib.Api
         /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns empty array.</returns>
         public virtual int[] AsIntArray ()
         {
-            if (!IsDefined) { return new int[0]; }
-
             AssertTypeSafe(GribValueType.IntArray);
+
+            if (!IsDefined) { return new int[0]; }
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -183,12 +184,12 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual double AsDouble (bool inDegrees = true)
         {
-            if (!IsDefined) { return Double.NaN; }
-
             double val;
             string valueKey = BuildTokenForDouble(inDegrees);
 
             AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
+
+            if (!IsDefined) { return Double.NaN; }
 
             GribApiProxy.GribGetDouble(_handle, valueKey, out val);
 
@@ -214,9 +215,9 @@ namespace Grib.Api
         /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns 0-length array.</returns>
         public virtual double[] AsDoubleArray ()
         {
-            if (!IsDefined) { return new double[0]; }
-
             AssertTypeSafe(GribValueType.DoubleArray);
+
+            if (!IsDefined) { return new double[0]; }
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -365,6 +366,14 @@ namespace Grib.Api
                 }
 
                 return nativeType;
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                return GribApiNative.GribKeyIsReadOnly(_handle.Reference, Key);
             }
         }
 
