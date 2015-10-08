@@ -31,7 +31,7 @@ namespace Grib.Api
     /// Parameter names are are given by the name, shortName and paramID keys. When iterated, returns instances of the
     /// <seealso cref="Grib.Api.GribValue"/> class.
     /// </summary>
-    public class GribMessage: IEnumerable<GribValue>
+    public class GribMessage: AutoRef, IEnumerable<GribValue>
     {
         private static readonly string[] _ignoreKeys = { "zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand" };
@@ -48,7 +48,7 @@ namespace Grib.Api
         /// <param name="handle">The handle.</param>
         /// <param name="context">The context.</param>
         /// <param name="index">The index.</param>
-        internal GribMessage (GribHandle handle, GribContext context = null, int index = 0)
+        protected GribMessage (GribHandle handle, GribContext context = null, int index = 0)
             : base()
         {
             Handle = handle;
@@ -56,6 +56,11 @@ namespace Grib.Api
             KeyFilters |= Interop.KeyFilters.All;
             Index = index;
         }
+
+        protected override void OnDispose(bool disposing)
+        {
+           // GribApiProxy.GribHandleDelete(Handle);
+        } 
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -105,6 +110,51 @@ namespace Grib.Api
         }
 
         /// <summary>
+        /// Returns points cropped to the given north/west/south/east boundaries.
+        /// 
+        /// Boxes are only supported for regular and reduced Gaussian grids.
+        /// </summary>
+        /// <param name="nw">The NW corner of the box.</param>
+        /// <param name="se">The SE corner of the box.</param>
+        /// <returns></returns>
+        public GribBox GetBox(GeoCoordinate nw, GeoCoordinate se)
+        {
+            if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg")) 
+            {
+                throw new GribApiException("Only regular and reduced Gaussian grids support boxes.");
+            }
+
+            return new GribBox(Handle, nw, se);
+        }
+
+        /// <summary>
+        /// Creates a GribMessage instance from a <seealso cref="Grib.Api.GribFile"/>.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="index">The index.</param>
+        /// <returns></returns>
+        public static GribMessage Create(GribFile file, int index) 
+        {
+            GribMessage msg = null;
+            int err = 0;
+
+            // grib_api moves to the next message in a stream for each new handle
+            GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
+
+            if (err != 0) 
+            {
+                throw GribApiException.Create(err);
+            }
+
+            if (handle != null) 
+            {
+                msg = new GribMessage(handle, file.Context, index);
+            }
+
+            return msg;
+        }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> containing metadata about this instance.
         /// </summary>
         /// <returns>
@@ -118,6 +168,8 @@ namespace Grib.Api
 
             return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
         }
+
+        #region Properties
 
         /// <summary>
         /// Gets the parameter name.
@@ -521,6 +573,8 @@ namespace Grib.Api
             }
         }
 
+        #endregion Properties
+
         /// <summary>
         /// Gets the <see cref="GribValue"/> with the specified key name.
         /// </summary>
@@ -534,37 +588,5 @@ namespace Grib.Api
             get { return new GribValue(Handle, keyName); }
         }
 
-        /// <summary>
-        /// Returns points cropped to the given north/west/south/east boundaries.
-        /// 
-        /// Boxes are only supported for regular and reduced Gaussian grids.
-        /// </summary>
-        /// <param name="nw">The NW corner of the box.</param>
-        /// <param name="se">The SE corner of the box.</param>
-        /// <returns></returns>
-        public GribPoints GetBox(GeoCoordinate nw, GeoCoordinate se)
-        {
-            if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg"))
-            {
-                throw new GribApiException("Only regular and reduced Gaussian grids support boxes.");
-            }
-
-            int err;
-            var box = GribApiProxy.GribBoxNew(Handle, out err);
-
-            if (err != 0)
-            {
-                throw GribApiException.Create(err);
-            }
-
-            var pts = GribApiProxy.GribBoxGetPoints(box, nw.Latitude, nw.Longitude, se.Latitude, se.Longitude, out err);
-
-            if (err != 0) 
-            {
-                throw GribApiException.Create(err);
-            }
-
-            return new GribPoints(SWIGTYPE_p_grib_points.getCPtr(pts).Handle, true);
-        }
     }
 }

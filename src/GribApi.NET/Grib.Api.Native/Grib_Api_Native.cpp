@@ -305,7 +305,7 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
         assert(CloseHandle((HANDLE)h) != 0);
     }
 
-	free(fhp);
+	delete(fhp);
 }
 
 SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * name)
@@ -333,8 +333,8 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
     }
     
 	FileHandleProxy* fhp = 0;
-	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
-    fhp->File = _fdopen(fd, "r");
+	fhp = new FileHandleProxy();
+	fhp->File = _fdopen(fd, "r");
 
 	return fhp;
 }

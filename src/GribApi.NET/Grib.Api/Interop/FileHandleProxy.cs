@@ -18,6 +18,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using Grib.Api.Interop.Util;
+using System.IO;
+using System.ComponentModel;
 namespace Grib.Api.Interop
 {
     [StructLayout(LayoutKind.Sequential)]
@@ -26,6 +29,6 @@ namespace Grib.Api.Interop
         /// <summary>
         /// FILE*
         /// </summary>
-        public IntPtr File;
+        public IntPtr File { get; set; }
     }
 }

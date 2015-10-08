@@ -35,8 +35,9 @@ namespace Grib.Api
     /// </summary>
     public static class GribEnvironment
     {
-        static GribRef _libHandle;
-        private static volatile bool _init = false;
+        private static GribRef _libHandle;
+        private static object _initLock = new object();
+        private static bool _init = false;
 
         /// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
@@ -45,9 +46,9 @@ namespace Grib.Api
         /// <exception cref="System.ComponentModel.Win32Exception"></exception>
         public static void Init()
         {
-            if (_init) { return; }
+            if (Initialized) { return; }
 
-            _init = true;
+            Initialized = true;
 
             string pathTemplate = ".\\Grib.Api\\lib\\win\\{0}\\Grib.Api.Native.{1}";
             string platform = (IntPtr.Size == 8) ? "x64" : "x86";
@@ -145,6 +146,16 @@ namespace Grib.Api
                 string patch = Int32.Parse(version.Substring(3, 2)).ToString();
 
                 return String.Join(".", major, minor, patch);
+            }
+        }
+
+        private static bool Initialized
+        {
+            get {
+                lock (_initLock) { return _init; }
+            }
+            set {
+                lock (_initLock) { _init = value; }
             }
         }
 

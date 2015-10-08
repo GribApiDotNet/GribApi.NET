@@ -149,7 +149,7 @@ ECHO ON
 
 ::ENDLOCAL
 
-::call build_nuget.cmd
+call build_nuget.cmd
 set BUILD_STATUS=%ERRORLEVEL%
 if %BUILD_STATUS% neq 0 (
 	goto :fail

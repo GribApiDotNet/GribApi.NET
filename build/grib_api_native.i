@@ -55,13 +55,7 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
         assert(CloseHandle((HANDLE)h) != 0);
     }
 
-	free(fhp);
-}
-
-SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * fn)
-{
-	    grib_accessor* a = grib_find_accessor(h, name);
-		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0 );
+	delete(fhp);
 }
 
 SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
@@ -83,7 +77,7 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
     }
     
 	FileHandleProxy* fhp = 0;
-	fhp = (FileHandleProxy*)malloc(sizeof(FileHandleProxy));
+	fhp = new FileHandleProxy();
     fhp->File = _fdopen(fd, "r");
 
 	return fhp;
@@ -94,6 +88,12 @@ SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator
     char* v = NULL;
     v = (char*)grib_keys_iterator_get_name(iter);
     strcpy_s(name, 255, v);
+}
+
+SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * fn)
+{
+	    grib_accessor* a = grib_find_accessor(h, name);
+		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0 );
 }
 
 SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)

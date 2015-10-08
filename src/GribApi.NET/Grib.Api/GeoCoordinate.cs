@@ -25,9 +25,26 @@ namespace Grib.Api
     /// </summary>
     public struct GeoCoordinate : IGeoCoordinate
     {
+        /// <summary>
+        /// Gets or sets the latitude for this coordinate.
+        /// </summary>
+        /// <value>
+        /// The latitude.
+        /// </value>
         public double Latitude { get; set; }
+        /// <summary>
+        /// Gets or sets the longitude for this coordinate.
+        /// </summary>
+        /// <value>
+        /// The longitude.
+        /// </value>
         public double Longitude { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeoCoordinate"/> struct.
+        /// </summary>
+        /// <param name="lat">The lat.</param>
+        /// <param name="lon">The lon.</param>
         public GeoCoordinate(double lat, double lon) : this()
         {
             this.Latitude = lat;

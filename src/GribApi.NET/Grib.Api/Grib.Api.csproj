@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GribApiException.cs" />
+    <Compile Include="GribBox.cs" />
     <Compile Include="GribPackingSpec.cs" />
     <Compile Include="GribValueTypeException.cs" />
     <Compile Include="IGeoCoordinate.cs" />

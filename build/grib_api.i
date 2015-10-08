@@ -143,6 +143,17 @@
 %typemap(cstype) double * data_values, double * vals, double * values, double * latitudes, double * longitudes, double * lats, double * lons, double * outlats, double * outlons, double * inlats, double * inlons, double * distances "double[]"
 %typemap(imtype) double * data_values, double * vals, double * values, double * latitudes, double * longitudes, double * lats, double * lons, double * outlats, double * outlons, double * inlats, double * inlons, double * distances "double[]"
 
+// GribPoints
+%typemap(csvarout, out="double[]", excode=SWIGEXCODE2) double * latitudes, double * longitudes %{
+	get {
+	    var p = $imcall;$excode
+        double[] d = new double[this.n];
+        Marshal.Copy(p, d, 0, d.Length);
+
+        return d;
+	} %}
+
+
 %typemap(csin) void*, unsigned char *, unsigned char const * "$csinput"
 %typemap(cstype) void*, unsigned char *, unsigned char const * "byte[]"
 %typemap(imtype) void*, unsigned char *, unsigned char const * "byte[]"
