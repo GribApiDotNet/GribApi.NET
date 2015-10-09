@@ -31,7 +31,7 @@ namespace Grib.Api
     /// Parameter names are are given by the name, shortName and paramID keys. When iterated, returns instances of the
     /// <seealso cref="Grib.Api.GribValue"/> class.
     /// </summary>
-    public class GribMessage: AutoRef, IEnumerable<GribValue>
+    public class GribMessage: IEnumerable<GribValue>
     {
         private static readonly string[] _ignoreKeys = { "zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand" };
@@ -56,11 +56,6 @@ namespace Grib.Api
             KeyFilters |= Interop.KeyFilters.All;
             Index = index;
         }
-
-        protected override void OnDispose(bool disposing)
-        {
-           // GribApiProxy.GribHandleDelete(Handle);
-        } 
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -110,14 +105,13 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Returns points cropped to the given north/west/south/east boundaries.
-        /// 
-        /// Boxes are only supported for regular and reduced Gaussian grids.
+        /// Returns a subdomain defined by the given north/west/south/east boundaries.
+        /// At this time, boxes are only supported for regular and reduced Gaussian grids.
         /// </summary>
         /// <param name="nw">The NW corner of the box.</param>
         /// <param name="se">The SE corner of the box.</param>
         /// <returns></returns>
-        public GribBox GetBox(GeoCoordinate nw, GeoCoordinate se)
+        public GribBox Box(GeoCoordinate nw, GeoCoordinate se)
         {
             if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg")) 
             {
@@ -169,6 +163,31 @@ namespace Grib.Api
             return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
         }
 
+        /// <summary>
+        /// Gets a *copy* of the raw data associated with this message. This data is static,
+        /// regardless of the projection used.
+        /// </summary>
+        /// <remarks>
+        /// This is an explicit function rather than a property because C# property semantics tempt devs
+        /// to iterate directly on the values array. For each call to the indexer, however, (eg msg.Values[i])
+        /// the *entire* array gets copied, leading to terrible performance. At some point we can handle
+        /// this on the native side.
+        /// </remarks>
+        /// <param name="values">The values.</param>
+        public void Values(out double[] values)
+        {
+            values = this["values"].AsDoubleArray();
+        }
+
+        /// <summary>
+        /// Sets the raw data associated with this message. The array is *copied*.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        public void SetValues(double[] values)
+        {
+            this["values"].AsDoubleArray(values);
+        }
+
         #region Properties
 
         /// <summary>
@@ -214,18 +233,6 @@ namespace Grib.Api
         public string Units
         {
             get { return this["parameterUnits"].AsString(); }
-        }
-
-        /// <summary>
-        /// Gets or sets the pressure units.
-        /// </summary>
-        /// <value>
-        /// The pressure units.
-        /// </value>
-        public string PressureUnits
-        {
-            get { return this["pressureUnits"].AsString(); }
-            set { this["pressureUnits"].AsString(value); }
         }
 
         /// <summary>
@@ -499,7 +506,7 @@ namespace Grib.Api
 
                 using (GribValuesIterator iter = GribValuesIterator.Create(Handle, (uint) KeyFilters))
                 {
-                    while (iter.Next(out gsVal, this.MissingValue))
+                    while (iter.Next(this.MissingValue, out gsVal))
                     {
                         yield return gsVal;
                     }
@@ -507,30 +514,6 @@ namespace Grib.Api
             }
         }
 
-        /// <summary>
-        /// Gets or sets the mesage values. This property returna a *copy* of the message's value array.
-        /// Set this explicitly to ensure changes are reflected in the message.
-        /// E.g.,
-        /// <code>
-        /// double[] vals = msg.Values;
-        /// vals[0] = 42;
-        /// msg.Values = vals;
-        /// </code>
-        /// </summary>
-        /// <value>
-        /// The values.
-        /// </value>
-        public double[] Values
-        {
-            get
-            {
-                return this["values"].AsDoubleArray();
-            }
-            set
-            {
-                this["values"].AsDoubleArray(value);
-            }
-        }
 
         /// <summary>
         /// Gets the message size.

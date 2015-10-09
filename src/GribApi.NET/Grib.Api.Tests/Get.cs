@@ -20,7 +20,7 @@ namespace Grib.Api.Tests
             using (GribFile file = new GribFile(Settings.GAUSS)) {
                 foreach (var msg in file)
                 {
-                    var pts = msg.GetBox(new GeoCoordinate(60, -10), new GeoCoordinate(10, 30));
+                    var pts = msg.Box(new GeoCoordinate(60, -10), new GeoCoordinate(10, 30));
                     foreach (var val in pts.Latitudes) {
                         Assert.GreaterOrEqual(60, val);
                         Assert.LessOrEqual(10, val);

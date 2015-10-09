@@ -172,7 +172,7 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValues">The new values.</param>
-        public virtual void AsIntArray(int[] newValues)
+        public virtual void AsIntArray (int[] newValues)
         {
             GribApiProxy.GribSetLongArray(_handle, Key, newValues, (SizeT)newValues.Length);
         }

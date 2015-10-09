@@ -78,6 +78,8 @@ namespace Grib.Api
             Reference = new HandleRef(this, _fileHandleProxy.File);
             Context = GribApiProxy.GribContextGetDefault();
 
+            // set the message count here; the result seems to be connected to the message iterator so
+            // that after you begin iterating messages, the count decreases until it reaches 1.
             int count = 0;
             GribApiProxy.GribCountInFile(Context, this, out count);
             MessageCount = count;

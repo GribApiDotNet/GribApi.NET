@@ -21,7 +21,8 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(msg.MissingValue, missing);
 
                 int numVals = 10;
-                double[] vals = msg.Values;
+                double[] vals;
+                msg.Values(out vals);
 
                 for (int i = 0; i < numVals; i++)
                 {
@@ -29,20 +30,23 @@ namespace Grib.Api.Tests
                 }
 
                 msg.HasBitmap = true;
-                msg.Values = vals;
+                msg.SetValues(vals);
+                double[] vals2;
+                msg.Values(out vals2);
 
                 for (int i = 0; i < numVals; i++)
                 {
-                    Assert.AreEqual(vals[i], msg.Values[i]);
-                    Assert.AreEqual(missing, msg.Values[i]);
+                    Assert.AreEqual(vals[i], vals2[i]);
+                    Assert.AreEqual(missing, vals2[i]);
                 }
 
                 missing = 9898;
                 msg.MissingValue = missing;
+                msg.Values(out vals);
 
                 for (int i = 0; i < numVals; i++)
                 {
-                    Assert.AreEqual(missing, msg.Values[i]);
+                    Assert.AreEqual(missing, vals[i]);
                 }
             }
         }
@@ -55,7 +59,8 @@ namespace Grib.Api.Tests
                 var msg = file.First();
 
                 int numVals = 10;
-                double[] vals = msg.Values;
+                double[] vals;
+                msg.Values(out vals);
                 double val = 42;
 
                 for(int i =0; i < numVals; i++)
@@ -64,12 +69,14 @@ namespace Grib.Api.Tests
                 }
 
                 msg.HasBitmap = true;
-                msg.Values = vals;
+                msg.SetValues(vals);
+                double[] vals2;
+                msg.Values(out vals2);
 
                 for (int i = 0; i < numVals; i++)
                 {
-                    Assert.AreEqual(vals[i], msg.Values[i]);
-                    Assert.AreEqual(val, msg.Values[i]);
+                    Assert.AreEqual(vals[i], vals2[i]);
+                    Assert.AreEqual(val, vals2[i]);
                 }                
             }
         }

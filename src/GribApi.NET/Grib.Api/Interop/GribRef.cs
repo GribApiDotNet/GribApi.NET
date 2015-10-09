@@ -73,7 +73,7 @@ namespace Grib.Api.Interop
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-            GribApiProxy.GribContextDelete(this);
+            // GribApiProxy.GribContextDelete(this);
         }
 
         /// <summary>
@@ -167,10 +167,10 @@ namespace Grib.Api.Interop
         /// <summary>
         /// Gets the next value in a series.
         /// </summary>
-        /// <param name="gsVal">The gs value.</param>
         /// <param name="isMissingFlag">The is missing flag.</param>
+        /// <param name="gsVal">The gs value.</param>
         /// <returns>False if there are no more values.</returns>
-        public bool Next (out GeoSpatialValue gsVal, double isMissingFlag)
+        public bool Next(double isMissingFlag, out GeoSpatialValue gsVal)
         {
             double lat, lon, val;
             bool success = GribApiProxy.GribIteratorNext(this, out lat, out lon, out val) != 0;
