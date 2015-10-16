@@ -47,6 +47,21 @@ namespace Grib.Api.Tests
                 Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
+                    Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("png"));
+                    Assert.IsTrue(msg.ValuesCount > 0);
+                }
+            }
+        }
+
+        [Test]
+        public void TestOpenComplex ()
+        {
+            using (GribFile file = new GribFile(Settings.COMPLEX_GRID))
+            {
+                Assert.IsTrue(file.MessageCount > 0);
+                foreach (var msg in file)
+                {
+                    Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
                     Assert.IsTrue(msg.ValuesCount > 0);
                 }
             }
