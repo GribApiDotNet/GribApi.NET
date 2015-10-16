@@ -18,6 +18,7 @@ namespace Grib.Api.Tests
 
             using(var file = new GribFile(Settings.BIN))
             {
+                Assert.IsTrue(file.MessageCount > 0);
                 foreach (var val in file.First())
                 {
                     // TODO: some sort of actual test here
@@ -33,6 +34,7 @@ namespace Grib.Api.Tests
 
             using (var file = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
+                Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
                     Console.WriteLine();

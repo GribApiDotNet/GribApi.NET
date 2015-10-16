@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libjasper", "..\ext\jasper-1.900.1\src\msvc\libjasper.vcxproj", "{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grib_api_lib", "..\ext\grib_api-1.14.0-Source\windows\msvc\grib_api_lib\grib_api_lib.vcxproj", "{3DE8B13F-7DFE-48ED-9158-B34D774500EC}"
@@ -73,6 +75,7 @@ Global
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug Library|x86.ActiveCfg = Debug|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug Library|x86.Build.0 = Debug|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug|Any CPU.Build.0 = Debug|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -100,6 +103,7 @@ Global
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release Library|x86.ActiveCfg = Release|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release Library|x86.Build.0 = Release|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release|Any CPU.ActiveCfg = Release|Win32
+		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release|Any CPU.Build.0 = Release|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{5053CD4D-1E0C-4720-8546-2982BDDC9BEC}.Release|Win32.ActiveCfg = Release|Win32
@@ -118,6 +122,7 @@ Global
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug Library|x86.ActiveCfg = Debug|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug Library|x86.Build.0 = Debug|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug|Any CPU.Build.0 = Debug|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Debug|Win32.ActiveCfg = Debug|Win32
@@ -145,6 +150,7 @@ Global
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release Library|x86.ActiveCfg = Release|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release Library|x86.Build.0 = Release|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release|Any CPU.ActiveCfg = Release|Win32
+		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release|Any CPU.Build.0 = Release|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release|Mixed Platforms.ActiveCfg = Release|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{3DE8B13F-7DFE-48ED-9158-B34D774500EC}.Release|Win32.ActiveCfg = Release|Win32

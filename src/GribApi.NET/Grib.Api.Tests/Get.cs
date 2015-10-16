@@ -16,17 +16,22 @@ namespace Grib.Api.Tests
     public class Get
     {
         [Test]
-        public void TestGetBox() {
-            using (GribFile file = new GribFile(Settings.GAUSS)) {
+        public void TestGetBox() 
+        {
+            using (GribFile file = new GribFile(Settings.GAUSS)) 
+            {
+                Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
                     var pts = msg.Box(new GeoCoordinate(60, -10), new GeoCoordinate(10, 30));
-                    foreach (var val in pts.Latitudes) {
+                    foreach (var val in pts.Latitudes)
+                    {
                         Assert.GreaterOrEqual(60, val);
                         Assert.LessOrEqual(10, val);
                     }
 
-                    foreach (var val in pts.Longitudes) {
+                    foreach (var val in pts.Longitudes)
+                    {
                         Assert.GreaterOrEqual(val, -10);
                         Assert.LessOrEqual(val, 30);
                     }
@@ -34,12 +39,25 @@ namespace Grib.Api.Tests
             }
         }
 
+        [Test]
+        public void TestOpenPng()
+        {
+            using (GribFile file = new GribFile(Settings.PNG_COMPRESSION))
+            {
+                Assert.IsTrue(file.MessageCount > 0);
+                foreach (var msg in file)
+                {
+                    Assert.IsTrue(msg.ValuesCount > 0);
+                }
+            }
+        }
 
         [Test]
         public void TestGetCounts()
         {
             using (GribFile file = new GribFile(Settings.GRIB))
             {
+                Assert.IsTrue(file.MessageCount > 0);
                 foreach(var msg in file)
                 {
                     Assert.AreNotEqual(msg.DataPointsCount, 0);

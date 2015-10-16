@@ -21,7 +21,7 @@ namespace Grib.Api.Tests
                 Console.WriteLine("Breaking on start...");
                 var mre = new ManualResetEvent(false);
 
-                // after attaching, put a breakpoint here
+                // after attaching nunit-agent, put a breakpoint here
                 while (!mre.WaitOne(250)) ;
             }
         }
