@@ -40,41 +40,61 @@ if exist "%SystemRoot%\Microsoft.NET\Framework64" (
 taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"
 taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
 
+Setlocal EnableDelayedExpansion
+
 @ECHO ON
 
 :::::::::: X64 NATIVE
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
-::C:\Users\ericmillin\Projects\GribApi.NET\ext\lpng1618\projects\vstudio
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
+)
+@ECHO ON
+
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
+)
+@ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
@@ -83,9 +103,10 @@ if %BUILD_STATUS% neq 0 (
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% 
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 
 :::::::::: X86 NATIVE
@@ -93,48 +114,67 @@ if %BUILD_STATUS% neq 0 (
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
-
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
+)
+@ECHO ON
+
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
+)
+@ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
-@ECHO ON 
+@ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO BUILD FAILED
+	EXIT /B 1
 )
-@ECHO ON
 
-:::::::::: ANYCPU
+ENDLOCAL
+@ECHO ON
 
 :: Copy the AnyCPU build to the x86 dir for testing
 xcopy "%BASEDIR%bin\x64\Release\Grib.Api.dll" "%BASEDIR%bin\x86\Release\Grib.Api.dll"  /S /Y /I /Q
@@ -142,26 +182,42 @@ xcopy "%BASEDIR%bin\x64\Release\Grib.Api.xml" "%BASEDIR%bin\x86\Release\Grib.Api
 xcopy "%BASEDIR%bin\x64\Release\Grib.Api.pdb" "%BASEDIR%bin\x86\Release\Grib.Api.pdb"  /S /Y /I /Q
 
 @ECHO OFF
-set BUILD_STATUS=%ERRORLEVEL%
-if %BUILD_STATUS% neq 0 (
-	goto :fail
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO COPY FAILED
+	EXIT /B 1
 )
 @ECHO ON
 
-::ENDLOCAL
-
 call build_nuget.cmd %PKG_VERSION%
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO PACKAGE FAILED
+	EXIT /B 1
+)
+@ECHO ON
 
 call run_tests.cmd x64 Release
-call run_tests.cmd x86 Release
-
-goto end
-
-:fail
-SET ERRORLEVEL=1
-
-:end
-IF %ERRORLEVEL%==0 (
-	echo Build success.
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
+	EXIT /B 1
 )
-EXIT /B %ERRORLEVEL%
+@ECHO ON
+
+call run_tests.cmd x86 Release
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
+	EXIT /B 1
+)
+
+@ECHO ON
+@ECHO Build success.
+EXIT /B 0
+
+
+
