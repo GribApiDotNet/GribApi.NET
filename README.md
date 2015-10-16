@@ -10,8 +10,8 @@ Special thanks to John L'Heureux, Meteorological Data Analyst at aWhere, Inc., f
 ## Docs
 The documentation is very much a WIP, but you'll find [grib_api's wiki](https://software.ecmwf.int/wiki/display/GRIB/Home), helpful.
 
-* [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
 * [Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
+* [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
 
 ## Usage
 Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
@@ -51,17 +51,28 @@ PM> Install-Package Grib.Api
 	}
 ```
 
-#### Iterating Lat/Lon/Value:
+#### Iterating lat/lon/value:
 ```csharp
 
 	GribMessage msg = gribFile.First();
 	
+	// the values in GeoSpatialValues are calculated by grid type
 	foreach (GeoSpatialValue val in msg.GeoSpatialValues)
 	{
 		if (val.IsMissing) { continue; }
 
 		Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
 	}
+```
+
+#### Getting raw data:
+```csharp
+
+	GribMessage msg = gribFile.First();
+	double[] rawValues;
+	
+	// a copy of the raw values stored in the message
+	msg.Values(out rawValues);
 ```
 
 #### Editing a single message and saving to a new file:
