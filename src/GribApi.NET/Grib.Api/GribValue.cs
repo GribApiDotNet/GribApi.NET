@@ -89,7 +89,9 @@ namespace Grib.Api
         /// <param name="newValue">The new value.</param>
         public virtual void AsString (string newValue)
         {
-            SizeT len = (SizeT)newValue.Length;
+            AssertTypeSafe(GribValueType.String);
+
+            SizeT len = (SizeT) newValue.Length;
             GribApiProxy.GribSetString(_handle, Key, newValue, ref len);
         }
 
@@ -99,9 +101,9 @@ namespace Grib.Api
         /// <returns></returns>
         public byte[] AsBytes ()
         {
-            if (!IsDefined) { return new byte[0]; }
-
             AssertTypeSafe(GribValueType.Bytes);
+
+            if (!IsDefined) { return new byte[0]; }
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -118,6 +120,8 @@ namespace Grib.Api
         /// <param name="newBytes">The new bytes.</param>
         public void AsBytes(byte[] newBytes)
         {
+            AssertTypeSafe(GribValueType.Bytes);
+
             SizeT sz = (SizeT) newBytes.Length;
             GribApiProxy.GribSetBytes(_handle, Key, newBytes, ref sz);
         }
@@ -145,6 +149,8 @@ namespace Grib.Api
         /// <param name="newValue">The new value.</param>
         public virtual void AsInt (int newValue)
         {
+            AssertTypeSafe(GribValueType.Int);
+
             GribApiProxy.GribSetLong(_handle, Key, newValue);
         }
 
@@ -174,6 +180,8 @@ namespace Grib.Api
         /// <param name="newValues">The new values.</param>
         public virtual void AsIntArray (int[] newValues)
         {
+            AssertTypeSafe(GribValueType.IntArray);
+
             GribApiProxy.GribSetLongArray(_handle, Key, newValues, (SizeT)newValues.Length);
         }
 
@@ -184,12 +192,13 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual double AsDouble (bool inDegrees = true)
         {
-            double val;
             string valueKey = BuildTokenForDouble(inDegrees);
 
             AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
             if (!IsDefined) { return Double.NaN; }
+
+            double val;
 
             GribApiProxy.GribGetDouble(_handle, valueKey, out val);
 
@@ -204,6 +213,8 @@ namespace Grib.Api
         public virtual void AsDouble (double newValue, bool inDegrees = true)
         {
             string valueKey = BuildTokenForDouble(inDegrees);
+
+            AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
             GribApiProxy.GribSetDouble(_handle, valueKey, newValue);
         }
@@ -240,6 +251,8 @@ namespace Grib.Api
                 GribApiProxy.GribSetForceDoubleArray(_handle, Key, newValues, (SizeT)newValues.Length);
             } else
             {
+                AssertTypeSafe(GribValueType.DoubleArray);
+
                 GribApiProxy.GribSetDoubleArray(_handle, Key, newValues, (SizeT)newValues.Length);
             }
         }
@@ -253,7 +266,7 @@ namespace Grib.Api
         {
             string valueKey = Key;
 
-            if (inDegrees && !Key.EndsWith("InDegrees") && CanConvertToDegrees)
+            if (inDegrees && CanConvertToDegrees && !Key.EndsWith("InDegrees"))
             {
                 valueKey += "InDegrees";
             } else if (!inDegrees && Key.EndsWith("InDegrees"))
