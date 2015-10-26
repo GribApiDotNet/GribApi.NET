@@ -118,7 +118,7 @@ namespace Grib.Api
 
         private static void AssertValidEnvironment ()
         {
-            string[] paths = GribEnvironment.DefinitionsPath.Split(new [] { ';', ':'});
+            string[] paths = GribEnvironment.DefinitionsPath.Split(new [] { ';' });
             string existingPath = "";
             bool exists = false;
 
