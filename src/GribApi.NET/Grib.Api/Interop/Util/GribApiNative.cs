@@ -29,7 +29,7 @@ namespace Grib.Api.Interop.Util
 
             if (ret != 0) 
             {
-                throw Grib.Api.GribApiException.Create(ret);
+                throw GribApiException.Create(ret);
             }
         }
     }

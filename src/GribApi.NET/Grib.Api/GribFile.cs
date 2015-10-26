@@ -32,8 +32,7 @@ namespace Grib.Api
     /// GRIB file iterator object that provides methods for reading and writing messages. When iterated, returns
     /// instances of the <see cref="Grib.Api.GribMessage"/> class.
     /// </summary>
-    [ContractClass(typeof(GribFile))]
-    public class GribFile: GribRef, IEnumerable<GribMessage>
+    public class GribFile: AutoRef, IEnumerable<GribMessage>
     {
         private IntPtr _pFileHandleProxy;
         private FileHandleProxy _fileHandleProxy;
@@ -54,9 +53,6 @@ namespace Grib.Api
         /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
         public GribFile (string fileName)
         {
-            Contract.Requires(Directory.Exists(GribEnvironment.DefinitionsPath), "GribEnvironment::DefinitionsPath must be a valid path.");
-            Contract.Requires(System.IO.File.Exists(Path.Combine(GribEnvironment.DefinitionsPath, "boot.def")), "Could not locate 'definitions/boot.def'.");
-
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check

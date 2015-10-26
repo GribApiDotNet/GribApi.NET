@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Grib.Api.Interop;
+﻿using Grib.Api.Interop;
 using Grib.Api.Interop.SWIG;
 
 namespace Grib.Api
@@ -10,7 +6,7 @@ namespace Grib.Api
     /// <summary>
     /// A subdomain of field measurements.
     /// </summary>
-    public class GribBox: AutoRef
+    public class GribBox : AutoRef
     {
         private GribPoints _points;
 
@@ -20,12 +16,13 @@ namespace Grib.Api
         /// <param name="msgHandle">The MSG handle.</param>
         /// <param name="nw">The nw.</param>
         /// <param name="se">The se.</param>
-        public GribBox(GribHandle msgHandle, GeoCoordinate nw, GeoCoordinate se)
+        public GribBox (GribHandle msgHandle, GeoCoordinate nw, GeoCoordinate se)
         {
             int err;
             var box = GribApiProxy.GribBoxNew(msgHandle, out err);
 
-            if (err != 0) {
+            if (err != 0)
+            {
                 throw GribApiException.Create(err);
             }
 
@@ -43,7 +40,7 @@ namespace Grib.Api
         /// Called when [dispose].
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected override void OnDispose(bool disposing)
+        protected override void OnDispose (bool disposing)
         {
             GribApiProxyPINVOKE.delete_GribPoints(GribPoints.getCPtr(_points));
         }
@@ -54,11 +51,14 @@ namespace Grib.Api
         /// <value>
         /// The latitudes.
         /// </value>
-        public double[] Latitudes {
-            set {
+        public double[] Latitudes
+        {
+            set
+            {
                 _points.latitudes = value;
             }
-            get {
+            get
+            {
                 return _points.latitudes;
             }
         }
@@ -69,11 +69,14 @@ namespace Grib.Api
         /// <value>
         /// The longitudes.
         /// </value>
-        public double[] Longitudes {
-            set {
+        public double[] Longitudes
+        {
+            set
+            {
                 _points.longitudes = value;
             }
-            get {
+            get
+            {
                 return _points.longitudes;
             }
         }
@@ -84,11 +87,14 @@ namespace Grib.Api
         /// <value>
         /// The indexes.
         /// </value>
-        public uint Indexes {
-            set {
+        public uint Indexes
+        {
+            set
+            {
                 _points.indexes = value;
             }
-            get {
+            get
+            {
                 return _points.indexes;
             }
         }
@@ -99,11 +105,14 @@ namespace Grib.Api
         /// <value>
         /// The group start.
         /// </value>
-        public uint GroupStart {
-            set {
+        public uint GroupStart
+        {
+            set
+            {
                 _points.groupStart = value;
             }
-            get {
+            get
+            {
                 return _points.groupStart;
             }
         }
@@ -114,11 +123,14 @@ namespace Grib.Api
         /// <value>
         /// The length of the group.
         /// </value>
-        public uint GroupLength {
-            set {
+        public uint GroupLength
+        {
+            set
+            {
                 _points.groupLen = value;
             }
-            get {
+            get
+            {
                 return _points.groupLen;
             }
         }
@@ -129,11 +141,14 @@ namespace Grib.Api
         /// <value>
         /// The group count.
         /// </value>
-        public uint GroupCount {
-            set {
+        public uint GroupCount
+        {
+            set
+            {
                 _points.nGroups = value;
             }
-            get {
+            get
+            {
                 return _points.nGroups;
             }
         }
@@ -144,11 +159,14 @@ namespace Grib.Api
         /// <value>
         /// The count.
         /// </value>
-        public uint Count {
-            set {
+        public uint Count
+        {
+            set
+            {
                 _points.n = value;
             }
-            get {
+            get
+            {
                 return _points.n;
             }
         }
@@ -159,11 +177,14 @@ namespace Grib.Api
         /// <value>
         /// The size.
         /// </value>
-        public uint Size {
-            set {
+        public uint Size
+        {
+            set
+            {
                 _points.size = value;
             }
-            get {
+            get
+            {
                 return _points.size;
             }
         }

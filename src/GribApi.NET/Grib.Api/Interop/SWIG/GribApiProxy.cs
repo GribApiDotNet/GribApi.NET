@@ -28,7 +28,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -43,7 +43,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -52,7 +52,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -73,7 +73,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -82,7 +82,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -97,7 +97,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -106,7 +106,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -115,7 +115,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -124,7 +124,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -133,7 +133,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -142,7 +142,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -151,7 +151,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -170,7 +170,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -185,7 +185,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -248,7 +248,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -263,7 +263,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -272,7 +272,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -281,7 +281,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -290,7 +290,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -299,7 +299,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -314,7 +314,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -327,7 +327,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -336,7 +336,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -345,7 +345,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -354,7 +354,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -369,7 +369,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -378,7 +378,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -387,7 +387,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -396,7 +396,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -405,7 +405,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -414,7 +414,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -423,7 +423,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -432,7 +432,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -441,7 +441,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -450,7 +450,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -459,7 +459,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -468,7 +468,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -477,7 +477,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -486,7 +486,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -495,7 +495,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -504,7 +504,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -513,7 +513,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -522,7 +522,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -531,7 +531,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -540,7 +540,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -549,7 +549,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -558,7 +558,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -603,7 +603,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -682,7 +682,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -691,7 +691,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -700,7 +700,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -709,7 +709,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -718,7 +718,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -727,7 +727,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -736,7 +736,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -759,7 +759,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -772,7 +772,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -793,7 +793,7 @@ public class GribApiProxy {
 	
 	if (err != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
 	
 	return ret == 1;
@@ -810,7 +810,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -819,7 +819,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -828,7 +828,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -837,7 +837,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -860,7 +860,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -869,7 +869,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -878,7 +878,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -887,7 +887,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -896,7 +896,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -935,7 +935,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -944,7 +944,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 
@@ -965,7 +965,7 @@ public class GribApiProxy {
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
 

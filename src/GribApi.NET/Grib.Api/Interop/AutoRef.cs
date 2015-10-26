@@ -24,7 +24,7 @@ namespace Grib.Api.Interop
     /// <summary>
     /// RAII-patterned wrapper for unmanaged references.
     /// </summary>
-    public abstract class AutoRef : IDisposable
+    public class AutoRef : IDisposable
     {
         // to detect redundant calls
         private bool _disposed = false;
@@ -32,8 +32,15 @@ namespace Grib.Api.Interop
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoRef"/> class.
         /// </summary>
-        public AutoRef ()
+        public AutoRef () : this(IntPtr.Zero) { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AutoRef"/> class.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        public AutoRef (IntPtr handle)
         {
+            Reference = new HandleRef(this, handle);
         }
 
         /// <summary>
@@ -73,5 +80,8 @@ namespace Grib.Api.Interop
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+        public HandleRef Reference { get; protected set; }
+        public IntPtr pReference { get { return Reference.Handle; } }
     }
 }

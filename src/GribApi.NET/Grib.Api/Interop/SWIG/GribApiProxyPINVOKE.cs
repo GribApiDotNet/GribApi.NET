@@ -10,7 +10,10 @@ using System;
 namespace Grib.Api.Interop.SWIG {
 
 class GribApiProxyPINVOKE {
-
+    static GribApiProxyPINVOKE()
+    {
+        GribEnvironment.Init();
+    }
   protected class SWIGExceptionHelper {
 
     public delegate void ExceptionDelegate(string message);
