@@ -14,7 +14,9 @@ The documentation is very much a WIP, but you'll find [grib_api's wiki](https://
 
 * [Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
 * [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
+
 --------------------------
+
 ## Usage
 Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
 ```shell
@@ -22,7 +24,7 @@ PM> Install-Package Grib.Api
 ```
 
 ### Shadow Copying
-**ASP.NET**, **NUnit**, and other frameworks employ a technique called "shadow copying". When Grib.Api.dll is shadow copied, GribApi\.NET may have difficulty locating the Grib.Api directory, which is required for proper operation.
+**ASP.NET**, **NUnit**, and other frameworks employ a technique called "shadow copying". When Grib.Api.dll is shadow copied, GribApi.NET may have difficulty locating the `Grib.Api` directory, which is required for proper operation.
 
 There are several ways to deal with this issue. The simplest is to set the`GRIB_API_DIR_ROOT` before calling GribApi.NET for the first time. The should be the directory *containing* the `Grib.Api` directory. E.g., for `C:\Some\Path\Grib.Api`, set:
 ```csharp
