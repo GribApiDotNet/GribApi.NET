@@ -58,7 +58,7 @@ namespace Grib.Api
             // need a better check
             if (fi.Length < 4)
             {
-                throw new FileLoadException("This file is empty.");
+                throw new FileLoadException("This file is empty or invalid.");
             }
 
             _pFileHandleProxy = GribApiNative.CreateFileHandleProxy(fileName);

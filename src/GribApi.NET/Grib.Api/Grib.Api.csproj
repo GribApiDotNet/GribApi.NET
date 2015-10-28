@@ -119,6 +119,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GribEnvironmentLoadHelper.cs" />
     <Compile Include="Interop\GribApiException.cs" />
     <Compile Include="GribBox.cs" />
     <Compile Include="Interop\GribContext.cs" />

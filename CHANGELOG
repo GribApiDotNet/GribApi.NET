@@ -1,0 +1,18 @@
+CHANGELOG
+
+0.6.0
+====
+* Added support for PNG compression.
+* Added support for extracting subdomains ("boxes") from Gaussian grids.
+* Added support for "GRIB_API_DIR_ROOT" environment variable to improve path definition of the Grib.Api root directory.
+* Improved Grib.Api path checking and related error messaging.
+* Improved IDisposable implementations to ensure memory is properly disposed.
+* Changed access to the "values" field to an "out" function; this prevents users from iterate the "Values" property, which causes severe performance issues.
+* Added type-checking for accessing/mutating keys via AsString, AsInt, etc.
+* Expanded documentation.
+* Multiple build script improvements.
+* Fixed bad linking for libjasper in x64 builds
+
+0.5.0
+====
+* First public release.

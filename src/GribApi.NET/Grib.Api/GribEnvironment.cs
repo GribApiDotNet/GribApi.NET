@@ -33,8 +33,6 @@ namespace Grib.Api
     {
         private static AutoRef _libHandle;
         private static object _initLock = new object();
-        private static bool _init = false;
-        private static string _rootPath = "";
 
         /// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
@@ -43,79 +41,32 @@ namespace Grib.Api
         /// <exception cref="System.ComponentModel.Win32Exception"></exception>
         public static void Init()
         {
-            if (Initialized) { return; }
-
-            Initialized = true;
-            string definitions = "";
-
-            if (String.IsNullOrWhiteSpace(DefinitionsPath) && TryFindDefinitions(out definitions))
+            lock(_initLock)
             {
-                DefinitionsPath = definitions;
+                if (Initialized) { return; }
+
+                Initialized = true;
+                string definitions = "";
+
+                if (String.IsNullOrWhiteSpace(DefinitionsPath) &&
+                    GribEnvironmentLoadHelper.TryFindDefinitions(out definitions))
+                {
+                    DefinitionsPath = definitions;
+                }
+
+                _libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
+                AssertValidEnvironment();
             }
-
-            BootStrapLibrary();
-            AssertValidEnvironment();
         }
 
-        private static void BootStrapLibrary()
-        {
-            string path = "";
-
-            if (!TryFindBootstrapLibrary(out path))
-            {
-                throw new FileNotFoundException("Could not find Grib.Api.Native. If you're using ASP.NET or NUnit, this is usually caused by shadow copying. Please see GribApi.NET's documentation for help.");
-            }
-
-            _libHandle = Win32.LoadWin32Library(path);
-        }
-
-        private static bool TryFindBootstrapLibrary (out string path)
-        {
-            path = "";
-
-            // TODO: make cross platform
-            string binaryType = "dll";
-            string file = "Grib.Api.Native." + binaryType;
-
-            const string PATH_TEMPLATE = "Grib.Api\\lib\\win";
-            string platform = (IntPtr.Size == 8) ? "x64" : "x86";
-            string gribNativeLibPath = Path.Combine(PATH_TEMPLATE, platform, file);
-
-            return TryBuildDescriptorPath(gribNativeLibPath, out path);
-        }
-
-        private static bool TryFindDefinitions (out string path)
-        {
-            return TryBuildDescriptorPath("Grib.Api\\definitions", out path);
-        }
-
-        private static bool TryBuildDescriptorPath (string target, out string path)
-        {
-            path = "";
-            string varDef = Environment.GetEnvironmentVariable("GRIB_API_DIR_ROOT") + "";
-
-            string envDir = Path.Combine(varDef, target);
-            string thisDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), target);
-            string exeDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, target);
-
-            return TryBuildGriApiPath(envDir, out path)  ||   // try using environment variable
-                   TryBuildGriApiPath(target, out path)  ||   // try using relative path
-                   TryBuildGriApiPath(thisDir, out path) ||   // try using the directory that contains this binary
-                   TryBuildGriApiPath(exeDir, out path);      // try using the directory that contains the exe
-        }
-
-        private static bool TryBuildGriApiPath(string root, out string path)
-        {
-            path = "";
-
-            if (File.Exists(root) || Directory.Exists(root))
-            {
-                path = Path.GetFullPath(root);
-            }
-
-            return !String.IsNullOrWhiteSpace(path);
-        }
-
+        /// <summary>
+        /// Asserts the valid environment.
+        /// </summary>
+        /// <exception cref="GribApiException">
+        /// GribEnvironment::DefinitionsPath must be a valid path. If you're using ASP.NET or NUnit, this exception is usually caused by shadow copying. Please see GribApi.NET's documentation for help.
+        /// or
+        /// Could not locate 'definitions/boot.def'.
+        /// </exception>
         private static void AssertValidEnvironment ()
         {
             string[] paths = GribEnvironment.DefinitionsPath.Split(new [] { ';' });
@@ -139,6 +90,19 @@ namespace Grib.Api
             {
                 throw new GribApiException("Could not locate 'definitions/boot.def'.");
             }
+        }
+
+        /// <summary>
+        /// Sets an env variable and notifies the C runtime to update its values.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="val">The value.</param>
+        private static void PutEnvVar (string name, string val)
+        {
+            Environment.SetEnvironmentVariable(name, val, EnvironmentVariableTarget.Process);
+            Win32._putenv_s(name, val);
+
+            Debug.Assert(Environment.GetEnvironmentVariable(name) == val);
         }
 
         /// <summary>
@@ -218,29 +182,12 @@ namespace Grib.Api
             }
         }
 
-        private static bool Initialized
-        {
-            get
-            {
-                lock (_initLock) { return _init; }
-            }
-            set
-            {
-                lock (_initLock) { _init = value; }
-            }
-        }
-
         /// <summary>
-        /// Sets an env variable and notifies the C runtime to update its values.
+        /// Gets or sets a value indicating whether this <see cref="GribEnvironment"/> is initialized.
         /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="val">The value.</param>
-        private static void PutEnvVar(string name, string val)
-        {
-            Environment.SetEnvironmentVariable(name, val, EnvironmentVariableTarget.Process);
-            Win32._putenv_s(name, val);
-
-            Debug.Assert(Environment.GetEnvironmentVariable(name) == val);
-        }
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
+        private static bool Initialized { get; set; }
     }
 }
