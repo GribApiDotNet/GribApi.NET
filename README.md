@@ -77,6 +77,19 @@ Environment.SetEnvironmentVariable("GRIB_API_DIR_ROOT", "C:\\Some\\Path", Enviro
 	}
 ```
 
+#### Cherry-picking messages by parameter name
+```csharp
+	using(GribFile file = new GribFile(@".\TestData\Pacific.wind.7days.grb"))
+	{
+		var vComp = file.Where(m => m.Name.Contains("V-component of wind m s**-1")).First();
+
+		foreach (var val in vComp.GeoSpatialValues)
+		{
+			Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
+		}
+	}
+```
+
 #### Getting raw data:
 ```csharp
 
