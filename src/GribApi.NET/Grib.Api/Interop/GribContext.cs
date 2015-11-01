@@ -45,6 +45,8 @@ namespace Grib.Api.Interop
                 {
                     GribApiProxy.GribMultiSupportOff(this);
                 }
+
+                _enableMultipleFieldMessages = value;
             }
         }
         private bool _enableMultipleFieldMessages = false;

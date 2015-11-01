@@ -302,7 +302,9 @@ SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
 
     if (h != (intptr_t)INVALID_HANDLE_VALUE)
     {
-        assert(CloseHandle((HANDLE)h) != 0);
+        // On Windows, DO NOT call CloseHandle here, see remarks in
+        // https://msdn.microsoft.com/en-us/library/fxfsw25t(v=vs.120).aspx
+        assert(fclose(fhp->File) == 0);
     }
 
 	delete(fhp);
