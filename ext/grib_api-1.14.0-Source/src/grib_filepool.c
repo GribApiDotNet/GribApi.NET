@@ -29,6 +29,16 @@ static void init() {
     pthread_mutexattr_destroy(&attr);
 
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
+
+static omp_nest_lock_t mutex1;
+
+static void init()
+{
+    GRIB_OMP_SINGLE
+    omp_init_nest_lock(&mutex1);
+}
 #endif
 
 static short next_id=0;

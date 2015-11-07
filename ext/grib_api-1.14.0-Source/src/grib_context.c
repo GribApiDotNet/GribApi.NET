@@ -40,7 +40,20 @@ static void init()
     pthread_mutex_init(&mutex_mem,&attr);
     pthread_mutexattr_destroy(&attr);
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
 
+static omp_nest_lock_t mutex_mem;
+static omp_nest_lock_t mutex_c;
+
+static void init()
+{
+    GRIB_OMP_SINGLE
+    {
+        omp_init_nest_lock(&mutex_mem);
+        omp_init_nest_lock(&mutex_c);
+    }
+}
 #endif
 
 
