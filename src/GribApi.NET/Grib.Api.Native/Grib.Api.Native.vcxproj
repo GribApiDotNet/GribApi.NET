@@ -130,6 +130,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,6 +146,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -160,6 +162,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -175,6 +178,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -192,6 +196,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -211,6 +216,7 @@
       <AdditionalIncludeDirectories>..\..\..\ext\grib_api-1.14.0-Source\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <PreprocessorDefinitions>_WINDLL;WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
