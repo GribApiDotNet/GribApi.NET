@@ -25,6 +25,7 @@ using System.IO;
 using System.Diagnostics;
 using System.ComponentModel;
 using Grib.Api.Interop.Util;
+using System.Threading;
 
 namespace Grib.Api
 {
@@ -36,6 +37,10 @@ namespace Grib.Api
     {
         private IntPtr _pFileHandleProxy;
         private FileHandleProxy _fileHandleProxy;
+        public Object _msgLock = new Object();
+        private ManualResetEvent _re = new ManualResetEvent(true);
+        private SynchronizationContext _sCtxt;
+        int _tId;
 
         /// <summary>
         /// Initializes the <see cref="GribFile"/> class.
@@ -53,6 +58,7 @@ namespace Grib.Api
         /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
         public GribFile (string fileName)
         {
+            _tId = Thread.CurrentThread.ManagedThreadId;
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check
@@ -70,9 +76,11 @@ namespace Grib.Api
 
             _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
 
+      //      _sCtxt = SynchronizationContext.Current ?? new GribSynchronizationContext();
+        //    SynchronizationContext.SetSynchronizationContext(_sCtxt);
             FileName = fileName;
             Reference = new HandleRef(this, _fileHandleProxy.File);
-            Context = GribApiProxy.GribContextGetDefault();
+            Context =  GribApiProxy.GribContextGetDefault();//GribContext.Create();
 
             // set the message count here; the result seems to be connected to the message iterator so
             // that after you begin iterating messages, the count decreases until it reaches 1.
@@ -90,6 +98,43 @@ namespace Grib.Api
             GribApiNative.DestroyFileHandleProxy(_pFileHandleProxy);
         }
 
+        private bool TryGetNextMessage (int i, out GribMessage msg)
+        {
+            msg = null;
+            msg = GribMessage.Create(this, i);
+            //if (_tId == Thread.CurrentThread.ManagedThreadId)
+            //{
+            //    msg = GribMessage.Create(this, i);
+            //} else
+            //{
+            //    //lock (_msgLock)
+            //    //{
+            //    Console.WriteLine("Creation Thread: " + _tId);
+
+            //    _sCtxt.Send(m =>
+            //    {
+            //        Console.WriteLine("In Send: " + Thread.CurrentThread.ManagedThreadId);
+            //        m = GribMessage.Create(this, i);
+
+
+            //    }, msg);
+            //    // }
+            //}
+
+
+            //lock (_msgLock)
+            //{
+            //    _sCtxt.Send(s =>
+            //    {
+
+            //        s = GribMessage.Create(this, i);
+
+
+            //    }, msg);
+            //}
+            return msg != null;
+        }
+
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
@@ -100,11 +145,13 @@ namespace Grib.Api
         {
             GribMessage msg;
             int i = 0;
-
-            while ((msg = GribMessage.Create(this, i++)) != null)
-            {
-                yield return msg;
-            }
+            //lock (_msgLock)
+         //   {
+                while (TryGetNextMessage(i++, out msg))
+                {
+                    yield return msg;
+                }
+         //   }
         }
 
         /// <summary>

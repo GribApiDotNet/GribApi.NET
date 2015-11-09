@@ -8,6 +8,7 @@ namespace Grib.Api.Interop
     /// </summary>
     public class GribContext : AutoRef
     {
+        private static GribContext _dfltCxt = GribApiProxy.GribContextGetDefault();
         /// <summary>
         /// Initializes a new instance of the <see cref="GribContext"/> class.
         /// </summary>
@@ -50,5 +51,17 @@ namespace Grib.Api.Interop
             }
         }
         private bool _enableMultipleFieldMessages = false;
+
+        /// <summary>
+        /// Creates an instance.
+        /// </summary>
+        /// <returns></returns>
+        public static GribContext Create()
+        {
+           // GribContext defaultContext = GribApiProxy.GribContextGetDefault();
+           // return GribApiProxy.GribContextNew(_dfltCxt);
+            var c = new GribContext(IntPtr.Zero);
+            return GribApiProxy.GribContextNew(c);
+        }
     }
 }

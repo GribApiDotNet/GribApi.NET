@@ -188,15 +188,6 @@ if ERRORLEVEL 1 (
 	EXIT /B 1
 )
 
-if NOT "%PKG_VERSION%"=="" (
-	@ECHO ON
-	call build_nuget.cmd %PKG_VERSION%
-	@ECHO OFF
-	if ERRORLEVEL 1 (
-		ECHO PACKAGE FAILED
-		EXIT /B 1
-	)
-)
 @ECHO ON
 	
 call run_tests.cmd x64 Release
@@ -214,6 +205,16 @@ if ERRORLEVEL 1 (
 	@ECHO ON
 	ECHO TEST FAILED
 	EXIT /B 1
+)
+
+if NOT "%PKG_VERSION%"=="" (
+	@ECHO ON
+	call build_nuget.cmd %PKG_VERSION%
+	@ECHO OFF
+	if ERRORLEVEL 1 (
+		ECHO PACKAGE FAILED
+		EXIT /B 1
+	)
 )
 
 @ECHO ON

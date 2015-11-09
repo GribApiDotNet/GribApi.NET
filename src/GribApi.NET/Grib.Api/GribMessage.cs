@@ -116,6 +116,8 @@ namespace Grib.Api
             return new GribBox(Handle, nw, se);
         }
 
+        public static object l = new object();
+
         /// <summary>
         /// Creates a GribMessage instance from a <seealso cref="Grib.Api.GribFile"/>.
         /// </summary>
@@ -126,20 +128,21 @@ namespace Grib.Api
         {
             GribMessage msg = null;
             int err = 0;
-
-            // grib_api moves to the next message in a stream for each new handle
-            GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
-
-            if (err != 0) 
+            lock (l)
             {
-                throw GribApiException.Create(err);
-            }
+                // grib_api moves to the next message in a stream for each new handle
+                GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
 
-            if (handle != null) 
-            {
-                msg = new GribMessage(handle, file.Context, index);
-            }
+                if (err != 0)
+                {
+                    throw GribApiException.Create(err);
+                }
 
+                if (handle != null)
+                {
+                    msg = new GribMessage(handle, file.Context, index);
+                }
+            }
             return msg;
         }
 

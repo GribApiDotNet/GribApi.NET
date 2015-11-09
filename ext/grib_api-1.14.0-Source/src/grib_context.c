@@ -586,11 +586,7 @@ char *grib_context_full_defs_path(grib_context* c,const char* basename)
     char full[1024]={0,};
     grib_string_list* dir=NULL;
     grib_string_list* fullpath=0;
-//#ifdef GRIB_ON_WINDOWS
-//    char* ps = "\\";
-//#else
-//    char* ps = "/";
-//#endif
+
     if (!c) c=grib_context_get_default();
 
     GRIB_PTHREAD_ONCE(&once,&init);
