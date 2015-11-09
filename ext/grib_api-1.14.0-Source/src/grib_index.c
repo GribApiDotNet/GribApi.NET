@@ -43,12 +43,18 @@ static int once = 0;
 
 static omp_nest_lock_t mutex1;
 static omp_nest_lock_t mutex2;
+static int _init = 0;
+
 static void init()
 {
     GRIB_OMP_SINGLE
     {
-        omp_init_nest_lock(&mutex1);
-        omp_init_nest_lock(&mutex2);
+        if (_init == 0)
+        {
+            omp_init_nest_lock(&mutex1);
+            omp_init_nest_lock(&mutex2);
+            _init = 1;
+        }
     }
 }
 #endif

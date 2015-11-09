@@ -60,7 +60,10 @@ namespace Grib.Api.Interop
             if (!_disposed)
             {
                 _disposed = true;
-                OnDispose(disposing);
+                try
+                {
+                    OnDispose(disposing);
+                } catch (Exception) { }
             }
         }
 

@@ -128,20 +128,17 @@ namespace Grib.Api
         {
             GribMessage msg = null;
             int err = 0;
-            lock (l)
+            // grib_api moves to the next message in a stream for each new handle
+            GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
+
+            if (err != 0)
             {
-                // grib_api moves to the next message in a stream for each new handle
-                GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
+                throw GribApiException.Create(err);
+            }
 
-                if (err != 0)
-                {
-                    throw GribApiException.Create(err);
-                }
-
-                if (handle != null)
-                {
-                    msg = new GribMessage(handle, file.Context, index);
-                }
+            if (handle != null)
+            {
+                msg = new GribMessage(handle, file.Context, index);
             }
             return msg;
         }

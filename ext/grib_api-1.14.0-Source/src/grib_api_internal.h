@@ -118,26 +118,26 @@ extern "C" {
 #endif
 
 #if GRIB_LINUX_PTHREADS
- extern int pthread_mutexattr_settype(pthread_mutexattr_t* attr,int type);
+   extern int pthread_mutexattr_settype(pthread_mutexattr_t* attr,int type);
 #endif
 
 #if GRIB_PTHREADS
- #include <pthread.h>
- #define GRIB_PTHREAD_ONCE(a,b) pthread_once(a,b);
- #define GRIB_MUTEX_LOCK(a) pthread_mutex_lock(a); 
- #define GRIB_MUTEX_UNLOCK(a) pthread_mutex_unlock(a);
-/*
-#define GRIB_MUTEX_LOCK(a) {pthread_mutex_lock(a); printf("MUTEX LOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);}
-#define GRIB_MUTEX_UNLOCK(a) {pthread_mutex_unlock(a);printf("MUTEX UNLOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);} 
-*/
+#include <pthread.h>
+#define GRIB_PTHREAD_ONCE(a,b) pthread_once(a,b);
+#define GRIB_MUTEX_LOCK(a) pthread_mutex_lock(a); 
+#define GRIB_MUTEX_UNLOCK(a) pthread_mutex_unlock(a);
+   /*
+   #define GRIB_MUTEX_LOCK(a) {pthread_mutex_lock(a); printf("MUTEX LOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);}
+   #define GRIB_MUTEX_UNLOCK(a) {pthread_mutex_unlock(a);printf("MUTEX UNLOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);} 
+   */
 #elif GRIB_OMP_THREADS
  #include <omp.h>
  #ifdef _MSC_VER
-  #define GRIB_OMP_SINGLE __pragma(omp single)
+  #define GRIB_OMP_SINGLE __pragma(omp single nowait)
  #else
-  #define GRIB_OMP_SINGLE _Pragma("omp single")
+  #define GRIB_OMP_SINGLE _Pragma("omp single nowait")
  #endif
- #define GRIB_PTHREAD_ONCE(a,b) (*b)();
+ #define GRIB_PTHREAD_ONCE(a,b) if (_init == 0) { (*b)(); }
  #define GRIB_MUTEX_LOCK(a)  omp_set_nest_lock(a); 
  #define GRIB_MUTEX_UNLOCK(a)  omp_unset_nest_lock(a);
 #else

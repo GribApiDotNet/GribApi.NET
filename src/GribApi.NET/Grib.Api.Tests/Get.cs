@@ -197,7 +197,7 @@ namespace Grib.Api.Tests
                     //    Console.WriteLine(" Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
                     //}
                     var msgs = (IEnumerable<GribMessage>) file;
-                    var foo = msgs.First();
+                //    var foo = msgs.First();
                     Parallel.ForEach(msgs, (msg, s2) =>
 {
     //Console.WriteLine(msg.ToString());

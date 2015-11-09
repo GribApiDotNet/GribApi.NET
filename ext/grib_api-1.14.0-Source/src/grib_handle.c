@@ -35,17 +35,22 @@ static void init() {
 
 }
 #elif GRIB_OMP_THREADS
-static int once = 0;
+static omp_lock_t once = 0;
 
 static omp_nest_lock_t mutex1;
 static omp_nest_lock_t mutex2;
+static int _init = 0;
 
 static void init()
 {
     GRIB_OMP_SINGLE
     {
-        omp_init_nest_lock(&mutex1);
-        omp_init_nest_lock(&mutex2);
+        if (_init == 0)
+        {
+            omp_init_nest_lock(&mutex1);
+            omp_init_nest_lock(&mutex2);
+            _init = 1;
+        }
     }
 }
 #endif
@@ -212,8 +217,8 @@ static grib_handle* grib_handle_create ( grib_handle  *gl, grib_context* c,void*
     if ( gl == NULL )
         return NULL;
 
-    GRIB_PTHREAD_ONCE(&once, &init);
-    GRIB_MUTEX_LOCK(&mutex1);
+    //GRIB_PTHREAD_ONCE(&once, &init);
+    //GRIB_MUTEX_LOCK(&mutex1);
 
     gl->use_trie = 1;
     gl->trie_invalid=0;
@@ -262,7 +267,7 @@ static grib_handle* grib_handle_create ( grib_handle  *gl, grib_context* c,void*
 
     check_definitions_version(gl);
 
-    GRIB_MUTEX_UNLOCK(&mutex1);
+   // GRIB_MUTEX_UNLOCK(&mutex1);
 
     return gl;
 
@@ -727,8 +732,8 @@ grib_handle* eccode_grib_new_from_file ( grib_context* c, FILE* f,int headers_on
 {
     grib_handle* h=0;
     if (!f) {*error=GRIB_IO_PROBLEM; return NULL;}
-    GRIB_PTHREAD_ONCE(&once, &init);
-    GRIB_MUTEX_LOCK(&mutex1);
+    //GRIB_PTHREAD_ONCE(&once, &init);
+    //GRIB_MUTEX_LOCK(&mutex1);
     if ( c == NULL ) c = grib_context_get_default();
 
     if ( c->multi_support_on ) h=grib_handle_new_from_file_multi ( c,f,error );
@@ -742,7 +747,7 @@ grib_handle* eccode_grib_new_from_file ( grib_context* c, FILE* f,int headers_on
         h=NULL;
     }
 
-    GRIB_MUTEX_UNLOCK(&mutex1);
+  //  GRIB_MUTEX_UNLOCK(&mutex1);
     return h;
 }
 
