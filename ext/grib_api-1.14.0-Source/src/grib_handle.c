@@ -263,6 +263,7 @@ static grib_handle* grib_handle_create ( grib_handle  *gl, grib_context* c,void*
     check_definitions_version(gl);
 
     return gl;
+
 }
 
 grib_handle* grib_handle_new_from_template ( grib_context* c, const char* name )

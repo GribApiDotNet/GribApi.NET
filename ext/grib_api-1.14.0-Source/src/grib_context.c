@@ -584,17 +584,15 @@ static int init_definition_files_dir(grib_context* c)
 
 char *grib_context_full_defs_path(grib_context* c,const char* basename)
 {
-   
     int err=0;
     char full[1024]={0,};
     grib_string_list* dir=NULL;
     grib_string_list* fullpath=0;
-
     if (!c) c=grib_context_get_default();
 
     GRIB_PTHREAD_ONCE(&once,&init);
 
-    if (*basename == '/' || *basename == '.') {
+    if(*basename == '/' || *basename ==  '.') {
         return (char*)basename;
     } else {
         fullpath=(grib_string_list*)grib_trie_get(c->def_files,basename);
@@ -614,7 +612,7 @@ char *grib_context_full_defs_path(grib_context* c,const char* basename)
         dir=c->grib_definition_files_dir;
 
         while (dir) {
-            sprintf(full, "%s/%s", dir->value, basename);
+            sprintf(full,"%s/%s",dir->value,basename);
             if (!access(full,F_OK)) {
                 fullpath=(grib_string_list*)grib_context_malloc_clear_persistent(c,sizeof(grib_string_list));
                 Assert(fullpath);

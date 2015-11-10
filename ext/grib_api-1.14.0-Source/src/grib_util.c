@@ -1125,7 +1125,6 @@ static void set_value(grib_values* value,char* str,int equal)
 {
     char *p=0,*q=0,*s=0;
     char buf[1000]={0,};
-
     grib_context* c=grib_context_get_default();
 
     value->equal=equal;

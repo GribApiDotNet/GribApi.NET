@@ -285,9 +285,7 @@ static void init() {
 }
 #elif GRIB_OMP_THREADS
 static int once = 0;
-
 static omp_nest_lock_t mutex;
-
 
 static void init()
 {

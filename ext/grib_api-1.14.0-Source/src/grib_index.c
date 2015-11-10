@@ -38,7 +38,7 @@ static void init() {
     pthread_mutexattr_destroy(&attr);
 
 }
-#elif GRIB_OMP_THREADS
+/* #elif GRIB_OMP_THREADS */
 static int once = 0;
 static omp_nest_lock_t mutex1;
 static omp_nest_lock_t mutex2;

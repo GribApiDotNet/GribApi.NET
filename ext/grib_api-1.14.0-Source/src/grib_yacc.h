@@ -282,7 +282,7 @@ typedef union YYSTYPE
 
 
 /* Line 1676 of yacc.c  */
-#line 286 "grib_yacc.h"
+#line 286 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define grib_yystype YYSTYPE /* obsolescent; will be withdrawn */

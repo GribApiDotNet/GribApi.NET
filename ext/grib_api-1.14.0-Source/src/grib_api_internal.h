@@ -118,18 +118,18 @@ extern "C" {
 #endif
 
 #if GRIB_LINUX_PTHREADS
-   extern int pthread_mutexattr_settype(pthread_mutexattr_t* attr,int type);
+ extern int pthread_mutexattr_settype(pthread_mutexattr_t* attr,int type);
 #endif
 
 #if GRIB_PTHREADS
-#include <pthread.h>
-#define GRIB_PTHREAD_ONCE(a,b) pthread_once(a,b);
-#define GRIB_MUTEX_LOCK(a) pthread_mutex_lock(a); 
-#define GRIB_MUTEX_UNLOCK(a) pthread_mutex_unlock(a);
-   /*
-   #define GRIB_MUTEX_LOCK(a) {pthread_mutex_lock(a); printf("MUTEX LOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);}
-   #define GRIB_MUTEX_UNLOCK(a) {pthread_mutex_unlock(a);printf("MUTEX UNLOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);} 
-   */
+ #include <pthread.h>
+ #define GRIB_PTHREAD_ONCE(a,b) pthread_once(a,b);
+ #define GRIB_MUTEX_LOCK(a) pthread_mutex_lock(a); 
+ #define GRIB_MUTEX_UNLOCK(a) pthread_mutex_unlock(a);
+/*
+#define GRIB_MUTEX_LOCK(a) {pthread_mutex_lock(a); printf("MUTEX LOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);}
+#define GRIB_MUTEX_UNLOCK(a) {pthread_mutex_unlock(a);printf("MUTEX UNLOCK %p %s line %d\n",(void*)a,__FILE__,__LINE__);} 
+*/
 #elif GRIB_OMP_THREADS
  #include <omp.h>
  #ifdef _MSC_VER
@@ -892,6 +892,7 @@ struct grib_context
 #elif GRIB_OMP_THREADS
     omp_nest_lock_t                 mutex;
 #endif
+
 };
 
 /* file_pool */
