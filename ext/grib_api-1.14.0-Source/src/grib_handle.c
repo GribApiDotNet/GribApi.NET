@@ -19,8 +19,8 @@
 /* will not be able to work with the current definitions. See the key "internalVersion" in boot,def  */
 #define LATEST_VERSION  22
 
-#if GRIB_PTHREADS
-/* #if 0 */
+/* #if GRIB_PTHREADS */
+#if 0
 static pthread_once_t once  = PTHREAD_ONCE_INIT;
 static pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t mutex2 = PTHREAD_MUTEX_INITIALIZER;
@@ -34,22 +34,20 @@ static void init() {
     pthread_mutexattr_destroy(&attr);
 
 }
-#elif GRIB_OMP_THREADS
-static omp_lock_t once = 0;
-
+/* #elif GRIB_OMP_THREADS */
+static int once = 0;
 static omp_nest_lock_t mutex1;
 static omp_nest_lock_t mutex2;
-static int _init = 0;
 
 static void init()
 {
     GRIB_OMP_SINGLE
     {
-        if (_init == 0)
+        if (once == 0)
         {
             omp_init_nest_lock(&mutex1);
             omp_init_nest_lock(&mutex2);
-            _init = 1;
+            once = 1;
         }
     }
 }
@@ -217,9 +215,6 @@ static grib_handle* grib_handle_create ( grib_handle  *gl, grib_context* c,void*
     if ( gl == NULL )
         return NULL;
 
-    //GRIB_PTHREAD_ONCE(&once, &init);
-    //GRIB_MUTEX_LOCK(&mutex1);
-
     gl->use_trie = 1;
     gl->trie_invalid=0;
     gl->buffer = grib_new_buffer ( gl->context,(unsigned char*)data,buflen );
@@ -267,10 +262,7 @@ static grib_handle* grib_handle_create ( grib_handle  *gl, grib_context* c,void*
 
     check_definitions_version(gl);
 
-   // GRIB_MUTEX_UNLOCK(&mutex1);
-
     return gl;
-
 }
 
 grib_handle* grib_handle_new_from_template ( grib_context* c, const char* name )
@@ -732,8 +724,7 @@ grib_handle* eccode_grib_new_from_file ( grib_context* c, FILE* f,int headers_on
 {
     grib_handle* h=0;
     if (!f) {*error=GRIB_IO_PROBLEM; return NULL;}
-    //GRIB_PTHREAD_ONCE(&once, &init);
-    //GRIB_MUTEX_LOCK(&mutex1);
+
     if ( c == NULL ) c = grib_context_get_default();
 
     if ( c->multi_support_on ) h=grib_handle_new_from_file_multi ( c,f,error );
@@ -747,7 +738,6 @@ grib_handle* eccode_grib_new_from_file ( grib_context* c, FILE* f,int headers_on
         h=NULL;
     }
 
-  //  GRIB_MUTEX_UNLOCK(&mutex1);
     return h;
 }
 

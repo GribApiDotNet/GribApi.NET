@@ -40,20 +40,18 @@ static void init() {
 }
 #elif GRIB_OMP_THREADS
 static int once = 0;
-
 static omp_nest_lock_t mutex1;
 static omp_nest_lock_t mutex2;
-static int _init = 0;
 
 static void init()
 {
     GRIB_OMP_SINGLE
     {
-        if (_init == 0)
+        if (once == 0)
         {
             omp_init_nest_lock(&mutex1);
             omp_init_nest_lock(&mutex2);
-            _init = 1;
+            once = 1;
         }
     }
 }

@@ -52,20 +52,19 @@ static omp_nest_lock_t mutex_rules;
 static omp_nest_lock_t mutex_concept;
 static omp_nest_lock_t mutex_stream;
 static omp_nest_lock_t mutex_parse;
-static int _init = 0;
 
 static void init()
 {
     GRIB_OMP_SINGLE
     {
-        if (_init == 0)
+        if (once == 0)
         {
             omp_init_nest_lock(&mutex_file);
             omp_init_nest_lock(&mutex_rules);
             omp_init_nest_lock(&mutex_concept);
             omp_init_nest_lock(&mutex_stream);
             omp_init_nest_lock(&mutex_parse);
-            _init = 1;
+            once = 1;
         }
     }
 }

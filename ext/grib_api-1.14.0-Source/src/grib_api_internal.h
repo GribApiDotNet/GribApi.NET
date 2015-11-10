@@ -133,11 +133,11 @@ extern "C" {
 #elif GRIB_OMP_THREADS
  #include <omp.h>
  #ifdef _MSC_VER
-  #define GRIB_OMP_SINGLE __pragma(omp single nowait)
+  #define GRIB_OMP_SINGLE __pragma(omp single)
  #else
-  #define GRIB_OMP_SINGLE _Pragma("omp single nowait")
+  #define GRIB_OMP_SINGLE _Pragma("omp single")
  #endif
- #define GRIB_PTHREAD_ONCE(a,b) if (_init == 0) { (*b)(); }
+ #define GRIB_PTHREAD_ONCE(a,b) if ((*a) == 0) { (*b)(); }
  #define GRIB_MUTEX_LOCK(a)  omp_set_nest_lock(a); 
  #define GRIB_MUTEX_UNLOCK(a)  omp_unset_nest_lock(a);
 #else
