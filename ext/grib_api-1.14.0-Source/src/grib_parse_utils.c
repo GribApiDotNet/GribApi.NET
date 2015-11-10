@@ -424,14 +424,6 @@ int grib_yyerror(const char* msg)
 
 void grib_parser_include(const char* fname)
 {
-    char fullpath[256];
-#ifdef GRIB_ON_WINDOWS
-    char* ps = '\\';
-    char* ps2 = '/';
-#else
-    char* ps = "/";
-#endif
-
     FILE *f = NULL;
     char path[1204];
     char* io_buffer=0;
@@ -450,7 +442,7 @@ void grib_parser_include(const char* fname)
         const char *q = NULL;
 
         while(*p) {
-            if (*p == ps || *p == ps2) q = p;
+            if(*p == '/') q = p;
             p++;
         }
 
@@ -465,7 +457,7 @@ void grib_parser_include(const char* fname)
         path[q-parse_file] = 0;
         strcat(path,fname);
 
-        Assert(*fname != ps);
+        Assert(*fname != '/');
 
         parse_file = path;
     }
@@ -518,26 +510,13 @@ static int parse(grib_context* gc, const char* filename)
     int err = 0;
     GRIB_THREADS_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&mutex_parse);
-    char fullpath[256];
+
 #ifdef YYDEBUG
     {
       extern int grib_yydebug;
       grib_yydebug = getenv("YYDEBUG") != NULL;
     }
 #endif
-#ifdef GRIB_ON_WINDOWS
-    char* ps = "\\";
-#else
-    char* ps = "/";
-#endif
-
-    // on windows the full path is often not avail here--get 
-    if (strstr(filename, ps) != NULL) {
-        strcpy(fullpath, filename);
-    }
-    else {
-        sprintf(fullpath, "%s%s%s", gc->grib_definition_files_dir->value, ps, filename);
-    }
 
     gc = gc ? gc : grib_context_get_default();
 
