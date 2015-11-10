@@ -177,50 +177,32 @@ namespace Grib.Api.Tests
             }
         }
 
-                [Test]
+        [Test]
         public void TestGetParallel ()
         {
-            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.PNG_COMPRESSION };
-            object l = new object();
+            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1 };
+
             Parallel.ForEach(files, (path, s) =>
             {
                 using (var file = new GribFile(path))
                 {
-                    //GribMessage m = null;
-                    //lock (l)
-                    //{
-                    //    m = ((IEnumerable<GribMessage>) file).First();
-                    //}
-                    //foreach (var val in m.GeoSpatialValues)
-                    //{
-                    //    if (val.IsMissing) continue;
-                    //    Console.WriteLine(" Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
-                    //}
-                    var msgs = (IEnumerable<GribMessage>) file;
-                //    var foo = msgs.First();
-                    Parallel.ForEach(msgs, (msg, s2) =>
-{
-    //Console.WriteLine(msg.ToString());
-    Console.WriteLine(path);
-    Console.WriteLine(msg.Index);
-    //foreach (var val in msg.GeoSpatialValues)
-    //{
-    //    if (val.IsMissing) continue;
-    //    Console.WriteLine(path);
-    //    Console.WriteLine(msg.Index);
-    //   // Console.WriteLine(" Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
-    //}
-});
-                    //foreach (var msg in file)
-                    //{
+                    Parallel.ForEach(file, (msg, s2) =>
+                    {
+                        try
+                        {
+                            if (!msg.GridType.ToLower().Contains("mercator") &&
+                                !msg.ShortName.ToLower().Contains("shww"))
+                            {
+                                Assert.IsTrue(msg.GeoSpatialValues.Any());
+                            }
+                        } catch (GribApiException)
+                        {
+                            Console.WriteLine(path);
+                            Console.WriteLine(msg.ShortName);
+                            Console.WriteLine(msg.ToString());
+                        }
+                    });
 
-                    //    foreach (var val in msg.GeoSpatialValues)
-                    //    {
-                    //        if (val.IsMissing) continue;
-                    //        Console.WriteLine(path);
-                    //        Console.WriteLine(" Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
-                    //    }
-                    //}
                 }
 
             });

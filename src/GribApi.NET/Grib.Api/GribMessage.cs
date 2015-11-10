@@ -116,8 +116,6 @@ namespace Grib.Api
             return new GribBox(Handle, nw, se);
         }
 
-        public static object l = new object();
-
         /// <summary>
         /// Creates a GribMessage instance from a <seealso cref="Grib.Api.GribFile"/>.
         /// </summary>
@@ -140,6 +138,7 @@ namespace Grib.Api
             {
                 msg = new GribMessage(handle, file.Context, index);
             }
+
             return msg;
         }
 
