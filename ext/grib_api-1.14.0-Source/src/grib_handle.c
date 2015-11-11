@@ -34,6 +34,23 @@ static void init() {
     pthread_mutexattr_destroy(&attr);
 
 }
+/* #elif GRIB_OMP_THREADS */
+static int once = 0;
+static omp_nest_lock_t mutex1;
+static omp_nest_lock_t mutex2;
+
+static void init()
+{
+    GRIB_OMP_SINGLE
+    {
+        if (once == 0)
+        {
+            omp_init_nest_lock(&mutex1);
+            omp_init_nest_lock(&mutex2);
+            once = 1;
+        }
+    }
+}
 #endif
 
 

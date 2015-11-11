@@ -5904,6 +5904,21 @@ static void init() {
   pthread_mutexattr_destroy(&attr);
 
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
+static omp_nest_lock_t mutex;
+
+static void init()
+{
+    GRIB_OMP_SINGLE
+    {
+        if (once == 0)
+        {
+            omp_init_nest_lock(&mutex);
+            once = 1;
+        }
+    }
+}
 #endif
 struct grib_itrie {
   grib_itrie* next[SIZE];
@@ -5922,7 +5937,7 @@ grib_itrie *grib_hash_keys_new(grib_context* c,int* count) {
 }
 
 void grib_hash_keys_delete(grib_itrie *t) {
-  GRIB_PTHREAD_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   if(t)  {
@@ -5952,7 +5967,7 @@ int grib_hash_keys_get_id(grib_itrie* t,const char* key)
 
   /* printf("+++ \"%s\"\n",key); */
 
-  GRIB_PTHREAD_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   while(*k && t)  t = t->next[mapping[(int)*k++]];
@@ -5973,8 +5988,7 @@ int grib_hash_keys_insert(grib_itrie* t,const char* key)
   grib_itrie *last = t;
   int* count;
 
-  GRIB_PTHREAD_ONCE(&once,&init)
-
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   count=t->count;

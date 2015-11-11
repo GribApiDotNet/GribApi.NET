@@ -3,7 +3,7 @@
 REM Sample usages:
 REM
 REM  Building and running tests
-REM  - build_gribapi.cmd [rebuild] [tools version] [package version]
+REM  - build_gribapi.cmd [rebuild] [tools version] [Debug|Release] [package version]
 REM 
 
 SET REBUILD=/t:Build 
@@ -14,7 +14,12 @@ if "%2"=="" (
 	SET VisualStudioVersion=11
 )
 
-SET PKG_VERSION=%3
+SET CONFIG=%3
+if "%3"=="" (
+	SET CONFIG=Release
+)
+
+SET PKG_VERSION=%4
 
 SET ERRORLEVEL=0
 
@@ -48,7 +53,7 @@ Setlocal EnableDelayedExpansion
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -58,7 +63,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -68,7 +73,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -78,7 +83,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -88,7 +93,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -98,9 +103,9 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="Release" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% /p:NoWarn="1591" /nowarn:1591
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="%CONFIG%" /property:Platform="AnyCPU" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% /p:NoWarn="1591" /nowarn:1591
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD% 
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -114,7 +119,7 @@ if ERRORLEVEL 1 (
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -124,7 +129,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -134,7 +139,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -144,7 +149,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -154,7 +159,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="Release" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -164,7 +169,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="Release" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /property:ExtraDefine="%ExtraDefine%" /tv:4.0 %REBUILD%  
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -177,14 +182,33 @@ ENDLOCAL
 @ECHO ON
 
 :: Copy the AnyCPU build to the x86 dir for testing
-xcopy "%BASEDIR%bin\x64\Release\Grib.Api.dll" "%BASEDIR%bin\x86\Release\Grib.Api.dll"  /S /Y /I /Q
-xcopy "%BASEDIR%bin\x64\Release\Grib.Api.xml" "%BASEDIR%bin\x86\Release\Grib.Api.xml"  /S /Y /I /Q
-xcopy "%BASEDIR%bin\x64\Release\Grib.Api.pdb" "%BASEDIR%bin\x86\Release\Grib.Api.pdb"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.dll" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.dll"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.xml" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.xml"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.pdb" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.pdb"  /S /Y /I /Q
 
 @ECHO OFF
 if ERRORLEVEL 1 (
 	@ECHO ON
 	ECHO COPY FAILED
+	EXIT /B 1
+)
+
+@ECHO ON
+	
+call run_tests.cmd x64 %CONFIG%
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
+	EXIT /B 1
+)
+@ECHO ON
+
+call run_tests.cmd x86 %CONFIG%
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
 	EXIT /B 1
 )
 
@@ -196,24 +220,6 @@ if NOT "%PKG_VERSION%"=="" (
 		ECHO PACKAGE FAILED
 		EXIT /B 1
 	)
-)
-@ECHO ON
-	
-call run_tests.cmd x64 Release
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO TEST FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-call run_tests.cmd x86 Release
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO TEST FAILED
-	EXIT /B 1
 )
 
 @ECHO ON

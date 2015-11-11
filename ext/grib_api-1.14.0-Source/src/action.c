@@ -27,12 +27,27 @@ static void init_mutex() {
     pthread_mutexattr_destroy(&attr);
 
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
+static omp_nest_lock_t mutex1;
+
+static void init_mutex()
+{
+    GRIB_OMP_SINGLE
+    {
+        if (once == 0)
+        {
+            omp_init_nest_lock(&mutex1);
+            once = 1;
+        }
+    }
+}
 #endif
 
 
 static void init(grib_action_class *c)
 {
-    GRIB_PTHREAD_ONCE(&once,&init_mutex);
+    GRIB_MUTEX_INIT_ONCE(&once,&init_mutex);
     GRIB_MUTEX_LOCK(&mutex1);
     if(c && !c->inited)
     {
@@ -100,7 +115,7 @@ int grib_create_accessor(grib_section* p, grib_action* a,  grib_loader* h)
     {
         if(c->create_accessor) {
 			int ret;
-			GRIB_PTHREAD_ONCE(&once,&init_mutex);
+			GRIB_MUTEX_INIT_ONCE(&once,&init_mutex);
 			GRIB_MUTEX_LOCK(&mutex1);
             ret=c->create_accessor(p, a, h);
 			GRIB_MUTEX_UNLOCK(&mutex1);
@@ -117,7 +132,7 @@ int grib_action_notify_change( grib_action* a, grib_accessor *observer, grib_acc
 {
     grib_action_class *c = a->cclass;
 
-    GRIB_PTHREAD_ONCE(&once,&init_mutex)
+    GRIB_MUTEX_INIT_ONCE(&once,&init_mutex)
     GRIB_MUTEX_LOCK(&mutex1)
 
     init(c);

@@ -1,5 +1,10 @@
 CHANGELOG
 
+0.6.2
+====
+* Fixed memory corruption when disposing grib_points.
+* Greatly improved thread safety by adding OpenMP support to grib_api lib.
+
 0.6.1
 ====
 * Fixed CLR exception thrown when closing that was caused by invalid file handle

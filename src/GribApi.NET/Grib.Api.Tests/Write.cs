@@ -19,14 +19,10 @@ namespace Grib.Api.Tests
                 File.Delete(Settings.OUT_GRIB);
             }
 
-            Console.WriteLine();
-
             int count = 0;
 
             using (var readFile = new GribFile(Settings.PACIFIC_WIND))
             {
-                Console.WriteLine("Writing 1 message from {0} to {1}", Settings.GRIB, Settings.OUT_GRIB);
-
                 var msg = readFile.First();
                 Assert.AreNotEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
                 msg["latitudeOfFirstGridPoint"].AsDouble(33);
@@ -38,14 +34,10 @@ namespace Grib.Api.Tests
                 count = readFile.MessageCount;
                 Assert.AreEqual(count, readFile.MessageCount);
                 Assert.AreEqual(33, readFile.First()["latitudeOfFirstGridPoint"].AsDouble());
-
-                Console.WriteLine("Messages in {0}: {1}", Settings.OUT_GRIB, count);
             }
 
             using (var readFile = new GribFile(Settings.GRIB))
-            {                
-                Console.WriteLine("Appending {0} messages from {1} to {2}", readFile.MessageCount, Settings.GRIB, Settings.OUT_GRIB);
-
+            {
                 GribFile.Write(Settings.OUT_GRIB, readFile as IEnumerable<GribMessage>, FileMode.Append);
                 count += readFile.MessageCount;
             }
@@ -54,8 +46,6 @@ namespace Grib.Api.Tests
             {
                 Assert.AreEqual(count, readFile.MessageCount);
                 Assert.AreEqual(33, readFile.First()["latitudeOfFirstGridPoint"].AsDouble());
-
-                Console.WriteLine("Messages in {0}: {1}", Settings.OUT_GRIB, count);
             }
 
         }

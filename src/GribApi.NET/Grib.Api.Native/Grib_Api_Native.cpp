@@ -336,7 +336,7 @@ SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
     
 	FileHandleProxy* fhp = 0;
 	fhp = new FileHandleProxy();
-	fhp->File = _fdopen(fd, "r");
+	fhp->File = _fdopen(fd, "rb");
 
 	return fhp;
 }

@@ -6,7 +6,7 @@ namespace Grib.Api
     /// <summary>
     /// A subdomain of field measurements.
     /// </summary>
-    public class GribBox : AutoRef
+    public class GribBox
     {
         private GribPoints _points;
 
@@ -33,16 +33,7 @@ namespace Grib.Api
                 throw GribApiException.Create(err);
             }
 
-            _points = new GribPoints(SWIGTYPE_p_grib_points.getCPtr(pts).Handle, true);
-        }
-
-        /// <summary>
-        /// Called when [dispose].
-        /// </summary>
-        /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
-        protected override void OnDispose (bool disposing)
-        {
-            GribApiProxyPINVOKE.delete_GribPoints(GribPoints.getCPtr(_points));
+            _points = new GribPoints(SWIGTYPE_p_grib_points.getCPtr(pts).Handle, false);
         }
 
         /// <summary>

@@ -15,10 +15,9 @@ namespace Grib.Api.Tests
         {
             var file = new GribFile(Settings.GAUSS);
             var msg = file.First();
-            Console.WriteLine("Bit per value: {0}", msg["bitsPerValue"].AsInt());
-            Console.WriteLine("Precision: {0}", msg.DecimalPrecision);
+            Assert.AreEqual(msg["bitsPerValue"].AsInt(), 13);
             msg.DecimalPrecision = 4;
-            Console.WriteLine("Bit per value: {0}", msg["bitsPerValue"].AsInt());
+            Assert.AreEqual(msg["bitsPerValue"].AsInt(), 20);
         }
     }
 }

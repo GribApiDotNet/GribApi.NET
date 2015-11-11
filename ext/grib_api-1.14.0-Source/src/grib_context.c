@@ -40,7 +40,23 @@ static void init()
     pthread_mutex_init(&mutex_mem,&attr);
     pthread_mutexattr_destroy(&attr);
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
+static omp_nest_lock_t mutex_mem;
+static omp_nest_lock_t mutex_c;
 
+static void init()
+{
+    GRIB_OMP_SINGLE
+    {
+        if (once == 0)
+        {
+            omp_init_nest_lock(&mutex_mem);
+            omp_init_nest_lock(&mutex_c);
+            once = 1;
+        }
+    }
+}
 #endif
 
 
@@ -52,7 +68,7 @@ static long cntp = 0;
 
 static void default_long_lasting_free(const grib_context* c, void* p)
 {
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     free(p);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cntp--;
@@ -62,7 +78,7 @@ static void default_long_lasting_free(const grib_context* c, void* p)
 static void* default_long_lasting_malloc(const grib_context* c, size_t size)
 {
     void* ret;
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cntp++;
     GRIB_MUTEX_UNLOCK(&mutex_mem);
@@ -72,7 +88,7 @@ static void* default_long_lasting_malloc(const grib_context* c, size_t size)
 
 static void default_buffer_free(const grib_context* c, void* p)
 {
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     free(p);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cntp--;
@@ -82,7 +98,7 @@ static void default_buffer_free(const grib_context* c, void* p)
 static void* default_buffer_malloc(const grib_context* c, size_t size)
 {
     void* ret;
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cntp++;
     GRIB_MUTEX_UNLOCK(&mutex_mem);
@@ -99,7 +115,7 @@ static void* default_buffer_realloc(const grib_context* c, void* p, size_t size)
 
 static void default_free(const grib_context* c, void* p)
 {
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     free(p);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cnt--;
@@ -109,7 +125,7 @@ static void default_free(const grib_context* c, void* p)
 static void* default_malloc(const grib_context* c, size_t size)
 {
     void* ret;
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&mutex_mem);
     cnt++;
     GRIB_MUTEX_UNLOCK(&mutex_mem);
@@ -323,7 +339,7 @@ static grib_context default_grib_context = {
 
 grib_context* grib_context_get_default()
 {
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
 
 #ifdef ENABLE_FLOATING_POINT_EXCEPTIONS
     feenableexcept(FE_ALL_EXCEPT & ~FE_INEXACT);
@@ -455,7 +471,7 @@ grib_context* grib_context_new(grib_context* parent)
 
     if (!parent) parent=grib_context_get_default();
 
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&(parent->mutex));
 
     c = (grib_context*)grib_context_malloc_clear_persistent(&default_grib_context,sizeof(grib_context));
@@ -532,7 +548,7 @@ static int init_definition_files_dir(grib_context* c)
     /* Note: strtok modifies its first argument so we copy */
     strncpy(path, c->grib_definition_files_path, DEF_PATH_MAXLEN);
 
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
     GRIB_MUTEX_LOCK(&mutex_c);
 
     p=path;
@@ -568,21 +584,15 @@ static int init_definition_files_dir(grib_context* c)
 
 char *grib_context_full_defs_path(grib_context* c,const char* basename)
 {
-   
     int err=0;
     char full[1024]={0,};
     grib_string_list* dir=NULL;
     grib_string_list* fullpath=0;
-//#ifdef GRIB_ON_WINDOWS
-//    char* ps = "\\";
-//#else
-//    char* ps = "/";
-//#endif
     if (!c) c=grib_context_get_default();
 
-    GRIB_PTHREAD_ONCE(&once,&init);
+    GRIB_MUTEX_INIT_ONCE(&once,&init);
 
-    if (*basename == '/' || *basename == '.') {
+    if(*basename == '/' || *basename ==  '.') {
         return (char*)basename;
     } else {
         fullpath=(grib_string_list*)grib_trie_get(c->def_files,basename);
@@ -602,7 +612,7 @@ char *grib_context_full_defs_path(grib_context* c,const char* basename)
         dir=c->grib_definition_files_dir;
 
         while (dir) {
-            sprintf(full, "%s/%s", dir->value, basename);
+            sprintf(full,"%s/%s",dir->value,basename);
             if (!access(full,F_OK)) {
                 fullpath=(grib_string_list*)grib_context_malloc_clear_persistent(c,sizeof(grib_string_list));
                 Assert(fullpath);

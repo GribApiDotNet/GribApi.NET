@@ -12,19 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Grib.Api.Interop.SWIG;
 using Grib.Api.Interop;
+using Grib.Api.Interop.SWIG;
+using Grib.Api.Interop.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics.Contracts;
-using System.IO;
-using System.Diagnostics;
 using System.ComponentModel;
-using Grib.Api.Interop.Util;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {

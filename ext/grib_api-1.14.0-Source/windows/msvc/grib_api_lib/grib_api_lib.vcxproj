@@ -85,7 +85,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\tools;..\..\..\..\jasper-1.900.1\src\libjasper\include;..\..\..\..\lpng1618;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_LIBJASPER;HAVE_LIBPNG;HAVE_LIBPNG_DEBUG;_LIB;IEEE;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions);HAVE_LIBJASPER</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;GRIB_OMP_THREADS;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_LIBJASPER;HAVE_LIBPNG;HAVE_LIBPNG_DEBUG;_LIB;IEEE;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions);HAVE_LIBJASPER</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -98,6 +98,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4273;4018;4244;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libjasper.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -116,7 +117,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\tools;..\..\..\jasper-1.900.1\src\libjasper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN64;_DEBUG;_LIB;IEEE;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;GRIB_OMP_THREADS;_WIN64;_DEBUG;_LIB;IEEE;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -128,6 +129,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4273;4018;4244;4101;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libjasper.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -142,7 +144,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\tools;..\..\..\..\jasper-1.900.1\src\libjasper\include;..\..\..\..\lpng1618;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_LIBJASPER;HAVE_LIBPNG;HAVE_LIBPNGNDEBUG;_LIB;IEEE;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions);HAVE_LIBJASPER</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;GRIB_OMP_THREADS;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_LIBJASPER;HAVE_LIBPNG;HAVE_LIBPNGNDEBUG;_LIB;IEEE;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions);HAVE_LIBJASPER</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -154,6 +156,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4273;4018;4244;4101;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName).pdb</ProgramDataBaseFileName>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libjasper.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -173,7 +176,7 @@
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>..\..\..\src;..\..\..\tools;..\..\..\jasper-1.900.1\src\libjasper\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WIN64;NDEBUG;_LIB;IEEE;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;GRIB_OMP_THREADS;_WIN64;NDEBUG;_LIB;IEEE;HAVE_JPEG;USE_JPEG2000;JAS_WIN_MSVC_BUILD;HAVE_STRING_H;YY_NO_UNISTD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -184,6 +187,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996;4273;4018;4244;4101;4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Lib>
       <AdditionalDependencies>libjasper.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>

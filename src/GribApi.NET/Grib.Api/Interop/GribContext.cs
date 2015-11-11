@@ -23,7 +23,7 @@ namespace Grib.Api.Interop
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-            // This causes AccessViolation when dispos
+            // This causes AccessViolation when disposing
             // GribApiProxy.GribContextDelete(this);
         }
 

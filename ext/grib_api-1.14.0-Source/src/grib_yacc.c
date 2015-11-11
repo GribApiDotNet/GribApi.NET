@@ -92,7 +92,7 @@ static grib_concept_value *reverse_concept(grib_concept_value *r,grib_concept_va
 
 
 /* Line 189 of yacc.c  */
-#line 96 "grib_yacc.c"
+#line 96 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -362,7 +362,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 366 "grib_yacc.c"
+#line 366 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define grib_yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -374,7 +374,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 378 "grib_yacc.c"
+#line 378 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -3782,7 +3782,7 @@ grib_yyreduce:
 
 
 /* Line 1455 of yacc.c  */
-#line 3786 "grib_yacc.c"
+#line 3786 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", grib_yyr1[grib_yyn], &grib_yyval, &grib_yyloc);

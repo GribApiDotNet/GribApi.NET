@@ -176,5 +176,37 @@ namespace Grib.Api.Tests
                 Assert.AreEqual("grid_simple", packingType);             
             }
         }
+
+        [Test]
+        public void TestGetParallel ()
+        {
+            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1 };
+
+            Parallel.ForEach(files, (path, s) =>
+            {
+                using (var file = new GribFile(path))
+                {
+                    Parallel.ForEach(file, (msg, s2) =>
+                    {
+                        try
+                        {
+                            if (!msg.GridType.ToLower().Contains("mercator") &&
+                                !msg.ShortName.ToLower().Contains("shww"))
+                            {
+                                Assert.IsTrue(msg.GeoSpatialValues.Any());
+                            }
+                        } catch (GribApiException)
+                        {
+                            Console.WriteLine(path);
+                            Console.WriteLine(msg.ShortName);
+                            Console.WriteLine(msg.ToString());
+                            Assert.IsTrue(false);
+                        }
+                    });
+
+                }
+
+            });
+        }
     }
 }
