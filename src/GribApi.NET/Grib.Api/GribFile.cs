@@ -12,20 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Grib.Api.Interop.SWIG;
 using Grib.Api.Interop;
+using Grib.Api.Interop.SWIG;
+using Grib.Api.Interop.Util;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Diagnostics.Contracts;
-using System.IO;
-using System.Diagnostics;
 using System.ComponentModel;
-using Grib.Api.Interop.Util;
-using System.Threading;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
@@ -73,7 +67,7 @@ namespace Grib.Api
 
             FileName = fileName;
             Reference = new HandleRef(this, _fileHandleProxy.File);
-            Context =  GribApiProxy.GribContextGetDefault();//GribContext.Create();
+            Context = GribApiProxy.GribContextGetDefault();
 
             // set the message count here; the result seems to be connected to the message iterator so
             // that after you begin iterating messages, the count decreases until it reaches 1.
@@ -102,7 +96,7 @@ namespace Grib.Api
             GribMessage msg;
             int i = 0;
 
-            while ((msg = GribMessage.Create(this, i)) != null)
+            while ((msg = GribMessage.Create(this, i++)) != null)
             {
                 yield return msg;
             }

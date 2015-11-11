@@ -106,7 +106,7 @@ static void *fast_new(size_t s,mempool *pool)
   char *p;
   memblk *m;
 
-  GRIB_THREADS_INIT_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   m = (memblk*)pool->priv;
@@ -168,7 +168,7 @@ static void fast_delete(void *p,mempool *pool)
   memblk *m ;
   memblk *n = NULL;
 
-  GRIB_THREADS_INIT_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   m = (memblk*)pool->priv;
@@ -280,7 +280,7 @@ void *grib_buffer_malloc(const grib_context* c,size_t s)
 {
   memblk *r;
 
-  GRIB_THREADS_INIT_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   s = ((s+WORD-1)/WORD)*WORD;
@@ -319,7 +319,7 @@ void grib_buffer_free(const grib_context* c,void *p)
   memblk *r;
   memblk *s;
 
-  GRIB_THREADS_INIT_ONCE(&once,&init)
+  GRIB_MUTEX_INIT_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   r = (memblk*)(((char*)p) - HEADER_SIZE);

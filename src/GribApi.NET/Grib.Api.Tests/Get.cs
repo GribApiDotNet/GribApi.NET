@@ -200,6 +200,7 @@ namespace Grib.Api.Tests
                             Console.WriteLine(path);
                             Console.WriteLine(msg.ShortName);
                             Console.WriteLine(msg.ToString());
+                            Assert.IsTrue(false);
                         }
                     });
 
