@@ -83,7 +83,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -149,7 +149,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api-1.14.0-Source/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" /property:ExtraDefine="%ExtraDefine%" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
