@@ -7,6 +7,13 @@ GRIB is a format commonly used in meteorology to store weather data. GribApi.NET
 
 Special thanks to John L'Heureux, Meteorological Data Analyst at aWhere, Inc., for his contributions as scientific advisor.
 
+#### Features
+* Read and write GRIB 1 and 2 messages
+* Easy to understand API
+* Thread safe
+* JPEG and PNG compression support
+* Multi-field support
+
 --------------------------
 
 ## Docs
@@ -23,15 +30,13 @@ Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From
 PM> Install-Package Grib.Api 
 ```
 
-### Shadow Copying
+#### Shadow Copying
 **ASP.NET**, **NUnit**, and other frameworks employ a technique called "shadow copying". When Grib.Api.dll is shadow copied, GribApi.NET may have difficulty locating the `Grib.Api` directory, which is required for proper operation.
 
 There are several ways to deal with this issue. The simplest is to set the`GRIB_API_DIR_ROOT` before calling GribApi.NET for the first time. The value should be the directory *containing* the `Grib.Api` directory. E.g., for `C:\Some\Path\Grib.Api`, set:
 ```csharp
 Environment.SetEnvironmentVariable("GRIB_API_DIR_ROOT", "C:\\Some\\Path", EnvironmentVariableTarget.Process);
 ```
-
---------------------------
 
 ### Examples
 #### Getting grid information from a GRIB message:
