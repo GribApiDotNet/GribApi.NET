@@ -114,6 +114,15 @@ if ERRORLEVEL 1 (
 	EXIT /B 1
 )
 
+@ECHO ON
+	
+call run_tests.cmd x64 %CONFIG%
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
+	EXIT /B 1
+)
 :::::::::: X86 NATIVE
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
@@ -190,16 +199,6 @@ xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.pdb" "%BASEDIR%bin\x86\%CONFIG%\Grib.A
 if ERRORLEVEL 1 (
 	@ECHO ON
 	ECHO COPY FAILED
-	EXIT /B 1
-)
-
-@ECHO ON
-	
-call run_tests.cmd x64 %CONFIG%
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO TEST FAILED
 	EXIT /B 1
 )
 @ECHO ON

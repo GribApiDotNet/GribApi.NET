@@ -111,7 +111,7 @@ static omp_nest_lock_t mutex;
 
 static void init()
 {
-    GRIB_OMP_SINGLE
+    GRIB_OMP_CRITICAL(lock_action_class_concept_c)
     {
         if (once == 0)
         {

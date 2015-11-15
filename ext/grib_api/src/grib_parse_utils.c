@@ -55,7 +55,7 @@ static omp_nest_lock_t mutex_parse;
 
 static void init()
 {
-    GRIB_OMP_SINGLE
+    GRIB_OMP_CRITICAL(lock_grib_parse_utils_c)
     {
         if (once == 0)
         {

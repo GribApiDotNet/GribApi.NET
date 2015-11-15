@@ -45,7 +45,7 @@ static omp_nest_lock_t mutex2;
 
 static void init()
 {
-    GRIB_OMP_SINGLE
+    GRIB_OMP_CRITICAL(lock_grib_index_c)
     {
         if (once == 0)
         {

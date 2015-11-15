@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using Grib.Api.Interop;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Grib.Api.Tests
 {
@@ -194,6 +195,13 @@ namespace Grib.Api.Tests
                                 !msg.ShortName.ToLower().Contains("shww"))
                             {
                                 Assert.IsTrue(msg.GeoSpatialValues.Any());
+                                foreach(var v in msg.GeoSpatialValues)
+                                {
+                                    Assert.AreNotEqual(Double.NaN, v.Latitude);
+                                    Assert.AreNotEqual(Double.NaN, v.Longitude);
+                                    Assert.AreNotEqual(Double.NaN, v.Value);
+                                }
+
                             }
                         } catch (GribApiException)
                         {
@@ -203,7 +211,6 @@ namespace Grib.Api.Tests
                             Assert.IsTrue(false);
                         }
                     });
-
                 }
 
             });
