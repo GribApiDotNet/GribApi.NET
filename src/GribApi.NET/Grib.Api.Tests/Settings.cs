@@ -16,7 +16,7 @@ namespace Grib.Api.Tests
         public const string OUT_GRIB = ".\\TestData\\out.grb";
         public const string GAUSS = ".\\TestData\\reduced_gaussian_model_level.grib1";
         public const string BIN = ".\\TestData\\ds.waveh.bin";
-        public const string PNG_COMPRESSION = ".\\TestData\\MRMS.grib2";
+        public const string PNG_COMPRESSION = ".\\TestData\\MRMS2.grib2";
         public const string COMPLEX_GRID = ".\\TestData\\gfs_0p50_2015101500_003.grb";
     }
 }

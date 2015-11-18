@@ -123,6 +123,9 @@
     <Content Include="TestData\regular_latlon_surface.grib1">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="TestData\MRMS2.grib2">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Grib.Api\Grib.Api.csproj">

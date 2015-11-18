@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace Grib.Api
 {
@@ -362,7 +363,7 @@ namespace Grib.Api
         {
             get
             {
-                return this["numberOfValues"].AsInt();
+                return this["numberOfCodedValues"].AsInt();
             }
         }
 
@@ -500,14 +501,15 @@ namespace Grib.Api
 
                 using (GribValuesIterator iter = GribValuesIterator.Create(Handle, (uint) KeyFilters))
                 {
-                    while (iter.Next(this.MissingValue, out gsVal))
+                    int mVal = this.MissingValue;
+
+                    while (iter.Next(mVal, out gsVal))
                     {
                         yield return gsVal;
                     }
                 }
             }
         }
-
 
         /// <summary>
         /// Gets the message size.
@@ -564,6 +566,5 @@ namespace Grib.Api
         {
             get { return new GribValue(Handle, keyName); }
         }
-
     }
 }

@@ -17,9 +17,9 @@ namespace Grib.Api.Tests
     public class Get
     {
         [Test]
-        public void TestGetBox() 
+        public void TestGetBox ()
         {
-            using (GribFile file = new GribFile(Settings.GAUSS)) 
+            using (GribFile file = new GribFile(Settings.GAUSS))
             {
                 Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
@@ -41,15 +41,31 @@ namespace Grib.Api.Tests
         }
 
         [Test]
-        public void TestOpenPng()
+        public void TestOpenPng ()
         {
             using (GribFile file = new GribFile(Settings.PNG_COMPRESSION))
             {
                 Assert.IsTrue(file.MessageCount > 0);
-                foreach (var msg in file)
+
+                var msg = file.First();
+
+                try
                 {
-                    Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("png"));
+                    Assert.IsTrue(msg["packingType"].AsString().ToLower().EndsWith("_png"));
                     Assert.IsTrue(msg.ValuesCount > 0);
+                    Assert.IsTrue(msg.GeoSpatialValues.Any());
+                    int i = 0;
+                    foreach (var v in msg.GeoSpatialValues)
+                    {
+                        Assert.AreNotEqual(Double.NaN, v.Value);
+                        if (i++ > 1000) break;
+                    }
+                } catch (GribApiException e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(msg.ShortName);
+                    Console.WriteLine(msg.ToString());
+                    Assert.IsTrue(false);
                 }
             }
         }
@@ -62,19 +78,35 @@ namespace Grib.Api.Tests
                 Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
-                    Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
-                    Assert.IsTrue(msg.ValuesCount > 0);
+                    try
+                    {
+                        Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
+                        Assert.IsTrue(msg.ValuesCount > 0);
+                        double[] vals;
+                        msg.Values(out vals);
+                        Assert.IsTrue(vals.Any());
+                        foreach (var v in vals)
+                        {
+                            Assert.AreNotEqual(Double.NaN, v);
+                        }
+                    } catch (GribApiException e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(msg.ShortName);
+                        Console.WriteLine(msg.ToString());
+                        Assert.IsTrue(false);
+                    }
                 }
             }
         }
 
         [Test]
-        public void TestGetCounts()
+        public void TestGetCounts ()
         {
             using (GribFile file = new GribFile(Settings.GRIB))
             {
                 Assert.IsTrue(file.MessageCount > 0);
-                foreach(var msg in file)
+                foreach (var msg in file)
                 {
                     Assert.AreNotEqual(msg.DataPointsCount, 0);
                     Assert.AreNotEqual(msg.ValuesCount, 0);
@@ -86,14 +118,14 @@ namespace Grib.Api.Tests
         }
 
         [Test]
-        public void TestGetVersion()
+        public void TestGetVersion ()
         {
             Regex re = new Regex(@"^(\d+\.)?(\d+\.)?(\*|\d+)$");
             Assert.IsTrue(re.IsMatch(GribEnvironment.GribApiVersion));
         }
 
         [Test]
-        public void TestGetNativeType()
+        public void TestGetNativeType ()
         {
             using (GribFile file = new GribFile(Settings.REG_LATLON_GRB1))
             {
@@ -174,14 +206,14 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(numberOfPointsAlongAMeridian, 501);
 
                 string packingType = msg["packingType"].AsString();
-                Assert.AreEqual("grid_simple", packingType);             
+                Assert.AreEqual("grid_simple", packingType);
             }
         }
 
         [Test]
         public void TestGetParallel ()
         {
-            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1 };
+            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1, Settings.GAUSS, Settings.PACIFIC_WIND };
 
             Parallel.ForEach(files, (path, s) =>
             {
@@ -189,23 +221,19 @@ namespace Grib.Api.Tests
                 {
                     Parallel.ForEach(file, (msg, s2) =>
                     {
+                        if (msg.ShortName == "shww") return;
+
                         try
                         {
-                            if (!msg.GridType.ToLower().Contains("mercator") &&
-                                !msg.ShortName.ToLower().Contains("shww"))
+                            foreach (var v in msg.GeoSpatialValues)
                             {
-                                Assert.IsTrue(msg.GeoSpatialValues.Any());
-                                foreach(var v in msg.GeoSpatialValues)
-                                {
-                                    Assert.AreNotEqual(Double.NaN, v.Latitude);
-                                    Assert.AreNotEqual(Double.NaN, v.Longitude);
-                                    Assert.AreNotEqual(Double.NaN, v.Value);
-                                }
-
+                                Assert.AreNotEqual(Double.NaN, v.Latitude);
+                                Assert.AreNotEqual(Double.NaN, v.Longitude);
+                                Assert.AreNotEqual(Double.NaN, v.Value);
                             }
-                        } catch (GribApiException)
+                        } catch (GribApiException e)
                         {
-                            Console.WriteLine(path);
+                            Console.WriteLine(e.Message);
                             Console.WriteLine(msg.ShortName);
                             Console.WriteLine(msg.ToString());
                             Assert.IsTrue(false);

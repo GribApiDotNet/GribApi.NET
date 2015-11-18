@@ -19,10 +19,10 @@ namespace Grib.Api.Tests
                 // set the value used to represent missing data
                 msg.MissingValue = missing;
                 Assert.AreEqual(msg.MissingValue, missing);
+                Assert.IsFalse(msg.HasBitmap);
 
                 int numVals = 10;
-                double[] vals;
-                msg.Values(out vals);
+                double[] vals = new double[numVals];                
 
                 for (int i = 0; i < numVals; i++)
                 {
@@ -59,8 +59,7 @@ namespace Grib.Api.Tests
                 var msg = file.First();
 
                 int numVals = 10;
-                double[] vals;
-                msg.Values(out vals);
+                double[] vals = new double[numVals];  
                 double val = 42;
 
                 for(int i =0; i < numVals; i++)

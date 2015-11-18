@@ -1,17 +1,24 @@
 CHANGELOG
 
+0.6.3
+=====
+* Improved performance when iterating GeoSpatialValues.
+* Added in/equality operators for GeoSpatialValue and GeoCoordinate.
+* Fixed bad linking to lpng.
+* Expanded test coverage for png and jpeg support.
+
 0.6.2
-====
+=====
 * Fixed memory corruption when disposing grib_points.
 * Greatly improved thread safety by adding OpenMP support to grib_api lib.
 
 0.6.1
-====
+=====
 * Fixed CLR exception thrown when closing that was caused by invalid file handle
 * Fixed failure to set the backing field in GribContext::EnableMultiFieldMessages
 
 0.6.0
-====
+=====
 * Added support for PNG compression.
 * Added support for extracting subdomains ("boxes") from Gaussian grids.
 * Added support for "GRIB_API_DIR_ROOT" environment variable to improve path definition of the Grib.Api root directory.
@@ -21,8 +28,8 @@ CHANGELOG
 * Added type-checking for accessing/mutating keys via AsString, AsInt, etc.
 * Expanded documentation.
 * Multiple build script improvements.
-* Fixed bad linking for libjasper in x64 builds
+* Fixed bad linking for libjasper in x64 builds.
 
 0.5.0
-====
+=====
 * First public release.
