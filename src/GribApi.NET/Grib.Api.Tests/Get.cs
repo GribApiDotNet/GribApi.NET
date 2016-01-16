@@ -17,6 +17,29 @@ namespace Grib.Api.Tests
     public class Get
     {
         [Test]
+        public void TestInvalidFiles ()
+        {
+            try
+            {
+                using (GribFile file = new GribFile(Settings.BAD))
+                {
+                    // shouldn't get here
+                    Assert.IsTrue(false);
+                }
+            } catch (GribApiException) { }
+
+            try
+            {
+                using (GribFile file = new GribFile(Settings.EMPTY))
+                {
+                    // shouldn't get here
+                    Assert.IsTrue(false);
+                }
+            } catch (FileLoadException) { }
+        }
+
+
+        [Test]
         public void TestGetBox ()
         {
             using (GribFile file = new GribFile(Settings.GAUSS))

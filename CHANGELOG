@@ -1,5 +1,10 @@
 CHANGELOG
 
+0.6.4
+=====
+* Fixed AccessViolationException when opening empty file.
+* Fixed AccessViolationException when opening bad file.
+
 0.6.3
 =====
 * Improved performance when iterating GeoSpatialValues.

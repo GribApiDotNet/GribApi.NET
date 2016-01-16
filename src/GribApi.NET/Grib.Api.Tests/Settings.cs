@@ -18,5 +18,7 @@ namespace Grib.Api.Tests
         public const string BIN = ".\\TestData\\ds.waveh.bin";
         public const string PNG_COMPRESSION = ".\\TestData\\MRMS2.grib2";
         public const string COMPLEX_GRID = ".\\TestData\\gfs_0p50_2015101500_003.grb";
+        public const string BAD = ".\\TestData\\bad.grb";
+        public const string EMPTY = ".\\TestData\\empty.grb";
     }
 }

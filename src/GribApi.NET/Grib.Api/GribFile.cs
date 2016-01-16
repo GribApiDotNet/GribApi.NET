@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Linq;
+using System.Diagnostics;
 
 namespace Grib.Api
 {
@@ -29,8 +31,8 @@ namespace Grib.Api
     /// </summary>
     public class GribFile: AutoRef, IEnumerable<GribMessage>
     {
-        private IntPtr _pFileHandleProxy;
-        private FileHandleProxy _fileHandleProxy;
+        private IntPtr _pFileHandleProxy = IntPtr.Zero;
+        private FileHandleProxy _fileHandleProxy = null;
 
         /// <summary>
         /// Initializes the <see cref="GribFile"/> class.
@@ -51,7 +53,7 @@ namespace Grib.Api
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check
-            if (fi.Length < 4)
+            if (fi.Length < 8)
             {
                 throw new FileLoadException("This file is empty or invalid.");
             }
@@ -72,7 +74,15 @@ namespace Grib.Api
             // set the message count here; the result seems to be connected to the message iterator so
             // that after you begin iterating messages, the count decreases until it reaches 1.
             int count = 0;
-            GribApiProxy.GribCountInFile(Context, this, out count);
+
+            try
+            {
+                GribApiProxy.GribCountInFile(Context, this, out count);
+            } catch (GribApiException ex)
+            {
+                throw new GribApiException("Failed to parse and count GRIB messages.", ex);
+            }
+
             MessageCount = count;
         }
 
@@ -82,7 +92,10 @@ namespace Grib.Api
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-            GribApiNative.DestroyFileHandleProxy(_pFileHandleProxy);
+            if (_pFileHandleProxy != IntPtr.Zero)
+            {
+                GribApiNative.DestroyFileHandleProxy(_pFileHandleProxy);
+            }
         }
 
         /// <summary>
