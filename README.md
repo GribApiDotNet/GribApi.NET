@@ -25,7 +25,7 @@ The documentation is very much a WIP, but you'll find [grib_api's wiki](https://
 --------------------------
 
 ## Usage
-You'll need the [v120 Visual C++ Redistributable Packages installed](https://www.microsoft.com/en-us/download/confirmation.aspx?id=40784).
+Make sure you have the [MSVC 2013 redistributables](https://www.microsoft.com/en-us/download/details.aspx?id=40784) installed.
 
 Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
 ```shell
