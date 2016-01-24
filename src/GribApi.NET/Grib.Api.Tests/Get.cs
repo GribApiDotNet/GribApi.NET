@@ -26,7 +26,7 @@ namespace Grib.Api.Tests
                     // shouldn't get here
                     Assert.IsTrue(false);
                 }
-            } catch (GribApiException) { }
+			} catch (FileLoadException) { }
 
             try
             {

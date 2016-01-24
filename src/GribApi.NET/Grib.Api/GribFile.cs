@@ -53,7 +53,7 @@ namespace Grib.Api
             FileInfo fi = new FileInfo(fileName);
 
             // need a better check
-            if (fi.Length < 8)
+            if (!GribFile.FileIsValid(fileName))
             {
                 throw new FileLoadException("This file is empty or invalid.");
             }
@@ -74,15 +74,7 @@ namespace Grib.Api
             // set the message count here; the result seems to be connected to the message iterator so
             // that after you begin iterating messages, the count decreases until it reaches 1.
             int count = 0;
-
-            try
-            {
-                GribApiProxy.GribCountInFile(Context, this, out count);
-            } catch (GribApiException ex)
-            {
-                throw new GribApiException("Failed to parse and count GRIB messages.", ex);
-            }
-
+            GribApiProxy.GribCountInFile(Context, this, out count);
             MessageCount = count;
         }
 
@@ -165,6 +157,51 @@ namespace Grib.Api
                     fs.Write(message.Buffer, 0, message.Buffer.Length);
                 }
             }
+        }
+
+        /// <summary>
+        /// Performs a basic test to determine if the file is in valid GRIB format.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        private static bool FileIsValid(string fileName)
+        {
+            bool isValid = false;
+
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    if (fs.Length < 8) { return isValid; }
+ 
+                    Debug.Assert(fs.CanRead && fs.CanSeek);
+
+					long offset = -1;
+                    fs.Seek(offset, SeekOrigin.End);
+
+					while (fs.Position > 0 && fs.ReadByte() == 0x00)
+					{
+						fs.Seek(--offset, SeekOrigin.End);
+					}
+
+					long start = Math.Abs(offset);
+					fs.Seek(offset, SeekOrigin.End);
+
+					while (fs.Position > 0 &&
+						   fs.ReadByte() == 0x37 &&
+						   start + offset > -4)
+					{
+						fs.Seek(--offset, SeekOrigin.End);
+					}
+
+					isValid = start + offset == -4;
+                }
+            } catch (Exception)
+            {
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         /// <summary>
