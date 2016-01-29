@@ -143,12 +143,12 @@ For more examples, checkout the tests.
 ## Building
 The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
-First, install the Nuget packages (this assumes you have nuget on PATH):
+First, install the Nuget packages:
 ```shell
 nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
 ```
 
-Make `NUnit 2.6.4` available on PATH. Then run:
+Install [NUnit 2.6.4](http://www.nunit.org/). Then run:
 ```shell
 build\build_gribapi.cmd [build|rebuild] [VS version, 11|12|14] [Debug|Release] [nuget package version]
 ```
@@ -159,7 +159,7 @@ build\build_gribapi.cmd build 12 Debug
 ```
 
 ### Running SWIG
-Most of the interop interfaces are generated using `SWIG` and included in the repository. If you want generate the interfaces yourself, you'll need `SWIG` installed and available on PATH. Then run `build/swig_gen.cmd`.
+Most of the interop interfaces are generated using `SWIG` and included in the repository. You shouldn't need to create them. However, if you want to generate the interfaces yourself, you'll need `SWIG` installed and available on PATH. Then run `build/swig_gen.cmd`.
 
 ### Running Tests
 1. Install [NUnit](http://www.nunit.org/) and expose it on PATH.
