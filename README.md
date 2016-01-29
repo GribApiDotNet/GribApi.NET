@@ -143,16 +143,14 @@ For more examples, checkout the tests.
 ## Building
 The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
-To build, you can use `build/Grib.Api.Master.sln`. The native projects are set to use the v110 (Visual Studio 2012) Cpp build tools. However, you can change these to match your version of VS in the native projects' `Properties > General > Platform Toolset` field.
-
-To run a full release build, you'll need `NUnit` and `Nuget` on PATH. Then run:
+To build, you'll need `NUnit` on PATH. Then run:
 ```shell
-build/build_gribapi.cmd [build|rebuild] [VS version, 11|12|14]
+build/build_gribapi.cmd [build|rebuild] [VS version, 11|12|14] [Debug|Release] [nuget package version]
 ```
 
-E.g., to build with Visual Studio 2012 (VS version 11):
+E.g., to build with Visual Studio 2013 (VS version 12):
 ```shell
-build/build_gribapi.cmd build 11
+build/build_gribapi.cmd build 12 Debug
 ```
 
 ### Running SWIG

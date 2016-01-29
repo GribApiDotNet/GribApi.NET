@@ -11,7 +11,6 @@ config/test-driver
 lex.yy.c
 stamp-h1
 src/config.h
-src/grib_api_version.h
 autom4te.cache/
 config.log
 config.status

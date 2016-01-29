@@ -28,7 +28,7 @@ SET ERRORLEVEL=0
 SET TV=/property:PlatformToolset=V%VisualStudioVersion%0
 
 SET PATH=C:\Program Files (x86)\NUnit 2.6.4\bin;%PATH%
-
+::SET PATH=C:\Program Files (x86)\NUnit 2.6.4\bin;C:\Program Files (x86)\Microsoft Visual Studio %VisualStudioVersion%.0\VC\bin;%PATH%
 SET BASEDIR=%~dp0..\
 SET FrameworkVersion=v4.0.30319
 SET FrameworkDir="%SystemRoot%\Microsoft.NET\Framework"
