@@ -116,7 +116,7 @@ if ERRORLEVEL 1 (
 
 @ECHO ON
 	
-call run_tests.cmd x64 %CONFIG%
+call %~dp0run_tests.cmd x64 %CONFIG%
 @ECHO OFF
 if ERRORLEVEL 1 (
 	@ECHO ON
@@ -203,7 +203,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-call run_tests.cmd x86 %CONFIG%
+call %~dp0run_tests.cmd x86 %CONFIG%
 @ECHO OFF
 if ERRORLEVEL 1 (
 	@ECHO ON
@@ -213,7 +213,7 @@ if ERRORLEVEL 1 (
 
 if NOT "%PKG_VERSION%"=="" (
 	@ECHO ON
-	call build_nuget.cmd %PKG_VERSION%
+	call %~dp0build_nuget.cmd %PKG_VERSION%
 	@ECHO OFF
 	if ERRORLEVEL 1 (
 		ECHO PACKAGE FAILED
