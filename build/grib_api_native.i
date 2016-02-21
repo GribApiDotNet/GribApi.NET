@@ -92,10 +92,10 @@ SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator
     strcpy_s(name, 255, v);
 }
 
-SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * fn)
+SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * name)
 {
 	    grib_accessor* a = grib_find_accessor(h, name);
-		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0 );
+		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0;
 }
 
 SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)

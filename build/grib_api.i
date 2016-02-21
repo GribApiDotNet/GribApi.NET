@@ -221,7 +221,7 @@
 	
 	if (ret != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
   }
   
@@ -231,7 +231,7 @@
 	
 	if (err != 0)
 	{
-		throw Grib.Api.GribApiException.Create(ret);
+		throw Grib.Api.Interop.GribApiException.Create(ret);
 	}
 	
 	return ret == 1;
