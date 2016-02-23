@@ -105,7 +105,7 @@ if ERRORLEVEL 1 (
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="%CONFIG%" /property:Platform="AnyCPU" /tv:4.0 %REBUILD% /p:NoWarn="1591" /nowarn:1591
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /tv:4.0 %REBUILD% 
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -178,7 +178,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /tv:4.0 %REBUILD%  
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
 @ECHO OFF
 if ERRORLEVEL 1 (
