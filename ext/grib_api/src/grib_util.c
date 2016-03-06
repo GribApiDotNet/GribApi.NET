@@ -10,23 +10,26 @@
 
 #include "grib_api_internal.h"
 
-#ifdef GRIB_ON_WINDOWS
+#ifdef GRIB_ON_WINDOWS 
+#if _MSC_VER < 1800 /* Modified for compiling in Visual Studio 2013 which suppors Unix rint() */
 /* Microsoft Windows Visual Studio support. Implementation of Unix rint() */
+
 double rint(double x)
 {
-    char * buf = 0;
-    int decimal=0, sign=0, err = 0;
-    double result = 0;
-    buf = (char*) malloc(_CVTBUFSIZE);
-    err = _fcvt_s(buf, _CVTBUFSIZE, x, 0, &decimal, &sign);
-    Assert(err == 0);
-    result = atof(buf);
-    if(sign == 1) {
-        result = result * -1;
-    }
-    free(buf);
-    return result;
+	char * buf = 0;
+	int decimal = 0, sign = 0, err = 0;
+	double result = 0;
+	buf = (char*)malloc(_CVTBUFSIZE);
+	err = _fcvt_s(buf, _CVTBUFSIZE, x, 0, &decimal, &sign);
+	Assert(err == 0);
+	result = atof(buf);
+	if (sign == 1) {
+		result = result * -1;
+	}
+	free(buf);
+	return result;
 }
+#endif
 #endif
 
 
