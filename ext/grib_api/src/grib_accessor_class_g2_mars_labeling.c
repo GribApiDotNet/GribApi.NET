@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -366,6 +366,7 @@ static int extra_set(grib_accessor* a,long val)
         case 81:	/* Forecast maximum     (fcmax) */
         case 82:	/* Forecast minimum     (fcmin) */
         case 83:	/* Forecast standard deviation  (fcstdev) */
+        case 87:	/* Simulated satellite data */
         case 88:	/* Gridded satellite data */
         case 89:	/* GFAS analysis */
             typeOfProcessedData=255;

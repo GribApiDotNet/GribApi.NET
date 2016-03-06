@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -101,23 +101,23 @@ endif()
 
 if( CMAKE_COMPILER_IS_GNUCC )
 
-    cmake_add_c_flags("-pipe") # use pipe for faster compilation
+    ecbuild_add_c_flags("-pipe") # use pipe for faster compilation
 
     if( ENABLE_WARNINGS )
-        cmake_add_c_flags("-Wall")
-        # cmake_add_c_flags("-pedantic")
-        # cmake_add_c_flags("-Wextra")
+        ecbuild_add_c_flags("-Wall")
+        # ecbuild_add_c_flags("-pedantic")
+        # ecbuild_add_c_flags("-Wextra")
     endif()
 
 endif()
 
 if( CMAKE_COMPILER_IS_GNUCXX )
 
-   cmake_add_cxx_flags("-pipe") # use pipe for faster compilation
+   ecbuild_add_cxx_flags("-pipe") # use pipe for faster compilation
 
     if( ENABLE_WARNINGS )
-        cmake_add_cxx_flags("-Wall")
-        #    cmake_add_cxx_flags("-Wextra")
+        ecbuild_add_cxx_flags("-Wall")
+        #    ecbuild_add_cxx_flags("-Wextra")
     endif()
 
 endif()
@@ -143,9 +143,9 @@ endif()
 # Fortran compiler specific flags
 # if( NOT HAVE_SINGLE_PRECISION )
 #  if(CMAKE_Fortran_COMPILER_ID STREQUAL "PGI")
-#      cmake_add_fortran_flags("-r8")
+#      ecbuild_add_fortran_flags("-r8")
 #  elseif(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
 #      # NOTE that if we add -fdefault-real-8 then we NEED -fdefault-double-8 to avoid quadmath
-#      cmake_add_fortran_flags("-fdefault-real-8 -fdefault-double-8")
+#      ecbuild_add_fortran_flags("-fdefault-real-8 -fdefault-double-8")
 #  endif()
 # endif()

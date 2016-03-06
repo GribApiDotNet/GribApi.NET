@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -33,23 +33,6 @@ static void init() {
     pthread_mutex_init(&mutex2,&attr);
     pthread_mutexattr_destroy(&attr);
 
-}
-/* #elif GRIB_OMP_THREADS */
-static int once = 0;
-static omp_nest_lock_t mutex1;
-static omp_nest_lock_t mutex2;
-
-static void init()
-{
-    GRIB_OMP_CRITICAL(lock_grib_handle_c)
-    {
-        if (once == 0)
-        {
-            omp_init_nest_lock(&mutex1);
-            omp_init_nest_lock(&mutex2);
-            once = 1;
-        }
-    }
 }
 #endif
 
@@ -284,7 +267,7 @@ grib_handle* grib_handle_new_from_samples ( grib_context* c, const char* name )
 	   g = grib_internal_template(c,name);
 	   if(g) return g;
      */
-    if (c->debug==-1) {
+    if (c->debug) {
         printf("GRIB_API DEBUG: grib_handle_new_from_samples '%s'\n", name);
     }
 

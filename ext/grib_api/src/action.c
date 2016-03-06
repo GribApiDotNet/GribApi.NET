@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -27,27 +27,12 @@ static void init_mutex() {
     pthread_mutexattr_destroy(&attr);
 
 }
-#elif GRIB_OMP_THREADS
-static int once = 0;
-static omp_nest_lock_t mutex1;
-
-static void init_mutex()
-{
-    GRIB_OMP_CRITICAL(lock_action_c)
-    {
-        if (once == 0)
-        {
-            omp_init_nest_lock(&mutex1);
-            once = 1;
-        }
-    }
-}
 #endif
 
 
 static void init(grib_action_class *c)
 {
-    GRIB_MUTEX_INIT_ONCE(&once,&init_mutex);
+    GRIB_PTHREAD_ONCE(&once,&init_mutex);
     GRIB_MUTEX_LOCK(&mutex1);
     if(c && !c->inited)
     {
@@ -115,7 +100,7 @@ int grib_create_accessor(grib_section* p, grib_action* a,  grib_loader* h)
     {
         if(c->create_accessor) {
 			int ret;
-			GRIB_MUTEX_INIT_ONCE(&once,&init_mutex);
+			GRIB_PTHREAD_ONCE(&once,&init_mutex);
 			GRIB_MUTEX_LOCK(&mutex1);
             ret=c->create_accessor(p, a, h);
 			GRIB_MUTEX_UNLOCK(&mutex1);
@@ -132,7 +117,7 @@ int grib_action_notify_change( grib_action* a, grib_accessor *observer, grib_acc
 {
     grib_action_class *c = a->cclass;
 
-    GRIB_MUTEX_INIT_ONCE(&once,&init_mutex)
+    GRIB_PTHREAD_ONCE(&once,&init_mutex)
     GRIB_MUTEX_LOCK(&mutex1)
 
     init(c);

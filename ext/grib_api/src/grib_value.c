@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -61,7 +61,7 @@ int grib_set_long_internal(grib_handle* h, const char* name, long val) {
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_long_internal %s=%ld\n",name,(long)val);
 
     if(a){
@@ -86,7 +86,7 @@ int grib_set_long(grib_handle* h, const char* name, long val) {
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_long %s=%ld\n",name,(long)val);
 
     if(a){
@@ -109,7 +109,7 @@ int grib_set_double_internal(grib_handle* h, const char* name, double val) {
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_double_internal %s=%g\n",name,val);
 
     if(a){
@@ -299,7 +299,7 @@ int grib_set_double(grib_handle* h, const char* name, double val) {
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_double %s=%g\n",name,val);
 
     if(a){
@@ -324,7 +324,7 @@ int grib_set_string_internal(grib_handle* h, const char* name,
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_string_internal %s=%s\n",name,val);
 
     if(a){
@@ -360,7 +360,7 @@ int grib_set_string(grib_handle* h, const char* name, const char* val, size_t *l
 
     a = grib_find_accessor(h, name);
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_string %s=%s\n",name,val);
 
     if(a)
@@ -575,7 +575,7 @@ int grib_set_double_array_internal(grib_handle* h, const char* name, const doubl
 {
     int ret=0;
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_double_array_internal key=%s %ld values\n",name, (long)length);
 
     if (length==0) {
@@ -597,7 +597,7 @@ static int __grib_set_double_array(grib_handle* h, const char* name, const doubl
     double v=val[0];
     int constant,i;
 
-    if (h->context->debug==-1)
+    if (h->context->debug)
         printf("GRIB_API DEBUG grib_set_double_array key=%s %ld values\n",name,(long)length);
 
     if (length==0) {
@@ -639,7 +639,7 @@ static int __grib_set_double_array(grib_handle* h, const char* name, const doubl
                     !strcmp(packingType,"grid_second_order_SPD3")
             ) {
                 slen=11; /*length of 'grid_simple' */
-                if (h->context->debug == -1)
+                if (h->context->debug)
                     printf("GRIB_API DEBUG grib_set_double_array forcing grid_simple\n");
                 grib_set_string(h,"packingType","grid_simple",&slen);
             }

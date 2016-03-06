@@ -7,7 +7,48 @@
 # does it submit to any jurisdiction.
 
 ##############################################################################
-# macro that runs the given C code and returns its output
+#.rst:
+#
+# ecbuild_check_c_source_return
+# =============================
+#
+# Compile and run a given C source code and return its output. ::
+#
+#   ecbuild_check_c_source_return( <source>
+#                                  VAR <name>
+#                                  OUTPUT <name>
+#                                  [ INCLUDES <path1> [ <path2> ... ] ]
+#                                  [ LIBS <library1> [ <library2> ... ] ]
+#                                  [ DEFINITIONS <definition1> [ <definition2> ... ] ] )
+#
+# Options
+# -------
+#
+# VAR : required
+#   name of the check and name of the CMake variable to write result to
+#
+# OUTPUT : required
+#   name of CMake variable to write the output to
+#
+# INCLUDES : optional
+#   list of paths to add to include directories
+#
+# LIBS : optional
+#   list of libraries to link against (CMake targets or external libraries)
+#
+# DEFINITIONS : optional
+#   list of definitions to add to preprocessor defines
+#
+# Usage
+# -----
+#
+# This will write the given source to a .c file and compile and run it with
+# try_run. If successful, ``${VAR}`` is set to 1 and ``${OUTPUT}`` is set to
+# the output of the successful run in the CMake cache.
+#
+# The check will not run if ``${VAR}`` is defined (e.g. from ecBuild cache).
+#
+##############################################################################
 
 macro( ecbuild_check_c_source_return SOURCE )
 
@@ -48,7 +89,7 @@ macro( ecbuild_check_c_source_return SOURCE )
         if( _PAR_INCLUDES )
             list( APPEND __add_incs ${_PAR_INCLUDES} )
         endif()
-		if( __add_incs )
+        if( __add_incs )
             set(CHECK_C_SOURCE_COMPILES_ADD_INCLUDES "-DINCLUDE_DIRECTORIES:STRING=${__add_incs}")
         endif()
     
@@ -113,9 +154,29 @@ macro( ecbuild_check_c_source_return SOURCE )
 endmacro()
 
 ##############################################################################
-# macro that only adds a c flag if compiler supports it
+#.rst:
+#
+# ecbuild_add_c_flags
+# ===================
+#
+# Add C compiler flags to CMAKE_C_FLAGS only if supported by the compiler. ::
+#
+#   ecbuild_add_c_flags( <flag1> [ <flag2> ... ]
+#                        [ BUILD <build> ]
+#                        [ NAME <name> ] )
+#
+# Options
+# -------
+#
+# BUILD : optional
+#   add flags to ``CMAKE_C_FLAGS_<build>`` instead of ``CMAKE_C_FLAGS``
+#
+# NAME : optional
+#   name of the check (if omitted, checks are enumerated)
+#
+##############################################################################
 
-macro( cmake_add_c_flags m_c_flags )
+macro( ecbuild_add_c_flags m_c_flags )
 
   set( _flags ${m_c_flags} )
 
@@ -159,3 +220,7 @@ macro( cmake_add_c_flags m_c_flags )
   unset( _flag_ok )
 endmacro()
 
+macro( cmake_add_c_flags m_c_flags )
+  message( DEPRECATION " cmake_add_c_flags is deprecated, use ecbuild_add_c_flags instead." )
+  ecbuild_add_c_flags( ${m_c_flags} )
+endmacro()

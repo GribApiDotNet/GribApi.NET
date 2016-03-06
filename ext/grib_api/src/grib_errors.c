@@ -105,10 +105,6 @@ void grib_check(const char* call,const char*  file,int line,int e,const char* ms
 
 void grib_fail(const char* expr,const char* file,int line) {
    fprintf(stderr,"%s at line %d: assertion failure Assert(%s)\n",file,line,expr);
-   if (!getenv("GRIB_API_NO_ABORT"))
-   {
-	   abort();
-   }
-
+   abort();
 }
 

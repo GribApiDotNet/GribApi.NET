@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -283,21 +283,6 @@ static void init() {
   pthread_mutex_init(&mutex,&attr);
   pthread_mutexattr_destroy(&attr);
 }
-#elif GRIB_OMP_THREADS
-static int once = 0;
-static omp_nest_lock_t mutex;
-
-static void init()
-{
-    GRIB_OMP_CRITICAL(lock_grib_trie_c)
-    {
-        if (once == 0)
-        {
-            omp_init_nest_lock(&mutex);
-            once = 1;
-        }
-    }
-}
 #endif
 
 struct grib_trie {
@@ -321,7 +306,7 @@ grib_trie *grib_trie_new(grib_context* c) {
 }
 
 void grib_trie_delete(grib_trie *t) {
-  GRIB_MUTEX_INIT_ONCE(&once,&init)
+  GRIB_PTHREAD_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
   if(t)  {
     int i;
@@ -355,7 +340,7 @@ void* grib_trie_insert(grib_trie* t,const char* key,void* data)
   const char *k = key;
   void* old = NULL;
 
-  GRIB_MUTEX_INIT_ONCE(&once,&init)
+  GRIB_PTHREAD_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   while(*k && t) {
@@ -411,7 +396,7 @@ void* grib_trie_insert_no_replace(grib_trie* t,const char* key,void* data)
 void *grib_trie_get(grib_trie* t,const char* key)
 {
   const char *k = key;
-  GRIB_MUTEX_INIT_ONCE(&once,&init)
+  GRIB_PTHREAD_ONCE(&once,&init)
   GRIB_MUTEX_LOCK(&mutex)
 
   while(*k && t)

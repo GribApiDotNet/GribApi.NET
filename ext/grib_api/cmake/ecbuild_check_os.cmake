@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -181,6 +181,35 @@ if( ENABLE_OS_ENDINESS_TEST )
 endif()
 
 ############################################################################################
+# enable profiling
+
+if( ENABLE_PROFILING )
+
+  if( CMAKE_C_COMPILER_ID MATCHES "GNU" )
+
+    set( _flags "-pg --coverage" )
+
+    set( CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} ${_flags}" )
+    set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${_flags}" )
+    set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${_flags}" )
+
+    set( _trust_flags ${ECBUILD_TRUST_FLAGS} )
+    set( ECBUILD_TRUST_FLAGS ON )
+    ecbuild_add_c_flags( "${_flags}" )
+    ecbuild_add_cxx_flags( "${_flags}" )
+    ecbuild_add_fortran_flags( "${_flags}" )
+    set( ECBUILD_TRUST_FLAGS ${_trust_flags} )
+    unset( _trust_flags )
+
+    unset( _flags )
+  
+  else()
+    message( WARNING "Profiling enabled but ecbuild doesn't know how to enable for this particular compiler ${CMAKE_C_COMPILER_ID}")
+  endif()
+
+endif()
+
+############################################################################################
 # check operating system
 
 set( EC_OS_NAME "UNKNOWN" )
@@ -237,78 +266,78 @@ if( UNIX )
 
 		if( CMAKE_COMPILER_IS_GNUCC )
 			if( EC_OS_BITS EQUAL "64" )
-				cmake_add_c_flags("-maix64")
+				ecbuild_add_c_flags("-maix64")
 			endif()
 			if( EC_OS_BITS EQUAL "32" )
-				cmake_add_c_flags("-maix32")
+				ecbuild_add_c_flags("-maix32")
 			endif()
 		endif()
 
 		if( CMAKE_COMPILER_IS_GNUCXX )
 			if( EC_OS_BITS EQUAL "64" )
-				cmake_add_cxx_flags("-maix64")
+				ecbuild_add_cxx_flags("-maix64")
 			endif()
 			if( EC_OS_BITS EQUAL "32" )
-				cmake_add_cxx_flags("-maix32")
+				ecbuild_add_cxx_flags("-maix32")
 			endif()
 		endif()
 
 		if( CMAKE_C_COMPILER_ID MATCHES "XL" )
 
-			cmake_add_c_flags("-qpic=large")
-#            cmake_add_c_flags("-qweaksymbol")
+			ecbuild_add_c_flags("-qpic=large")
+#            ecbuild_add_c_flags("-qweaksymbol")
 
 			if(EC_OS_BITS EQUAL "32" )
-				cmake_add_c_flags("-q32")
+				ecbuild_add_c_flags("-q32")
 			endif()
 
 			if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "Production" )
-					cmake_add_c_flags("-qstrict")
-					cmake_add_c_flags("-qinline")
+					ecbuild_add_c_flags("-qstrict")
+					ecbuild_add_c_flags("-qinline")
 			endif()
 
 			if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-					cmake_add_c_flags("-qfullpath")
-					cmake_add_c_flags("-qkeepparm")
+					ecbuild_add_c_flags("-qfullpath")
+					ecbuild_add_c_flags("-qkeepparm")
 			endif()
 
 		endif()
 
 		if( CMAKE_CXX_COMPILER_ID MATCHES "XL" )
 
-			cmake_add_cxx_flags("-qpic=large")
-			cmake_add_cxx_flags("-bmaxdata:0x40000000")
-			cmake_add_cxx_flags("-qrtti")
-			cmake_add_cxx_flags("-qfuncsect")
+			ecbuild_add_cxx_flags("-qpic=large")
+			ecbuild_add_cxx_flags("-bmaxdata:0x40000000")
+			ecbuild_add_cxx_flags("-qrtti")
+			ecbuild_add_cxx_flags("-qfuncsect")
 
-#           cmake_add_cxx_flags("-qweaksymbol")
+#           ecbuild_add_cxx_flags("-qweaksymbol")
 
 			if(EC_OS_BITS EQUAL "32" )
-				cmake_add_cxx_flags("-q32")
+				ecbuild_add_cxx_flags("-q32")
 			endif()
 
 			if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "Production" )
-					cmake_add_cxx_flags("-qstrict")
-					cmake_add_cxx_flags("-qinline")
+					ecbuild_add_cxx_flags("-qstrict")
+					ecbuild_add_cxx_flags("-qinline")
 			endif()
 
 			if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-					cmake_add_cxx_flags("-qfullpath")
-					cmake_add_cxx_flags("-qkeepparm")
+					ecbuild_add_cxx_flags("-qfullpath")
+					ecbuild_add_cxx_flags("-qkeepparm")
 			endif()
 
 		endif()
 
 		if( CMAKE_Fortran_COMPILER_ID MATCHES "XL" )
 
-			cmake_add_fortran_flags("-qxflag=dealloc_cfptr")
-			cmake_add_fortran_flags("-qextname")
-			cmake_add_fortran_flags("-qdpc=e")
-			cmake_add_fortran_flags("-bmaxdata:0x40000000")
-			cmake_add_fortran_flags("-bloadmap:loadmap -bmap:loadmap")
+			ecbuild_add_fortran_flags("-qxflag=dealloc_cfptr")
+			ecbuild_add_fortran_flags("-qextname")
+			ecbuild_add_fortran_flags("-qdpc=e")
+			ecbuild_add_fortran_flags("-bmaxdata:0x40000000")
+			ecbuild_add_fortran_flags("-bloadmap:loadmap -bmap:loadmap")
 
 			if(EC_OS_BITS EQUAL "32" )
-				cmake_add_fortran_flags("-q32")
+				ecbuild_add_fortran_flags("-q32")
 			endif()
 		endif()
 
@@ -338,5 +367,3 @@ if( ${EC_OS_NAME} MATCHES "UNKNOWN" )
 	endif()
 
 endif()
-
-

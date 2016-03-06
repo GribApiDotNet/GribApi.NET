@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -23,7 +23,7 @@
 
 # default is netcdf4
 if( NetCDF_FIND_VERSION STREQUAL "3" )
-    set( PREFER_NETCDF3 1 )
+  set( PREFER_NETCDF3 1 )
 endif()
 
 if( NOT PREFER_NETCDF3 )
@@ -40,87 +40,88 @@ set( NETCDF_FIND_COMPONENTS ${NetCDF_FIND_COMPONENTS} )
 list( APPEND NETCDF_FIND_COMPONENTS C )
 
 if( NETCDF_CXX )
-    list( APPEND NETCDF_FIND_COMPONENTS CXX )
+  ecbuild_debug( "FindNetCDF: also looking for C++ libraries" )
+  list( APPEND NETCDF_FIND_COMPONENTS CXX )
 endif()
 
 if( NETCDF_Fortran OR NETCDF_FORTRAN OR NETCDF_F90 )
-    list( APPEND NETCDF_FIND_COMPONENTS FORTRAN F90 )
+  ecbuild_debug( "FindNetCDF: also looking for Fortran libraries" )
+  list( APPEND NETCDF_FIND_COMPONENTS FORTRAN F90 )
 endif()
 
 list(FIND NETCDF_FIND_COMPONENTS "FORTRAN" _index)
 if(${_index} GREATER -1)
-    list( APPEND NETCDF_FIND_COMPONENTS F90 )
+  list( APPEND NETCDF_FIND_COMPONENTS F90 )
 endif()
 
 list (FIND NETCDF_FIND_COMPONENTS "F90" _index)
 if(${_index} GREATER -1)
-    list( APPEND NETCDF_FIND_COMPONENTS FORTRAN )
+  list( APPEND NETCDF_FIND_COMPONENTS FORTRAN )
 endif()
 
 list(FIND NETCDF_FIND_COMPONENTS "Fortran" _index)
 if(${_index} GREATER -1)
-    list( REMOVE_ITEM NETCDF_FIND_COMPONENTS Fortran )
-    list( APPEND NETCDF_FIND_COMPONENTS FORTRAN F90 )
+  list( REMOVE_ITEM NETCDF_FIND_COMPONENTS Fortran )
+  list( APPEND NETCDF_FIND_COMPONENTS FORTRAN F90 )
 endif()
 
 list( REMOVE_DUPLICATES NETCDF_FIND_COMPONENTS )
+ecbuild_debug( "FindNetCDF: looking for components ${NETCDF_FIND_COMPONENTS}" )
 
 ### NetCDF4
 
 if( PREFER_NETCDF4 )
 
-    ## hdf5
+  ecbuild_debug( "FindNetCDF: looking for NetCDF4" )
 
-    ecbuild_add_extra_search_paths( hdf5 )
+  ## hdf5
 
-    # Note: Only the HDF5 C-library is required for NetCDF 
-    #       ( even for Fortan and CXX bindings)
-    find_package( HDF5 COMPONENTS C QUIET )
+  # Note: Only the HDF5 C-library is required for NetCDF 
+  #       ( even for Fortan and CXX bindings)
+  find_package( HDF5 COMPONENTS C QUIET )
 
-    ## netcdf4
+  ## netcdf4
 
-    # CONFIGURE the NETCDF_FIND_COMPONENTS variable
+  # CONFIGURE the NETCDF_FIND_COMPONENTS variable
 
-    # Find NetCDF4
+  # Find NetCDF4
 
-    ecbuild_add_extra_search_paths( netcdf4 )
+  # message( "NETCDF CMAKE_PREFIX_PATH = [${CMAKE_PREFIX_PATH}]")
+  # debug_var( NETCDF_ROOT )
+  # debug_var( NETCDF_FIND_COMPONENTS )
+  # debug_var( NETCDF_FIND_QUIETLY )
+  # debug_var( NETCDF_FIND_REQUIRED )
+  find_package( NetCDF4 COMPONENTS ${NETCDF_FIND_COMPONENTS} )
+  # debug_var( NETCDF4_FOUND )
+  # debug_var( NETCDF_FOUND )
+  # debug_var( NETCDF_LIBRARIES )
+  # debug_var( NETCDF_INCLUDE_DIRS )
 
-    # message( "NETCDF CMAKE_PREFIX_PATH = [${CMAKE_PREFIX_PATH}]")
-    # debug_var( NETCDF_ROOT )
-    # debug_var( NETCDF_FIND_COMPONENTS )
-    # debug_var( NETCDF_FIND_QUIETLY )
-    # debug_var( NETCDF_FIND_REQUIRED )
-    find_package( NetCDF4 )
-    # debug_var( NETCDF4_FOUND )
-    # debug_var( NETCDF_FOUND )
-    # debug_var( NETCDF_LIBRARIES )
-    # debug_var( NETCDF_INCLUDE_DIRS )
+  list( APPEND NETCDF_Fortran_LIBRARIES ${NETCDF_FORTRAN_LIBRARIES} ${NETCDF_F90_LIBRARIES} )
+  if( NETCDF_Fortran_LIBRARIES )
+    list( REMOVE_DUPLICATES NETCDF_Fortran_LIBRARIES )
+  endif()
 
-    list( APPEND NETCDF_Fortran_LIBRARIES ${NETCDF_FORTRAN_LIBRARIES} ${NETCDF_F90_LIBRARIES} )
-    if( NETCDF_Fortran_LIBRARIES )
-      list( REMOVE_DUPLICATES NETCDF_Fortran_LIBRARIES )
-    endif()
-
-    # debug_var( NETCDF_Fortran_LIBRARIES )
-    # debug_var( NETCDF_C_LIBRARIES )
-    # debug_var( NETCDF_CXX_LIBRARIES )
+  # debug_var( NETCDF_Fortran_LIBRARIES )
+  # debug_var( NETCDF_C_LIBRARIES )
+  # debug_var( NETCDF_CXX_LIBRARIES )
 
 
-	set_package_properties( NetCDF4 PROPERTIES TYPE RECOMMENDED PURPOSE "support for NetCDF4 file format" )
+  set_package_properties( NetCDF4 PROPERTIES TYPE RECOMMENDED PURPOSE "support for NetCDF4 file format" )
 
-    if( NETCDF_FOUND AND HDF5_FOUND )
-        # list( APPEND NETCDF_DEFINITIONS  ${HDF5_DEFINITIONS} )
-        list( APPEND NETCDF_LIBRARIES    ${HDF5_HL_LIBRARIES} ${HDF5_LIBRARIES}  )
-        list( APPEND NETCDF_INCLUDE_DIRS ${HDF5_INCLUDE_DIRS} )
-    endif()
+  if( NETCDF_FOUND AND HDF5_FOUND )
+    # list( APPEND NETCDF_DEFINITIONS  ${HDF5_DEFINITIONS} )
+    list( APPEND NETCDF_LIBRARIES    ${HDF5_HL_LIBRARIES} ${HDF5_LIBRARIES}  )
+    list( APPEND NETCDF_INCLUDE_DIRS ${HDF5_INCLUDE_DIRS} )
+  endif()
 
-    #debug_var( NETCDF_FOUND )
-    #debug_var( NETCDF_LIBRARIES )
-    #debug_var( NETCDF_INCLUDE_DIRS )
-    #debug_var( HDF5_FOUND )
-    #debug_var( HDF5_INCLUDE_DIRS )
-    #debug_var( HDF5_HL_LIBRARIES )
-    #debug_var( HDF5_LIBRARIES )
+  #debug_var( NETCDF_FOUND )
+  #debug_var( NETCDF_LIBRARIES )
+  #debug_var( NETCDF_INCLUDE_DIRS )
+  #debug_var( HDF5_FOUND )
+  #debug_var( HDF5_INCLUDE_DIRS )
+  #debug_var( HDF5_HL_LIBRARIES )
+  #debug_var( HDF5_LIBRARIES )
 
 endif()
 
@@ -128,40 +129,36 @@ endif()
 
 if( PREFER_NETCDF3 )
 
-    # message( "LOOKING FOR NETCDF3" )
+  ecbuild_debug( "FindNetCDF: looking for NetCDF3" )
 
-    # debug_var( NetCDF_FIND_COMPONENTS )
-    # debug_var( NetCDF_FIND_QUIETLY )
-    # debug_var( NetCDF_FIND_REQUIRED )
+  # debug_var( NetCDF_FIND_COMPONENTS )
+  # debug_var( NetCDF_FIND_QUIETLY )
+  # debug_var( NetCDF_FIND_REQUIRED )
 
-	list(FIND NetCDF_FIND_COMPONENTS "CXX" _index)
-	if(${_index} GREATER -1)
-        set( NETCDF_CXX 1 )
-    endif()
+  list(FIND NetCDF_FIND_COMPONENTS "CXX" _index)
+  if(${_index} GREATER -1)
+    set( NETCDF_CXX 1 )
+  endif()
 
-	list(FIND NetCDF_FIND_COMPONENTS "Fortran" _index)
-	if(${_index} GREATER -1)
-        set( NETCDF_Fortran 1 )
-    endif()
+  list(FIND NetCDF_FIND_COMPONENTS "Fortran" _index)
+  if(${_index} GREATER -1)
+    set( NETCDF_Fortran 1 )
+  endif()
 
-	list(FIND NetCDF_FIND_COMPONENTS "FORTRAN" _index)
-	if(${_index} GREATER -1)
-        set( NETCDF_Fortran 1 )
-    endif()
+  list(FIND NetCDF_FIND_COMPONENTS "FORTRAN" _index)
+  if(${_index} GREATER -1)
+    set( NETCDF_Fortran 1 )
+  endif()
 
-	list(FIND NetCDF_FIND_COMPONENTS "F90" _index)
-	if(${_index} GREATER -1)
-        set( NETCDF_Fortran 1 )
-    endif()
+  list(FIND NetCDF_FIND_COMPONENTS "F90" _index)
+  if(${_index} GREATER -1)
+    set( NETCDF_Fortran 1 )
+  endif()
 
-    ecbuild_add_extra_search_paths( netcdf3 )
+  #message( "NETCDF CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}" )
 
-	ecbuild_add_extra_search_paths( netcdf ) # fallback to netcdf search paths
+  find_package( NetCDF3 COMPONENTS ${NETCDF_FIND_COMPONENTS} )
 
-    message( "NETCDF CMAKE_PREFIX_PATH = ${CMAKE_PREFIX_PATH}" )
-
-    find_package( NetCDF3 )
-
-	set_package_properties( NetCDF3 PROPERTIES TYPE RECOMMENDED PURPOSE "support for NetCDF3 file format" )
+  set_package_properties( NetCDF3 PROPERTIES TYPE RECOMMENDED PURPOSE "support for NetCDF3 file format" )
 
 endif()

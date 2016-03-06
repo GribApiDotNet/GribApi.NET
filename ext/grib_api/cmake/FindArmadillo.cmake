@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -6,19 +6,28 @@
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
-ecbuild_add_extra_search_paths( armadillo )
+# - Try to find Armadillo
+# Once done this will define
+#
+#  ARMADILLO_FOUND         - system has Armadillo
+#  ARMADILLO_INCLUDE_DIRS  - the Armadillo include directory
+#  ARMADILLO_LIBRARIES     - the Armadillo library
+#
+# The following paths will be searched with priority if set in CMake or env
+#
+#  ARMADILLO_PATH          - prefix path of the Armadillo installation
 
-IF( NOT DEFINED ARMADILLO_PATH AND NOT "$ENV{ARMADILLO_PATH}" STREQUAL "" )
-  SET( ARMADILLO_PATH "$ENV{ARMADILLO_PATH}" )
-ENDIF()
-
-if( DEFINED ARMADILLO_PATH )
-        find_path(ARMADILLO_INCLUDE_DIR ARMADILLO.h PATHS ${ARMADILLO_PATH}/include PATH_SUFFIXES ARMADILLO  NO_DEFAULT_PATH)
-        find_library(ARMADILLO_LIBRARY  ARMADILLO   PATHS ${ARMADILLO_PATH}/lib     PATH_SUFFIXES ARMADILLO  NO_DEFAULT_PATH)
-endif()
-
+# Search with priority for ARMADILLO_PATH if given as CMake or env var
+find_path(ARMADILLO_INCLUDE_DIR armadillo
+          PATHS ${ARMADILLO_PATH} ENV ARMADILLO_PATH
+          PATH_SUFFIXES include NO_DEFAULT_PATH)
 find_path(ARMADILLO_INCLUDE_DIR  armadillo PATH_SUFFIXES include )
-find_library( ARMADILLO_LIBRARY  armadillo   PATH_SUFFIXES lib )
+
+# Search with priority for ARMADILLO_PATH if given as CMake or env var
+find_library(ARMADILLO_LIBRARY armadillo
+             PATHS ${ARMADILLO_PATH} ENV ARMADILLO_PATH
+             PATH_SUFFIXES lib64 lib NO_DEFAULT_PATH)
+find_library( ARMADILLO_LIBRARY  armadillo   PATH_SUFFIXES lib64 lib )
 
 set( ARMADILLO_LIBRARIES    ${ARMADILLO_LIBRARY} )
 set( ARMADILLO_INCLUDE_DIRS ${ARMADILLO_INCLUDE_DIR} )

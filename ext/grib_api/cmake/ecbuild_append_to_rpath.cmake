@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -6,32 +6,46 @@
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
-############################################################################################
-# macro to append paths to rpath
-
-# if dir is absolute, it simply appends
-# if dir is relative,
-#    then it will try to make it relative to the executables
-#    else it will fallback to making it absolute by prepending the install path
+##############################################################################
+#.rst:
+#
+# ecbuild_append_to_rpath
+# =======================
+#
+# Append paths to the rpath. ::
+#
+#   ecbuild_append_to_rpath( RPATH_DIRS )
+#
+# ``RPATH_DIRS`` is a list of directories to append to ``CMAKE_INSTALL_RPATH``.
+#
+# * If a directory is absolute, simply append it.
+# * If a directory is relative, build a platform-dependent relative path
+#   (using ``@loader_path`` on Mac OSX, ``$ORIGIN`` on Linux and Solaris)
+#   or fall back to making it absolute by prepending the install prefix.
+#
+##############################################################################
 
 function( _path_append var path )
 	if( "${${var}}" STREQUAL "" )
 		set( ${var} "${path}" PARENT_SCOPE )
 	else()
-		set( ${var} "${${var}}:${path}" PARENT_SCOPE )
+		list( FIND ${var} ${path} _found )
+		if( _found EQUAL "-1" )
+			set( ${var} "${${var}}:${path}" PARENT_SCOPE )
+		endif()
 	endif()
 endfunction()
 
 macro( ecbuild_append_to_rpath RPATH_DIRS )
    
    if( NOT ${ARGC} EQUAL 1 )
-	   message( SEND_ERROR "ecbuild_append_to_rpath takes 1 argument")
+     message( SEND_ERROR "ecbuild_append_to_rpath takes 1 argument")
    endif()
 
    foreach( RPATH_DIR ${RPATH_DIRS} )
      
 		if( NOT ${RPATH_DIR} STREQUAL "" )
-        
+
 			file( TO_CMAKE_PATH ${RPATH_DIR} RPATH_DIR ) # sanitize the path
 
 			if( IS_ABSOLUTE ${RPATH_DIR} )
@@ -48,6 +62,7 @@ macro( ecbuild_append_to_rpath RPATH_DIRS )
 						set( CMAKE_INSTALL_NAME_DIR "@loader_path/${RPATH_DIR}" )
 					endif()
 					_path_append( CMAKE_INSTALL_RPATH "@loader_path/${RPATH_DIR}" )
+
 					set( _done 1 )
 
 				endif()

@@ -1,17 +1,30 @@
+# (C) Copyright 1996-2015 ECMWF.
+#
+# This software is licensed under the terms of the Apache Licence Version 2.0
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# In applying this licence, ECMWF does not waive the privileges and immunities
+# granted to it by virtue of its status as an intergovernmental organisation
+# nor does it submit to any jurisdiction.
+
+# Internal macros to handle CMake features
+
 include( FeatureSummary )
 
 function( debug_var _var )
   message( "${_var} = ${${_var}}" )
 endfunction()
 
+# Write list of enabled features to CMake variable ${OUT}
 macro( ecbuild_enabled_features OUT )
     get_property( ${OUT}  GLOBAL PROPERTY ENABLED_FEATURES )
 endmacro()
 
+# Write list of disabled features to CMake variable ${OUT}
 macro( ecbuild_disabled_features OUT )
     get_property( ${OUT}  GLOBAL PROPERTY DISABLED_FEATURES )
 endmacro()
 
+# Enable the feature ${_name} (add to enabled features, remove from disabled)
 function( ecbuild_enable_feature _name )
   
   get_property( _enabled_features  GLOBAL PROPERTY ENABLED_FEATURES )
@@ -29,6 +42,7 @@ function( ecbuild_enable_feature _name )
 
 endfunction()
 
+# Disable the feature ${_name} (add to disabled features, remove from enabled)
 function( ecbuild_disable_feature _name )
 
   get_property( _enabled_features  GLOBAL PROPERTY ENABLED_FEATURES )
@@ -46,10 +60,12 @@ function( ecbuild_disable_feature _name )
   
 endfunction()
 
+# Set description of feature ${_name} to ${_desc}
 function( ecbuild_set_feature_description _name _desc)      
   set_property(GLOBAL PROPERTY _CMAKE_${_name}_DESCRIPTION "${_desc}" )
 endfunction()
 
+# Set purpose of feature ${_name} to ${_desc}
 function( ecbuild_set_feature_purpose _name _purpose )
   get_property( _purpose_list  GLOBAL PROPERTY _CMAKE_${_name}_PURPOSE )
   list( APPEND _purpose_list ${_purpose} )
@@ -57,6 +73,7 @@ function( ecbuild_set_feature_purpose _name _purpose )
   set_property(GLOBAL PROPERTY _CMAKE_${_name}_PURPOSE "${_purpose_list}" )
 endfunction()
 
+# en/disable feature ${_name} and set its description and purpose
 function( ecbuild_set_feature _name )
 
   set(options ) # none

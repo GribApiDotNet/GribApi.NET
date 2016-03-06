@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -6,8 +6,28 @@
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
-############################################################################################
-# print warnings about unused files
+##############################################################################
+#.rst:
+#
+# ecbuild_warn_unused_files
+# =========================
+#
+# Print warnings about unused source files in the project. ::
+#
+#   ecbuild_warn_unused_files()
+#
+# If the CMake variable ``CHECK_UNUSED_FILES`` is set, ecBuild will keep track
+# of any source files (.c, .cc, .cpp, .cxx) which are not part of a CMake
+# target. If set, this macro reports unused files if any have been found. This
+# is considered a fatal error unless ``UNUSED_FILES_LEVEL`` is set to a value
+# different from ``ERROR``.
+#
+# .. note ::
+#
+#   Enabling ``CHECK_UNUSED_FILES`` can slow down the CMake configure time
+#   considerably!
+#
+##############################################################################
 
 macro( ecbuild_warn_unused_files )
 

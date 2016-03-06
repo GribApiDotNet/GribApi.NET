@@ -12,7 +12,6 @@ project( grib_api C )
 
 set( CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild/cmake")
 
-
 include( ecbuild_system )
 
 ecbuild_requires_macro_version( 1.7 )
@@ -204,8 +203,6 @@ endif()
 
 ### config header
 
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
-
 ecbuild_generate_config_headers()
 
 configure_file( grib_api_config.h.in grib_api_config.h )
@@ -220,8 +217,6 @@ endif()
 
 ############################################################################################
 # contents
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
 
 ### export package to other ecbuild packages
 
@@ -240,8 +235,6 @@ foreach( _tpl ${GRIB_API_TPLS} )
     endif()
 endforeach()
 
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
-
 ### include directories
 
 include_directories( ${GRIB_API_INCLUDE_DIRS}  ${GRIB_API_EXTRA_INCLUDE_DIRS} )
@@ -251,36 +244,17 @@ add_subdirectory( tools )
 add_subdirectory( fortran )
 add_subdirectory( python )
 add_subdirectory( definitions )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")  # slow
-
 add_subdirectory( tests )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
-
 add_subdirectory( tigge )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")  # slow
-
 add_subdirectory( examples )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")  # slow
-
 add_subdirectory( data )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
-
-add_subdirectory( rpms )
-
-message("${CMAKE_CURRENT_LIST_FILE} ${CMAKE_CURRENT_LIST_LINE}")
-
 add_subdirectory( samples )
 add_subdirectory( ifs_samples ) # must come after samples
 
 # ecbuild_dont_pack( DIRS samples DONT_PACK_REGEX "*.grib" )
 ecbuild_dont_pack( DIRS
-     concepts html tests.ecmwf doxygen examples.dev templates sms parameters java
-     perl/GRIB-API/lib perl/GRIB-API/t gaussian_experimental gribex examples/F77
+     concepts tests.ecmwf doxygen examples.dev templates sms parameters java
+     gaussian_experimental gribex examples/F77
      examples/extra bamboo definitions/bufr use fortran/fortranCtypes tigge/tools share/grib_api
      src/.deps tests/.deps tools/.deps tigge/.deps examples/C/.deps examples/python/.deps
      python/.deps fortran/.deps
@@ -345,3 +319,13 @@ endif()
 ecbuild_install_project( NAME ${CMAKE_PROJECT_NAME} )
 
 ecbuild_print_summary()
+
+message("")
+message("   +---------------------------+")
+message("   |  GRIB API version ${GRIB_API_VERSION}  |")
+message("   |  Configuration completed  |")
+message("   +---------------------------+")
+message("")
+message("   You can now do 'make' to compile the package, 'ctest' to test it and 'make install' to install it afterwards.")
+message("")
+

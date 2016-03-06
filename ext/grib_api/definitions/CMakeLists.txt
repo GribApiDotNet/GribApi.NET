@@ -16,14 +16,10 @@ install(  DIRECTORY budg cdf common grib1 grib2 gts mars tide hdf5 wrap
           PATTERN "4.2.192.*.table" EXCLUDE
           PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ )
 
-# copy the definitions to the build directory
-
-file(    COPY ${definition_files} ${table_files}
-         DESTINATION ${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}/definitions )
-
-file(     COPY budg cdf common grib1 grib2 gts mars tide hdf5 wrap
-          DESTINATION ${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}/definitions
-          FILES_MATCHING
-          PATTERN "*.def"
-          PATTERN "*.table"
-          PATTERN "4.2.192.*.table" EXCLUDE )
+# link to the definitions
+file( MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/share/${PROJECT_NAME} )
+if( NOT EXISTS "${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}/definitions" )
+  execute_process( COMMAND "${CMAKE_COMMAND}" "-E" "create_symlink"
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_BINARY_DIR}/share/${PROJECT_NAME}/definitions" )
+endif()

@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -6,52 +6,10 @@
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
-#############################################################################################
-#
-# MACRO ecbuild_pkgconfig
-#
-# This macro creates a pkg-config file for the current project
-#
-# It takes following optional arguments:
-#
-#  - FILENAME <filename>
-#       The file that will be generated. Default value is the lowercase
-#       name of the project with suffix ".pc" is used
-#
-#  - NAME <name>
-#       The name to be given to the package. Default value is the lowercase
-#       name of the project
-#
-#  - TEMPLATE <template>
-#       The template configuration file to use. This is useful to create more
-#       custom pkg-config files. Default is ${ECBUILD_CMAKE_DIR}/pkg-config.pc.in
-#
-#  - URL <url>
-#       The url of the package. Default is ${UPPERCASE_PROJECT_NAME}_URL
-#
-#  - DESCRIPTION <description>
-#       The description of the package. Default is ${UPPERCASE_PROJECT_NAME}_DESCRIPTION
-#
-#  - LIBRARIES <libraries>
-#       The package libraries. Default is ${UPPERCASE_PROJECT_NAME}_LIBRARIES
-#       This is e.g. of the form "eckit;eckit_geometry"
-#
-#  - IGNORE_INCLUDE_DIRS <include_dirs>
-#       Ignore specified include directories
-#
-#  - IGNORE_LIBRARIES <libraries>
-#       Ignore specified libraries
-#
-#  - LANGUAGES <languages>
-#       List of languages used. If none given, all CMake_<lang>_COMPILER_LOAED languages
-#       are added. Accepted languages: C CXX Fortran
-#
-#  - NO_PRIVATE_INCLUDE_DIRS
-#       Don't add include dirs of dependencies to Cflags. This is mainly useful
-#       for Fortran only packages, when only the modules need to be added to Cflags
-#
-#############################################################################################
+##############################################################################
 
+# Write transitive list of library dependencies of each library in ${libraries}
+# to CMake variable ${dependencies}
 function( ecbuild_library_dependencies dependencies libraries )
 
   set( _libraries ${${libraries}} )
@@ -105,8 +63,10 @@ function( ecbuild_library_dependencies dependencies libraries )
 
 endfunction(ecbuild_library_dependencies)
 
-#############################################################################################
+##############################################################################
 
+# Write list of include directories of each library in ${libraries}
+# to CMake variable ${dependencies}
 function( ecbuild_include_dependencies dependencies libraries )
 
   set( _libraries ${${libraries}} )
@@ -129,8 +89,10 @@ function( ecbuild_include_dependencies dependencies libraries )
 
 endfunction(ecbuild_include_dependencies)
 
-#############################################################################################
+##############################################################################
 
+# Transform list of libraries in ${libraries}, ignoring any in ${ignore_libs},
+# and write pkg-config compatible string to CMake variable ${pkgconfig_libs}
 function( ecbuild_pkgconfig_libs pkgconfig_libs libraries ignore_libs )
 
   set( _libraries ${${libraries}} )
@@ -158,6 +120,9 @@ function( ecbuild_pkgconfig_libs pkgconfig_libs libraries ignore_libs )
         get_filename_component( _name ${_lib} NAME_WE )
         get_filename_component( _dir  ${_lib} PATH )
 
+        if( TARGET ${_lib} )
+          get_target_property( _name ${_lib} OUTPUT_NAME )
+        endif()
         if( NOT _name )
           set( _name ${_lib} )
         endif()
@@ -203,10 +168,11 @@ function( ecbuild_pkgconfig_libs pkgconfig_libs libraries ignore_libs )
 
 endfunction(ecbuild_pkgconfig_libs)
 
+##############################################################################
 
-#############################################################################################
-
-
+# Transform list of include directories in ${INCLUDE_DIRS}, ignoring any in
+# ${ignore_includes} and ${${PNAME}_INCLUDE_DIRS}, and write pkg-config
+# compatible string to CMake variable ${INCLUDE}
 function( ecbuild_pkgconfig_include INCLUDE INCLUDE_DIRS ignore_includes )
 
   string( TOUPPER ${PROJECT_NAME} PNAME )
@@ -216,14 +182,17 @@ function( ecbuild_pkgconfig_include INCLUDE INCLUDE_DIRS ignore_includes )
   list( APPEND ignore_include_dirs
     "/usr/include"
      ${${PNAME}_INCLUDE_DIRS} # These are build-directory includes
+     ${CMAKE_SOURCE_DIR}  # Ignore private includes referencing source tree
+     ${CMAKE_BINARY_DIR}  # Ignore private includes referencing build tree
      ${_ignore_includes}
   )
 
   foreach( _incdir ${${INCLUDE_DIRS}} )
 
     foreach( _ignore ${ignore_include_dirs} )
-      if( "${_incdir}" STREQUAL "${_ignore}" )
+      if( "${_incdir}" MATCHES "${_ignore}" )
         unset( _incdir )
+        break()
       endif()
     endforeach()
 
@@ -241,13 +210,100 @@ function( ecbuild_pkgconfig_include INCLUDE INCLUDE_DIRS ignore_includes )
 
 endfunction(ecbuild_pkgconfig_include)
 
-
-#############################################################################################
+##############################################################################
+#.rst:
+#
+# ecbuild_pkgconfig
+# =================
+#
+# Create a pkg-config file for the current project. ::
+#
+#   ecbuild_pkgconfig( [ NAME <name> ]
+#                      [ FILENAME <filename> ]
+#                      [ TEMPLATE <template> ]
+#                      [ URL <url> ]
+#                      [ DESCRIPTION <description> ]
+#                      [ LIBRARIES <lib1> [ <lib2> ... ] ]
+#                      [ IGNORE_INCLUDE_DIRS <dir1> [ <dir2> ... ] ]
+#                      [ IGNORE_LIBRARIES <lib1> [ <lib2> ... ] ]
+#                      [ LANGUAGES <language1> [ <language2> ... ] ]
+#                      [ VARIABLES <variable1> [ <variable2> ... ] ]
+#                      [ NO_PRIVATE_INCLUDE_DIRS ] )
+#
+# Options
+# -------
+#
+# NAME : optional, defaults to lower case name of the project
+#   name to be given to the package
+#
+# FILENAME : optional, defaults to ``<NAME>.pc``
+#   file to be generated, including .pc extension
+#
+# TEMPLATE : optional, defaults to ``${ECBUILD_CMAKE_DIR}/pkg-config.pc.in``
+#   template configuration file to use
+#
+#   This is useful to create customised pkg-config files.
+#
+# URL : optional, defaults to ``${UPPERCASE_PROJECT_NAME}_URL``
+#   url of the package
+#
+# DESCRIPTION : optional, defaults to ``${UPPERCASE_PROJECT_NAME}_DESCRIPTION``
+#   description of the package
+#
+# LIBRARIES : optional, defaults to ``${UPPERCASE_PROJECT_NAME}_LIBRARIES``
+#   list of package libraries
+#
+# IGNORE_INCLUDE_DIRS : optional
+#   list of include directories to ignore
+#
+# IGNORE_LIBRARIES : optional
+#   list of libraries to ignore i.e. those are removed from ``LIBRARIES``
+#
+# VARIABLES : optional
+#   list of additional CMake variables to export to the pkg-config file
+#
+# LANGUAGES : optional, defaults to all loaded languages
+#   list of languages to use. Accepted languages: C CXX Fortran
+#
+# NO_PRIVATE_INCLUDE_DIRS
+#   do not add include directories of dependencies to Cflags
+#
+#   This is mainly useful for Fortran only packages, when only modules need
+#   to be added to Cflags.
+#
+# Input variables
+# ---------------
+#
+# The following CMake variables are used as default values for some of the
+# options listed above, where ``PNAME`` is the project name in upper case: ::
+#
+# :<PNAME>_LIBRARIES:    list of libraries to export
+# :<PNAME>_DESCRIPTION:  package description
+# :<PNAME>_URL:          package URL
+# :<PNAME>_VERSION:      package version
+# :<PNAME>_GIT_SHA1:     Git revision
+#
+# Usage
+# -----
+#
+# It is good practice to provide a separate pkg-config file for each library a
+# package exports. This can be achieved as follows: ::
+#
+#   foreach( _lib ${${PNAME}_LIBRARIES} )
+#     if( TARGET ${_lib} )
+#       ecbuild_pkgconfig( NAME ${_lib}
+#                          DESCRIPTION "..."
+#                          URL "..."
+#                          LIBRARIES ${_lib} )
+#     endif()
+#   endforeach()
+#
+##############################################################################
 
 function( ecbuild_pkgconfig )
 
   set( options REQUIRES NO_PRIVATE_INCLUDE_DIRS )
-  set( single_value_args FILEPATH NAME TEMPLATE URL DESCRIPTION )
+  set( single_value_args FILENAME NAME TEMPLATE URL DESCRIPTION )
   set( multi_value_args LIBRARIES IGNORE_INCLUDE_DIRS IGNORE_LIBRARIES VARIABLES LANGUAGES )
 
   cmake_parse_arguments( _PAR "${options}" "${single_value_args}" "${multi_value_args}"  ${_FIRST_ARG} ${ARGN} )
@@ -331,8 +387,8 @@ function( ecbuild_pkgconfig )
     set( PKGCONFIG_NAME ${_PAR_NAME} )
   endif()
 
-  if( NOT _PAR_FILEPATH )
-    set( _PAR_FILEPATH "${PKGCONFIG_NAME}.pc" )
+  if( NOT _PAR_FILENAME )
+    set( _PAR_FILENAME "${PKGCONFIG_NAME}.pc" )
   endif()
 
   set( PKGCONFIG_DESCRIPTION ${${PNAME}_DESCRIPTION} )
@@ -355,10 +411,10 @@ function( ecbuild_pkgconfig )
     endforeach()
   endif()
 
-  configure_file( ${_PAR_TEMPLATE} "${CMAKE_BINARY_DIR}/${_PAR_FILEPATH}" @ONLY )
-  message( STATUS "pkg-config file created: ${_PAR_FILEPATH}" )
+  configure_file( ${_PAR_TEMPLATE} "${CMAKE_BINARY_DIR}/${_PAR_FILENAME}" @ONLY )
+  message( STATUS "pkg-config file created: ${_PAR_FILENAME}" )
 
-  install( FILES ${CMAKE_BINARY_DIR}/${_PAR_FILEPATH}
+  install( FILES ${CMAKE_BINARY_DIR}/${_PAR_FILENAME}
            DESTINATION ${CMAKE_INSTALL_PREFIX}/${INSTALL_LIB_DIR}/pkgconfig/
            COMPONENT utilities )
 

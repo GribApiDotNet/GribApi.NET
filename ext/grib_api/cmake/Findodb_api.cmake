@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -14,8 +14,6 @@
 #  ODB_API_DEFINITIONS - Compiler switches required for using ODB_API
 
 if( NOT odb_api_FOUND )
-
-    ecbuild_add_extra_search_paths( odb_api )
 
     # find external odb_api
 

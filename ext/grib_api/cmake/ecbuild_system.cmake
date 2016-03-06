@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -39,59 +39,13 @@ include( "${ECBUILD_MACROS_DIR}/VERSION.cmake" )
 
 set( ecbuild_VERSION_STR "${ECBUILD_VERSION_STR}" )
 
-########################################################################################################
-# define cmake policies
+# Set policies
+include( ecbuild_policies NO_POLICY_SCOPE )
 
-# Included scripts don't automatic cmake_policy PUSH and POP
+# set capitalised project name
 
-if( POLICY CMP0011 )
-    cmake_policy( SET CMP0011 OLD )
-endif()
-
-# Allow use of the LOCATION target property.
-
-if( POLICY CMP0026 )
-    cmake_policy( SET CMP0026 OLD )
-endif()
-
-# for macosx use @rpath in a target’s install name
-
-if( POLICY CMP0042 )
-    cmake_policy( SET CMP0042 NEW )
-    set( CMAKE_MACOSX_RPATH ON )
-endif()
-
-# Error on non-existent target in get_target_property
-
-if( POLICY CMP0045 )
-    cmake_policy( SET CMP0045 NEW )
-endif()
-
-# Error on non-existent target in get_target_property
-
-if( POLICY CMP0046 )
-    cmake_policy( SET CMP0046 NEW )
-endif()
-
-# Error on non-existent dependency in add_dependencies
-
-if( POLICY CMP0046 )
-    cmake_policy( SET CMP0050 NEW )
-endif()
-
-# Reject source and build dirs in installed INTERFACE_INCLUDE_DIRECTORIES
-
-if( POLICY CMP0052 )
-    cmake_policy( SET CMP0052 NEW )
-endif()
-
-# inside if() don't dereference variables if they are quoted
-# e.g. "VAR" is not dereferenced
-#      "${VAR}" is dereference only once
-
-if( POLICY CMP0054 )
-    cmake_policy( SET CMP0054 NEW )
-endif()
+string( TOUPPER ${PROJECT_NAME} PROJECT_NAME_CAPS )
+string( TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWCASE )
 
 ########################################################################################################
 # include our cmake macros, but only do so if this is the top project
@@ -199,18 +153,13 @@ if( PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME )
     # add our macros
 
     include( ecbuild_debug_var )
+    include( ecbuild_log )
     include( ecbuild_list_macros )
 
-    include( ecbuild_check_c_source )
-
-    if( CMAKE_CXX_COMPILER_LOADED )
-    include( ecbuild_check_cxx_source )
+    include( ecbuild_check_c_source_return )
+    include( ecbuild_check_cxx_source_return )
     include( ecbuild_check_cxx11 )
-    endif()
-
-    if( CMAKE_Fortran_COMPILER_LOADED )
-    include( ecbuild_check_fortran_source )
-    endif()
+    include( ecbuild_check_fortran_source_return )
 
     include( ecbuild_requires_macro_version )
     include( ecbuild_get_date )
@@ -224,15 +173,20 @@ if( PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME )
     include( ecbuild_add_library )
     include( ecbuild_add_executable )
     include( ecbuild_append_to_rpath )
+    include( ecbuild_download_resource )
     include( ecbuild_get_test_data )
+    include( ecbuild_add_c_flags )
+    include( ecbuild_add_cxx_flags )
     include( ecbuild_add_cxx11_flags )
     include( ecbuild_get_cxx11_flags )
+    include( ecbuild_add_fortran_flags )
     include( ecbuild_add_test )
     include( ecbuild_add_resources )
     include( ecbuild_get_resources )
+    include( ecbuild_dont_pack )
     include( ecbuild_project_files )
     include( ecbuild_declare_project )
-    include( ecbuild_install_package )
+    include( ecbuild_install_project )
     include( ecbuild_separate_sources )
     include( ecbuild_find_package )
     include( ecbuild_use_package )
@@ -246,10 +200,8 @@ if( PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME )
     include( ecbuild_find_python )
     include( ecbuild_find_lexyacc )
     include( ecbuild_find_fortranlibs )
+    include( ecbuild_git )
     include( ecbuild_enable_fortran )
-    include( ecbuild_check_c_source )
-    include( ecbuild_check_cxx_source )
-    include( ecbuild_check_fortran_source )
     include( ecbuild_bundle )
     include( ecbuild_pkgconfig )
     include( ecbuild_cache )
