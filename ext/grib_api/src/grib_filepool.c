@@ -29,6 +29,21 @@ static void init() {
     pthread_mutexattr_destroy(&attr);
 
 }
+#elif GRIB_OMP_THREADS
+static int once = 0;
+static omp_nest_lock_t mutex1;
+
+static void init()
+{
+    GRIB_OMP_CRITICAL(lock_grib_filepool_c)
+    {
+        if (once == 0)
+        {
+            omp_init_nest_lock(&mutex1);
+            once = 1;
+        }
+    }
+}
 #endif
 
 static short next_id=0;
@@ -167,7 +182,7 @@ grib_file* grib_file_open(const char* filename, const char* mode,int* err)
 	grib_file *file=0,*prev=0;
 	int same_mode=0;
 	int is_new=0;
-	GRIB_PTHREAD_ONCE(&once,&init);
+	GRIB_MUTEX_INIT_ONCE(&once,&init);
 
 	if (!file_pool.context) file_pool.context=grib_context_get_default();
 
@@ -247,7 +262,7 @@ void grib_file_close(const char* filename,int* err)
 	/* So only call fclose() when too many files are open */
 	if ( file_pool.number_of_opened_files > GRIB_MAX_OPENED_FILES ) {
 		/*printf("++ closing file %s\n",filename);*/
-		GRIB_PTHREAD_ONCE(&once,&init);
+		GRIB_MUTEX_INIT_ONCE(&once,&init);
 		GRIB_MUTEX_LOCK(&mutex1);
 		file=grib_get_file(filename,err);
 		if (file->handle) {
@@ -270,7 +285,7 @@ void grib_file_close_all(int *err)
 	grib_file* file = NULL;
 	if (!file_pool.first) return;
 
-	GRIB_PTHREAD_ONCE(&once,&init);
+	GRIB_MUTEX_INIT_ONCE(&once,&init);
 	GRIB_MUTEX_LOCK(&mutex1);
 
 	file = file_pool.first;
@@ -335,7 +350,7 @@ grib_file* grib_file_new(grib_context* c, const char* name, int* err)
 		*err=GRIB_OUT_OF_MEMORY;
 		return NULL;
 	}
-	GRIB_PTHREAD_ONCE(&once,&init);
+	GRIB_MUTEX_INIT_ONCE(&once,&init);
 
 	file->name=strdup(name);
 	file->id=next_id;
@@ -355,7 +370,7 @@ grib_file* grib_file_new(grib_context* c, const char* name, int* err)
 
 void grib_file_delete(grib_file* file)
 {
-	GRIB_PTHREAD_ONCE(&once,&init);
+	GRIB_MUTEX_INIT_ONCE(&once,&init);
 	GRIB_MUTEX_LOCK(&mutex1);
 	if (!file) return;
 	if(file->name) free(file->name);
