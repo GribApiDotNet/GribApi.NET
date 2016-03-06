@@ -24,13 +24,25 @@ namespace Grib.Api.Interop
             return GribApiProxy.GribKeysIteratorNext(this) != 0;
         }
 
+		/// <summary>
+		/// Rewinds this instance.
+		/// </summary>
+		public void Rewind ()
+		{
+			GribApiProxy.GribKeysIteratorRewind(this);
+		}
+
         /// <summary>
         /// Called when [dispose].
         /// </summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-            GribApiProxy.GribKeysIteratorDelete(this);
+			if (this.pReference != IntPtr.Zero) 
+			{
+				this.Rewind();
+				GribApiProxy.GribKeysIteratorDelete(this);
+			}
         }
 
         public string Name

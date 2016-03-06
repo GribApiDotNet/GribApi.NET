@@ -105,7 +105,17 @@ namespace Grib.Api
             {
                 yield return msg;
             }
+
+			this.Rewind();
         }
+
+		/// <summary>
+		/// Resets the underlying file pointer to the beginning of the file.
+		/// </summary>
+		public void Rewind ()
+		{
+			GribApiNative.RewindFileHandleProxy(this._pFileHandleProxy);
+		}
 
         /// <summary>
         /// NOT IMPLEMENTED.
@@ -170,6 +180,8 @@ namespace Grib.Api
 
             try
             {
+				// all we're doing is looking for 7777 (0x37 4 times), which is the GRIB end of message.
+				// we start with the last byte and move backward. If we hit data before we see 7777, we throw.
                 using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
                 {
                     if (fs.Length < 8) { return isValid; }

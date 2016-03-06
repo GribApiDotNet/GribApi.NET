@@ -41,6 +41,7 @@ Environment.SetEnvironmentVariable("GRIB_API_DIR_ROOT", "C:\\Some\\Path", Enviro
 ```
 
 ### Examples
+
 #### Getting grid information from a GRIB message:
 ```csharp
 	using (GribFile file = new GribFile("mygrib.grb"))
@@ -50,13 +51,9 @@ Environment.SetEnvironmentVariable("GRIB_API_DIR_ROOT", "C:\\Some\\Path", Enviro
 		Console.WriteLine("Grid Type: " + msg.GridType);
 		
 		double latInDegrees = msg["latitudeOfFirstGridPoint"].AsDouble();
-		// GribApi.NET automatically converts coordinate values to degrees. This follows the best practice
-		// advised by ECMWF and normalizes the values returned by the API. You can opt-out of degree
-		// conversion by calling `AsDouble(false)`, e.g.:
-		//     double rawValue = msg["latitudeOfFirstGridPoint"].AsDouble(false);
-		// Only values capable of degree conversion are affected.
+		// GribApi.NET normalizes the coordinate values to degrees. This follows the best practice advised by ECMWF.
 		
-		// all values are also accessible as strings
+		// values are also accessible as strings
 		Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPoint"].AsString());
 	}
 ```
@@ -95,6 +92,22 @@ Environment.SetEnvironmentVariable("GRIB_API_DIR_ROOT", "C:\\Some\\Path", Enviro
 		foreach (var val in vComp.GeoSpatialValues)
 		{
 			Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
+		}
+	}
+```
+
+#### Key dump:
+```csharp
+	using (GribFile file = new GribFile("mygrib.grb"))
+	{
+		GribMessage msg = file.First();
+		
+		foreach (var msg in file)
+		{
+			foreach (var key in msg)
+			{
+				Console.WriteLine("Key: {0}, Value: {1}", key.Name, key.Value.AsString());
+			}
 		}
 	}
 ```
@@ -143,6 +156,15 @@ For more examples, checkout the tests.
 ## Building
 The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
+<<<<<<< HEAD
+First, install the Nuget packages (this assumes you have nuget on PATH):
+```shell
+nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
+```
+
+Make `NUnit 2.6.4` available on PATH. Then run:
+```shell
+=======
 First, install the Nuget packages:
 ```shell
 nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
@@ -150,6 +172,7 @@ nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
 
 Install [NUnit 2.6.4](http://www.nunit.org/). Then run:
 ```shell
+>>>>>>> cf15e48d61bfb2d6421c541d0d330df02a317332
 build\build_gribapi.cmd [build|rebuild] [VS version, 11|12|14] [Debug|Release] [nuget package version]
 ```
 

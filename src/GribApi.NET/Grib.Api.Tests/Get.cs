@@ -17,113 +17,6 @@ namespace Grib.Api.Tests
     public class Get
     {
         [Test]
-        public void TestInvalidFiles ()
-        {
-            try
-            {
-                using (GribFile file = new GribFile(Settings.BAD))
-                {
-                    // shouldn't get here
-                    Assert.IsTrue(false);
-                }
-			} catch (FileLoadException) { }
-
-            try
-            {
-                using (GribFile file = new GribFile(Settings.EMPTY))
-                {
-                    // shouldn't get here
-                    Assert.IsTrue(false);
-                }
-            } catch (FileLoadException) { }
-        }
-
-
-        [Test]
-        public void TestGetBox ()
-        {
-            using (GribFile file = new GribFile(Settings.GAUSS))
-            {
-                Assert.IsTrue(file.MessageCount > 0);
-                foreach (var msg in file)
-                {
-                    var pts = msg.Box(new GeoCoordinate(60, -10), new GeoCoordinate(10, 30));
-                    foreach (var val in pts.Latitudes)
-                    {
-                        Assert.GreaterOrEqual(60, val);
-                        Assert.LessOrEqual(10, val);
-                    }
-
-                    foreach (var val in pts.Longitudes)
-                    {
-                        Assert.GreaterOrEqual(val, -10);
-                        Assert.LessOrEqual(val, 30);
-                    }
-                }
-            }
-        }
-
-        [Test]
-        public void TestOpenPng ()
-        {
-            using (GribFile file = new GribFile(Settings.PNG_COMPRESSION))
-            {
-                Assert.IsTrue(file.MessageCount > 0);
-
-                var msg = file.First();
-
-                try
-                {
-                    Assert.IsTrue(msg["packingType"].AsString().ToLower().EndsWith("_png"));
-                    Assert.IsTrue(msg.ValuesCount > 0);
-                    Assert.IsTrue(msg.GeoSpatialValues.Any());
-                    int i = 0;
-                    foreach (var v in msg.GeoSpatialValues)
-                    {
-                        Assert.AreNotEqual(Double.NaN, v.Value);
-                        if (i++ > 1000) break;
-                    }
-                } catch (GribApiException e)
-                {
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(msg.ShortName);
-                    Console.WriteLine(msg.ToString());
-                    Assert.IsTrue(false);
-                }
-            }
-        }
-
-        [Test]
-        public void TestOpenComplex ()
-        {
-            using (GribFile file = new GribFile(Settings.COMPLEX_GRID))
-            {
-                Assert.IsTrue(file.MessageCount > 0);
-                foreach (var msg in file)
-                {
-                    try
-                    {
-                        Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
-                        Assert.IsTrue(msg.ValuesCount > 0);
-                        double[] vals;
-                        msg.Values(out vals);
-                        Assert.IsTrue(vals.Any());
-                        foreach (var v in vals)
-                        {
-                            Assert.AreNotEqual(Double.NaN, v);
-                        }
-                    } catch (GribApiException e)
-                    {
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine(msg.ShortName);
-                        Console.WriteLine(msg.ToString());
-                        Assert.IsTrue(false);
-                    }
-                }
-            }
-        }
-
-        [Test]
         public void TestGetCounts ()
         {
             using (GribFile file = new GribFile(Settings.GRIB))
@@ -266,5 +159,61 @@ namespace Grib.Api.Tests
 
             });
         }
+
+		[TestFixture]
+		public class IterateValues
+		{
+			[Test]
+			public void TestIterateKeyValuePairs()
+			{
+				using (var file = new GribFile(Settings.BIN)) {
+					Assert.IsTrue(file.MessageCount > 0);
+					Assert.IsTrue(file.First().Any());
+				}
+			}
+
+			[Test]
+			public void TestIterateLatLong()
+			{
+				Console.WriteLine();
+
+				using (var file = new GribFile(Settings.REDUCED_LATLON_GRB2)) {
+					Assert.IsTrue(file.MessageCount > 0);
+					foreach (var msg in file) {
+						int c = msg.Count();
+
+						msg.Namespace = "geography";
+
+						Assert.AreNotEqual(c, msg.Count());
+
+						Assert.IsTrue(msg.GeoSpatialValues.Any());
+					}
+				}
+			}
+		}
+
+		[Test]
+		public void TestTime()
+		{
+			using (GribFile file = new GribFile(Settings.TIME))
+			{
+				Assert.IsTrue(file.MessageCount > 0);
+
+				int diff = 0;
+				int i = 0;
+
+				foreach (var msg in file) 
+				{
+					if (i++ == 0) { continue; }
+
+					diff = msg["P2"].AsInt();
+					Assert.IsTrue(diff > 0);
+					var t = msg.ReferenceTime.AddHours(diff);
+					Assert.AreNotEqual(msg.ReferenceTime, t);
+					Assert.AreEqual(t, msg.Time);
+				}
+				Assert.IsTrue(i > 2);
+			}
+		}
     }
 }

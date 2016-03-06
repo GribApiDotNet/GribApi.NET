@@ -49,10 +49,10 @@ namespace Grib.Api
             string thisDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), target);
             string exeDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, target);
 
-            return TryBuildGriApiPath(envDir, out path) ||    // try using environment variable
-                   TryBuildGriApiPath(target, out path) ||    // try using relative path
-                   TryBuildGriApiPath(thisDir, out path) ||   // try using the directory that contains this binary
-                   TryBuildGriApiPath(exeDir, out path);      // try using the directory that contains the exe
+			return TryBuildGriApiPath(envDir, out path) ||    // try using environment variable
+				   TryBuildGriApiPath(thisDir, out path) ||   // try using the directory that contains this binary
+				   TryBuildGriApiPath(exeDir, out path) ||	  // try using the directory that contains the exe
+				   TryBuildGriApiPath(target, out path);      // try using relative path;      
         }
 
         internal static bool TryBuildGriApiPath (string root, out string path)

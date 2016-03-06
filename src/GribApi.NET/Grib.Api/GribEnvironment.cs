@@ -48,14 +48,21 @@ namespace Grib.Api
                 Initialized = true;
                 string definitions = "";
 
+				PutEnvVar("GRIB_API_LOG_STREAM", "stdout");
+
+				if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GRIB_API_NO_ABORT"))) 
+				{
+					NoAbort = true;
+				}
+
                 if (String.IsNullOrWhiteSpace(DefinitionsPath) &&
                     GribEnvironmentLoadHelper.TryFindDefinitions(out definitions))
                 {
                     DefinitionsPath = definitions;
                 }
 
+				AssertValidEnvironment();
                 _libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
-                AssertValidEnvironment();
             }
         }
 
@@ -83,7 +90,7 @@ namespace Grib.Api
 
             if (!exists)
             {
-                throw new GribApiException("GribEnvironment::DefinitionsPath must be a valid path. If you're using ASP.NET or NUnit, this exception is usually caused by shadow copying. Please see GribApi.NET's documentation for help.");
+                throw new GribApiException("GribEnvironment::DefinitionsPath must be a valid path. If you're using ASP.NET or NUnit, this exception is usually caused by shadow copying. Please see GribApi.NET's documentation for help. Path: " + DefinitionsPath);
             }
 
             if (!File.Exists(Path.Combine(existingPath, "boot.def")))
@@ -155,7 +162,7 @@ namespace Grib.Api
         {
             get
             {
-                return Environment.GetEnvironmentVariable("GRIB_DEFINITION_PATH");
+                return Environment.GetEnvironmentVariable("GRIB_DEFINITION_PATH") + "";
             }
             set
             {

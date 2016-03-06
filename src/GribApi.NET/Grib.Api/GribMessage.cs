@@ -207,6 +207,41 @@ namespace Grib.Api
             get { return this["shortName"].AsString(); }
         }
 
+		/// <summary>
+		/// Gets the GRIB specification edition. grib_api does not always correctly identify the edition, in which case this property return 0.
+		/// </summary>
+		public int Edition
+		{
+			get
+			{
+				if (this._ed == -1)
+				{
+					string gen = this["GRIBEditionNumber"].AsString();
+
+					if (!Int32.TryParse(gen, out this._ed))
+					{
+						gen = this["editionNumber"].AsString();
+
+						if (!Int32.TryParse(gen, out this._ed))
+						{
+							this._ed = 0;
+						}
+					}
+				}
+
+				// allow for GRIB N?
+				if (this._ed < 0)
+				{
+					throw new GribApiException("Bad GRIB edition.");
+				}
+
+				Debug.Assert(this._ed < 3);
+
+				return this._ed;
+			}
+		}
+		private int _ed = -1;
+
         /// <summary>
         /// Gets or sets the parameter number.
         /// </summary>
@@ -229,6 +264,35 @@ namespace Grib.Api
         {
             get { return this["parameterUnits"].AsString(); }
         }
+
+		/// <summary>
+		/// Gets or sets the unit of the step. This will be the short name from the following table:
+		/// 
+		/// 0 m  Minute
+		/// 1 h  Hour
+		/// 2 D  Day
+		/// 3 M  Month
+		/// 4 Y  Year
+		/// 5 10Y  Decade (10 years)
+		/// 6 30Y  Normal (30 years)
+		/// 7 C  Century (100 years)
+		/// 10 3h  3 hours
+		/// 11 6h  6 hours
+		/// 12 12h  12 hours
+		/// 13 s  Second
+		/// 14 15m  15 minutes
+		/// 15 30m  30 minutes
+		/// 255 255  Missing
+		/// 
+		/// </summary>
+		/// <value>
+		/// The type of the step.
+		/// </value>
+		public string StepUnit
+		{
+			get { return this["stepUnits"].AsString(); }
+			set { this["stepUnits"].AsString(value); }
+		}
 
         /// <summary>
         /// Gets or sets the type of the step.
@@ -314,8 +378,34 @@ namespace Grib.Api
             set { this["unitOfTimeRange"].AsString(value); }
         }
 
+		/// <summary>
+		/// Gets or set the *reference* time of the data - date and time of start of averaging or accumulation period. Time is UTC.
+		/// </summary>
+		/// <value>
+		/// The reference time.
+		/// </value>
+		public DateTime ReferenceTime
+		{
+			get
+			{
+				return new DateTime(this["year"].AsInt(), this["month"].AsInt(), this["day"].AsInt(),
+									this["hour"].AsInt(), this["minute"].AsInt(), this["second"].AsInt(),
+									DateTimeKind.Utc);
+			}
+			set
+			{
+				this["year"].AsInt(value.Year);
+				this["month"].AsInt(value.Month);
+				this["day"].AsInt(value.Day);
+				this["hour"].AsInt(value.Hour);
+				this["minute"].AsInt(value.Minute);
+				this["second"].AsInt(value.Second);
+			}
+		}
+
         /// <summary>
-        /// Gets or set the time of the measurement. Time is UTC.
+		/// Gets the beginning of the time interval, i.e., ReferenceTime + forecastTime or ReferenceTime + P2. Time is UTC.
+		/// If the time range indicator is greater than 5, ReferenceTime is returned.
         /// </summary>
         /// <value>
         /// The time.
@@ -324,20 +414,76 @@ namespace Grib.Api
         {
             get
             {
-                return new DateTime(this["year"].AsInt(), this["month"].AsInt(), this["day"].AsInt(),
-                                    this["hour"].AsInt(), this["minute"].AsInt(), this["second"].AsInt(),
-                                    DateTimeKind.Utc);
-            }
-            set
-            {
-                this["year"].AsInt(value.Year);
-                this["month"].AsInt(value.Month);
-                this["day"].AsInt(value.Day);
-                this["hour"].AsInt(value.Hour);
-                this["minute"].AsInt(value.Minute);
-                this["second"].AsInt(value.Second);
+				string key = this["forecastTime"].IsDefined ? "forecastTime" : "P2";
+
+				return this.GetOffsetTime(key);
             }
         }
+
+		private static readonly string[] _legalTimeArgs = new[] { "P1", "P2", "forecastTime" };
+
+		private DateTime GetOffsetTime (string p)
+		{
+
+			if (!_legalTimeArgs.Contains(p))
+			{
+				throw new ArgumentException("Argument must be in " + _legalTimeArgs.ToString());
+			}
+
+			DateTime time = this.ReferenceTime;
+			string units = this.TimeRangeUnit;
+
+			if (String.IsNullOrWhiteSpace(units))
+			{
+				units = this.StepUnit;
+			}
+
+			int offset = this[p].AsInt();
+			int indicator = this["timeRangeIndicator"].AsInt();
+
+			if (units != "255" && offset != 0)
+			{
+				offset *= GetTimeMultiplier(units);
+
+				if (units.EndsWith("s"))
+				{
+					time = time.AddSeconds(offset);
+				} else if (units.EndsWith("m"))
+				{
+					time = time.AddMinutes(offset);
+				} else if (units.EndsWith("h"))
+				{
+					time = time.AddHours(offset);
+				} else if (units.EndsWith("D"))
+				{
+					time = time.AddDays(offset);
+				} else if (units.EndsWith("M"))
+				{
+					time = time.AddMonths(offset);
+				} else if (units.EndsWith("Y"))
+				{
+					time = time.AddYears(offset);
+				} else if (units.EndsWith("C")) 
+				{
+					time = time.AddYears(100 * offset);
+				}
+			}
+
+			return time;
+		}
+
+		private static int GetTimeMultiplier (string units)
+		{
+			int multiplier = 1;
+
+			if (units.Length > 1)
+			{
+				string val = units.Substring(0, units.Length - 2);
+				Int32.TryParse(val, out multiplier);
+			}
+
+			return multiplier;
+		}
 
         /// <summary>
         /// The total number of points on the grid and includes missing as well as 'real' values. DataPointsCount = <see cref="ValuesCount"/> + <see cref="MissingCount"/>.

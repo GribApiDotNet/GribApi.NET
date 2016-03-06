@@ -7,7 +7,7 @@ using System.Text;
 namespace Grib.Api.Tests
 {
     [TestFixture]
-    public class SetBitmap
+    public class Set
     {
         [Test]
         public void TestSetBitmapMissing ()
@@ -79,6 +79,16 @@ namespace Grib.Api.Tests
                 }                
             }
         }
+
+		[Test]
+		public void TestPrecision()
+		{
+			var file = new GribFile(Settings.GAUSS);
+			var msg = file.First();
+			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 13);
+			msg.DecimalPrecision = 4;
+			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 20);
+		}
 
     }
 }

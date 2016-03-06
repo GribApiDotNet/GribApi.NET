@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using Grib.Api.Interop;
 
 namespace Grib.Api.Tests
 {
@@ -16,6 +17,7 @@ namespace Grib.Api.Tests
         [SetUp]
         public void OnSetup()
         {
+			//GribContext.OnLog += GribContext_OnLog;
             if (Environment.GetEnvironmentVariable("_GRIB_BREAK") == "1")
             {
                 Console.WriteLine("Breaking on start...");
@@ -25,5 +27,10 @@ namespace Grib.Api.Tests
                 while (!mre.WaitOne(250)) ;
             }
         }
+
+		void GribContext_OnLog(int lvl, string msg)
+		{
+			Console.WriteLine(String.Format("Lvl {0}: {1}", lvl, msg));
+		}
     }
 }

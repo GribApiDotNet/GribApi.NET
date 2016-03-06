@@ -1,13 +1,27 @@
 ﻿using Grib.Api.Interop.SWIG;
+using Grib.Api.Interop.Util;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api.Interop
 {
+	/// <summary>
+	/// Logging handler.
+	/// </summary>
+	/// <param name="lvl">The level.</param>
+	/// <param name="msg">The MSG.</param>
+	public delegate void GribApiLogHandler (int lvl, string msg);
+
     /// <summary>
     /// Wraps grib_context struct.
     /// </summary>
     public class GribContext : AutoRef
     {
+		/// <summary>
+		/// Occurs when the grib_api library logs a message.
+		/// </summary>
+		public event GribApiLogHandler OnLog;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GribContext"/> class.
         /// </summary>
@@ -15,6 +29,7 @@ namespace Grib.Api.Interop
         public GribContext (IntPtr h)
             : base(h)
         {
+			GribApiNative.GribSetContextLogger(h, this.OnLogReceived);
         }
 
         /// <summary>
@@ -26,6 +41,20 @@ namespace Grib.Api.Interop
             // This causes AccessViolation when disposing
             // GribApiProxy.GribContextDelete(this);
         }
+
+		/// <summary>
+		/// Called when [log received].
+		/// </summary>
+		/// <param name="ctx">The grib_context generating the log.</param>
+		/// <param name="lvl">The level.</param>
+		/// <param name="msg">The MSG.</param>
+		private void OnLogReceived(IntPtr ctx, int lvl, [MarshalAs(UnmanagedType.LPStr)]string msg)
+		{
+			if (this.OnLog != null)
+			{
+				this.OnLog(lvl, msg);
+			}
+		}
 
         /// <summary>
         /// Gets or sets a value indicating whether [enable multiple field messages].
