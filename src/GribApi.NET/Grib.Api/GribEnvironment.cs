@@ -59,6 +59,7 @@ namespace Grib.Api
                     GribEnvironmentLoadHelper.TryFindDefinitions(out definitions))
                 {
                     DefinitionsPath = definitions;
+					SamplesPath = definitions.Remove(definitions.LastIndexOf("definitions")) + "samples";
                 }
 
 				AssertValidEnvironment();
@@ -169,6 +170,25 @@ namespace Grib.Api
                 PutEnvVar("GRIB_DEFINITION_PATH", value);
             }
         }
+
+
+		/// <summary>
+		/// Gets or sets the location of grib_api's samples directory. By default, it is located  next to Grib.Api/definitions.
+		/// </summary>
+		/// <value>
+		/// The definitions path.
+		/// </value>
+		public static string SamplesPath
+		{
+			get
+			{
+				return Environment.GetEnvironmentVariable("GRIB_SAMPLES_PATH") + "";
+			}
+			set
+			{
+				PutEnvVar("GRIB_SAMPLES_PATH", value);
+			}
+		}
 
         /// <summary>
         /// Gets the grib_api version wrapped by this library.
