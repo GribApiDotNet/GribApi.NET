@@ -83,9 +83,9 @@ namespace Grib.Api.Tests
 		[Test]
 		public void TestPrecision()
 		{
-			var file = new GribFile(Settings.GAUSS);
+			var file = new GribFile(Settings.REG_GAUSSIAN_SURFACE_GRB2);
 			var msg = file.First();
-			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 13);
+			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 14);
 			msg.DecimalPrecision = 4;
 			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 20);
 		}

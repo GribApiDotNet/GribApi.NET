@@ -7,7 +7,7 @@
 # virtue of its status as an intergovernmental organisation nor does it submit to any jurisdiction.
 #
 
-# TEMPLATE 4.1100, Hovmöller-type grid with no averaging or other statistical processing
+# TEMPLATE 4.1100, HovmÃ¶ller-type grid with no averaging or other statistical processing
 
 include "template.4.parameter.def"
 include "template.4.horizontal.def"

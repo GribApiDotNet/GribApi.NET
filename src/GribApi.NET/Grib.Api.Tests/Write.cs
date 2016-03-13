@@ -86,7 +86,7 @@ namespace Grib.Api.Tests
                         do
                         {
                             // over 200k values, so only pick from a subset
-                            k = GetRandomNumber(0, (count - 2) / 20);
+                            k = GetRandomNumber(0, (count) / 20);
                         }
                         while (orig.ContainsKey(k));
 
@@ -112,7 +112,7 @@ namespace Grib.Api.Tests
 
                 msg["packingType"].AsString(grid);
                 Assert.AreEqual(msg["packingType"].AsString(), grid);
-                Assert.AreEqual(count - 2, msg.ValuesCount);
+                Assert.AreEqual(count, msg.ValuesCount);
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 GribFile.Write(Settings.OUT_GRIB, msg);
 
@@ -129,7 +129,7 @@ namespace Grib.Api.Tests
             using (var readFile = new GribFile(Settings.OUT_GRIB))
             {
                 var msg = readFile.First();
-                Assert.AreEqual(count - 2, msg.ValuesCount);
+                Assert.AreEqual(count, msg.ValuesCount);
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 Assert.AreEqual(msg["packingType"].AsString(), grid);
 
