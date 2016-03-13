@@ -53,7 +53,7 @@ taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -63,7 +63,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -128,7 +128,7 @@ if ERRORLEVEL 1 (
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -138,7 +138,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng1618\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
