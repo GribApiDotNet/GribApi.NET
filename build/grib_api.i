@@ -28,7 +28,6 @@
 %rename("%(camelcase)s", %$isenum) "";
 %rename("%(camelcase)s", %$isenumitem) "";
 
-
 %typemap(imtype, out="System.IntPtr") FILE*, grib_handle*, grib_context* , grib_keys_iterator*, grib_iterator* "System.Runtime.InteropServices.HandleRef"
 %typemap(csin) FILE*, grib_handle*, grib_context*, grib_keys_iterator*, grib_iterator* "$csinput.Reference"
 %typemap(cstype) FILE* "GribFile"

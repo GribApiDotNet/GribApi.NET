@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-using System.Runtime.InteropServices;
 namespace Grib.Api.Interop.SWIG {
 
 public class GribPoints : global::System.IDisposable {
@@ -51,16 +50,12 @@ public class GribPoints : global::System.IDisposable {
   }
 
   public double[] latitudes {
-      set {
-          GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, value);
-      } 
+    set {
+      GribApiProxyPINVOKE.GribPoints_latitudes_set(swigCPtr, value);
+    } 
 	get
 	{
-	    var p = GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
-        double[] d = new double[this.n];
-        Marshal.Copy(p, d, 0, d.Length);
-
-        return d;
+		return GribApiProxyPINVOKE.GribPoints_latitudes_get(swigCPtr);
 	} 
   }
 
@@ -70,12 +65,7 @@ public class GribPoints : global::System.IDisposable {
     } 
 	get
 	{
-        var p = GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
-          double[] d = new double[this.n];
-          Marshal.Copy(p, d, 0, d.Length);
-
-          return d;
-		//return GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
+		return GribApiProxyPINVOKE.GribPoints_longitudes_get(swigCPtr);
 	} 
   }
 

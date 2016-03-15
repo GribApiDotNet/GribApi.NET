@@ -30,6 +30,9 @@ namespace Grib.Api.Interop.Util
 		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribSetContextLogger")]
 		internal static extern void GribSetContextLogger(IntPtr gribContext, GribLogProc proc);
 
+		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribSetOnFatal")]
+		internal static extern void GribSetOnFatal();
+
         [DllImport("Grib.Api.Native.dll", EntryPoint="DeleteGribBox")]
         private static extern int _DeleteGribBox(HandleRef box);
 
@@ -42,5 +45,24 @@ namespace Grib.Api.Interop.Util
                 throw GribApiException.Create(ret);
             }
         }
+
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		private delegate void GribExceptionDelegate([MarshalAs(UnmanagedType.LPStr)]string msg);
+
+		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribExceptionRegisterCallback")]
+		private static extern
+			   void GribExceptionRegisterCallback(GribExceptionDelegate customCallback);
+
+
+		private static void OnGribFatalException([MarshalAs(UnmanagedType.LPStr)]string msg)
+		{
+			Grib.Api.Interop.SWIG.GribApiProxyPINVOKE.SWIGPendingException.Set(new GribApiFatalException(msg));
+		}
+
+		internal static void HookGribExceptions()
+		{
+			GribApiNative.GribExceptionRegisterCallback(OnGribFatalException);
+			GribApiNative.GribSetOnFatal();
+		}
     }
 }

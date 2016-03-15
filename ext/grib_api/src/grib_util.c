@@ -1456,7 +1456,7 @@ int parse_keyval_string(char* grib_tool, char* arg, int values_required, int def
                     printf("%s error: no value provided for key \"%s\"\n", grib_tool, values[i].name);
                 else
                     printf("Error: no value provided for key \"%s\"\n", values[i].name);
-                exit(GRIB_INVALID_ARGUMENT);
+                grib_exit(GRIB_INVALID_ARGUMENT);
             }
             set_value(&values[i],value,equal);
         }

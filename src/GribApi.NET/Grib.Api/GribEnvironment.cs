@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
@@ -34,7 +35,7 @@ namespace Grib.Api
         private static AutoRef _libHandle;
         private static object _initLock = new object();
 
-        /// <summary>
+		/// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
         /// to ensure the native libraries are bootstrapped and the environment setup correctly.
         /// </summary>
@@ -64,6 +65,8 @@ namespace Grib.Api
 
 				AssertValidEnvironment();
                 _libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
+
+				GribApiNative.HookGribExceptions();
             }
         }
 

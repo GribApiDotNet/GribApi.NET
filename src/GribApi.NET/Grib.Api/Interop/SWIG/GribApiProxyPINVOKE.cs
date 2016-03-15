@@ -6,7 +6,6 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-using System;
 namespace Grib.Api.Interop.SWIG {
 
 class GribApiProxyPINVOKE {
@@ -596,6 +595,15 @@ class GribApiProxyPINVOKE {
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribGetErrorMessage(int jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetFailProc")]
+  public static extern void GribSetFailProc(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetExitProc")]
+  public static extern void GribSetExitProc(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribExit")]
+  public static extern void GribExit(int jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetTypeName")]
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribGetTypeName(int jarg1);
@@ -691,13 +699,13 @@ class GribApiProxyPINVOKE {
   public static extern void GribPoints_latitudes_set(global::System.Runtime.InteropServices.HandleRef jarg1, double[] jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribPoints_latitudes_get")]
-  public static extern IntPtr GribPoints_latitudes_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern double[] GribPoints_latitudes_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribPoints_longitudes_set")]
   public static extern void GribPoints_longitudes_set(global::System.Runtime.InteropServices.HandleRef jarg1, double[] jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribPoints_longitudes_get")]
-  public static extern IntPtr GribPoints_longitudes_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+  public static extern double[] GribPoints_longitudes_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribPoints_indexes_set")]
   public static extern void GribPoints_indexes_set(global::System.Runtime.InteropServices.HandleRef jarg1, ref System.UIntPtr jarg2);

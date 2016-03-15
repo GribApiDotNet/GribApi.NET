@@ -283,83 +283,118 @@ SWIGEXPORT void SWIGSTDCALL SWIGRegisterStringCallback_GribApiProxy(SWIG_CSharpS
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
+#include <sstream>
 #include "grib_api_internal.h"
 
+typedef void (SWIGSTDCALL* CSharpExceptionCallback_t)(const char *);
+CSharpExceptionCallback_t gribExceptionCallback = NULL;
+
 extern "C" {
-	SWIGEXPORT struct FileHandleProxy
-	{
-		FILE* File;
-	};
+  SWIGEXPORT
+  void SWIGSTDCALL GribExceptionRegisterCallback(CSharpExceptionCallback_t customCallback) {
+    gribExceptionCallback = customCallback;
+  }
 
-	SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
-	{
-		intptr_t h = _get_osfhandle(_fileno(fhp->File));
+  static void GribSetPendingFatalException(const char *msg) {
+    gribExceptionCallback(msg);
+  }
+  
+  SWIGEXPORT struct FileHandleProxy
+  {
+    FILE* File;
+  };
 
-		if (h != (intptr_t)INVALID_HANDLE_VALUE)
-		{
-			// On Windows, DO NOT call CloseHandle here, see remarks in
-			// https://msdn.microsoft.com/en-us/library/fxfsw25t(v=vs.120).aspx
-			assert(fclose(fhp->File) == 0);
-		}
+  SWIGEXPORT void __stdcall DestroyFileHandleProxy(FileHandleProxy* fhp)
+  {
+    intptr_t h = _get_osfhandle(_fileno(fhp->File));
 
-		delete(fhp);
-	}
+    if (h != (intptr_t)INVALID_HANDLE_VALUE)
+    {
+      // On Windows, DO NOT call CloseHandle here, see remarks in
+      // https://msdn.microsoft.com/en-us/library/fxfsw25t(v=vs.120).aspx
+      assert(fclose(fhp->File) == 0);
+    }
 
-	SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
-	{
-		char * fmode = NULL;
+    delete(fhp);
+  }
 
-		auto hFile = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+  SWIGEXPORT FileHandleProxy* __stdcall CreateFileHandleProxy(char * fn)
+  {
+    char * fmode = NULL;
 
-		if (hFile == INVALID_HANDLE_VALUE)
-		{
-			return NULL;
-		}
+    auto hFile = CreateFileA(fn, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
-		auto fd = _open_osfhandle((intptr_t)hFile, 0);
+    if (hFile == INVALID_HANDLE_VALUE)
+    {
+      return NULL;
+    }
 
-		if (fd == -1)
-		{
-			return NULL;
-		}
+    auto fd = _open_osfhandle((intptr_t)hFile, 0);
 
-		FileHandleProxy* fhp = 0;
-		fhp = new FileHandleProxy();
-		fhp->File = _fdopen(fd, "r");
+    if (fd == -1)
+    {
+      return NULL;
+    }
 
-		return fhp;
-	}
+    FileHandleProxy* fhp = 0;
+    fhp = new FileHandleProxy();
+    fhp->File = _fdopen(fd, "r");
 
-	SWIGEXPORT void __stdcall RewindFileHandleProxy(FileHandleProxy* fhp)
-	{
-		rewind(fhp->File);
-	}
+    return fhp;
+  }
 
-	SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator* iter)
-	{
-		char* v = NULL;
-		v = (char*)grib_keys_iterator_get_name(iter);
-		strcpy_s(name, 255, v);
-	}
+  SWIGEXPORT void __stdcall RewindFileHandleProxy(FileHandleProxy* fhp)
+  {
+    rewind(fhp->File);
+  }
 
-	SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * fn)
-	{
-		grib_accessor* a = grib_find_accessor(h, fn);
-		return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0 ;
-	}
+  SWIGEXPORT void __stdcall GetGribKeysIteratorName(char* name, grib_keys_iterator* iter)
+  {
+    char* v = NULL;
+    v = (char*)grib_keys_iterator_get_name(iter);
+    strcpy_s(name, 255, v);
+  }
 
-	SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)
-	{
-		// not exposed by SWIG by default
-		return grib_box_delete(box) == 0;
-	}
+  SWIGEXPORT bool __stdcall GribKeyIsReadOnly(grib_handle* h, char * name)
+  {
+    grib_accessor* a = grib_find_accessor(h, name);
+    return (a->flags & GRIB_ACCESSOR_FLAG_READ_ONLY) != 0;
+  }
 
-	SWIGEXPORT void  __stdcall GribSetContextLogger(void* ctx, grib_log_proc proc)
-	{
-		grib_context* pCtx = (grib_context*)ctx;
-		grib_context_set_logging_proc(pCtx, proc);
-	}
+  SWIGEXPORT int __stdcall DeleteGribBox(grib_box* box)
+  {
+    // not exposed by SWIG by default
+    return grib_box_delete(box) == 0;
+  }
+
+  SWIGEXPORT void  __stdcall GribSetContextLogger(void* ctx, grib_log_proc proc)
+  {
+    grib_context* pCtx = (grib_context*)ctx;
+    grib_context_set_logging_proc(pCtx, proc);
+  }
+  
+  void OnFail(const char* expr, const char* file, int line)
+  {
+    std::ostringstream stringStream;
+    stringStream << expr << " failed at " << file << " " << line;
+	GribSetPendingFatalException(stringStream.str().c_str());
+  };
+  
+  void OnExit(int code)
+  {
+    std::ostringstream stringStream;
+    stringStream << "grib_api signaled exit with code " << code;
+	GribSetPendingFatalException(stringStream.str().c_str());
+  };
+  
+  SWIGEXPORT void  __stdcall GribSetOnFatal()
+  {
+    grib_set_fail_proc(&OnFail);
+    grib_set_exit_proc(&OnExit);
+  }
 }
+
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -2201,6 +2236,30 @@ SWIGEXPORT char * SWIGSTDCALL CSharp_GribGetErrorMessage(int jarg1) {
 }
 
 
+SWIGEXPORT void SWIGSTDCALL CSharp_GribSetFailProc(void * jarg1) {
+  grib_fail_proc arg1 = (grib_fail_proc) 0 ;
+  
+  arg1 = (grib_fail_proc)jarg1; 
+  grib_set_fail_proc(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_GribSetExitProc(void * jarg1) {
+  grib_exit_proc arg1 = (grib_exit_proc) 0 ;
+  
+  arg1 = (grib_exit_proc)jarg1; 
+  grib_set_exit_proc(arg1);
+}
+
+
+SWIGEXPORT void SWIGSTDCALL CSharp_GribExit(int jarg1) {
+  int arg1 ;
+  
+  arg1 = (int)jarg1; 
+  grib_exit(arg1);
+}
+
+
 SWIGEXPORT char * SWIGSTDCALL CSharp_GribGetTypeName(int jarg1) {
   char * jresult ;
   int arg1 ;
@@ -2697,15 +2756,15 @@ SWIGEXPORT void SWIGSTDCALL CSharp_GribPoints_latitudes_set(void * jarg1, void *
 }
 
 
-SWIGEXPORT double * SWIGSTDCALL CSharp_GribPoints_latitudes_get(void * jarg1) {
+SWIGEXPORT void * SWIGSTDCALL CSharp_GribPoints_latitudes_get(void * jarg1) {
   void * jresult ;
   grib_points *arg1 = (grib_points *) 0 ;
   double *result = 0 ;
   
   arg1 = (grib_points *)jarg1; 
   result = (double *) ((arg1)->latitudes);
-  //jresult = (void *)result; 
-  return result;
+  jresult = (void *)result; 
+  return jresult;
 }
 
 

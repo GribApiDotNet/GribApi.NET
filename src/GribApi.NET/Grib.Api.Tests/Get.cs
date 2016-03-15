@@ -16,6 +16,7 @@ namespace Grib.Api.Tests
     [TestFixture]
     public class Get
     {
+
         [Test]
         public void TestGetCounts ()
         {
@@ -216,7 +217,7 @@ namespace Grib.Api.Tests
 			}
 		}
 
-		[Test]
+		//[Test]
 		public void TestGetBox()
 		{
 			using (GribFile file = new GribFile(Settings.REG_GAUSSIAN_MODEL_GRB1)) {

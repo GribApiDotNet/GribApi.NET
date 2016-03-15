@@ -998,7 +998,6 @@ typedef void  (*grib_log_proc)      (const grib_context* c, int level, const cha
 */
 typedef void  (*grib_print_proc)    (const grib_context* c, void* descriptor, const char* mesg);
 
-
 /**
 * Grib data read proc, format of a procedure referenced in the context that is used to read from a stream in a resource
 *
@@ -1266,6 +1265,42 @@ void grib_update_sections_lengths(grib_handle* h);
 * @return           the error message
 */
 const char* grib_get_error_message(int code);
+
+/**
+* Grib fail proc, format of a procedure handling a fatal error
+*
+* @param c             : the context where the logging will apply
+* @param level         : the log level, as defined in log modes
+* @param mesg          : the message to be logged
+*/
+typedef void(*grib_fail_proc)    (const char* expr, const char* file, int line);
+
+/**
+* Set a custom handler for fatal errors
+*
+* @param p             : the procedure to invoke on fatal errors
+*/
+void grib_set_fail_proc(grib_fail_proc p);
+
+/**
+* Grib exit proc, format of a procedure that terminates the process
+*
+* @param c             : the exit code
+*/
+typedef void(*grib_exit_proc)    (int code);
+
+/**
+* Set a custom handler for exit
+*
+* @param p             : the procedure to invoke to terminate the process
+*/
+void grib_set_exit_proc(grib_exit_proc p);
+
+/**
+* Terminate the process
+*/
+void grib_exit(int code);
+
 const char* grib_get_type_name(int type);
 
 int grib_get_native_type(grib_handle* h, const char* name,int* type);

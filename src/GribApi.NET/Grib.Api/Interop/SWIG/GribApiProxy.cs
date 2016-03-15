@@ -749,6 +749,18 @@ public class GribApiProxy {
     return ret;
   }
 
+  public static void GribSetFailProc(SWIGTYPE_p_f_p_q_const__char_p_q_const__char_int__void p) {
+    GribApiProxyPINVOKE.GribSetFailProc(SWIGTYPE_p_f_p_q_const__char_p_q_const__char_int__void.getCPtr(p));
+  }
+
+  public static void GribSetExitProc(SWIGTYPE_p_f_int__void p) {
+    GribApiProxyPINVOKE.GribSetExitProc(SWIGTYPE_p_f_int__void.getCPtr(p));
+  }
+
+  public static void GribExit(int code) {
+    GribApiProxyPINVOKE.GribExit(code);
+  }
+
   public static string GribGetTypeName(int type) {
     string ret = GribApiProxyPINVOKE.GribGetTypeName(type);
     return ret;

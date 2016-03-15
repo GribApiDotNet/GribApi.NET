@@ -38,9 +38,22 @@
 #include <windows.h>
 #include <assert.h>
 #include <io.h>
+#include <sstream>
 #include "grib_api_internal.h"
 
+typedef void (SWIGSTDCALL* CSharpExceptionCallback_t)(const char *);
+CSharpExceptionCallback_t gribExceptionCallback = NULL;
+
 extern "C" {
+  SWIGEXPORT
+  void SWIGSTDCALL GribExceptionRegisterCallback(CSharpExceptionCallback_t customCallback) {
+    gribExceptionCallback = customCallback;
+  }
+
+  static void GribSetPendingException(const char *msg) {
+    gribExceptionCallback(msg);
+  }
+  
   SWIGEXPORT struct FileHandleProxy
   {
     FILE* File;
@@ -113,6 +126,26 @@ extern "C" {
   {
     grib_context* pCtx = (grib_context*)ctx;
     grib_context_set_logging_proc(pCtx, proc);
+  }
+  
+  void OnFail(const char* expr, const char* file, int line)
+  {
+    std::ostringstream stringStream;
+    stringStream << expr << " failed at " << file << " " << line;
+	GribSetPendingException(stringStream.str().c_str());
+  };
+  
+  void OnExit(int code)
+  {
+    std::ostringstream stringStream;
+    stringStream << "grib_api signaled exit with code " << code;
+	GribSetPendingException(stringStream.str().c_str());
+  };
+  
+  SWIGEXPORT void  __stdcall GribSetOnFatal()
+  {
+    grib_set_fail_proc(&OnFail);
+    grib_set_exit_proc(&OnExit);
   }
 }
 
