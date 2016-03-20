@@ -1,5 +1,16 @@
 CHANGELOG
 
+0.7.0
+=====
+* Updated grib_api to 1.14.5.
+* Updated lpng to 1.6.21.
+* Added new "GribApiFatalException" that is signaled from native code in lieu of calling `exit` or `abort`.
+* Fixed issue where changing directories with OpenFileDialog in WinForms causes crash.
+* Improved search for the `definitions` folder on init.
+* Fixed crash caused when trying to iterate two files at the same time.
+* Fixed missing items in SWIG files that prevented file generation.
+* Improved time reporting and added `rewind` for iterables.
+
 0.6.4
 =====
 * Fixed AccessViolationException when opening empty file.
