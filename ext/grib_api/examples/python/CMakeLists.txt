@@ -12,6 +12,7 @@ list( APPEND test_bins
    iterator
    count_messages
 )
+
 foreach( tool ${test_bins} )
    ecbuild_add_executable( TARGET    p_${tool}
                            NOINSTALL

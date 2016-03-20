@@ -14,10 +14,11 @@ namespace Grib.Api.Tests
         public const string REDUCED_LATLON_GRB2 = ".\\TestData\\reduced_latlon_surface.grib2";
         public const string OUT_INDEX = ".\\TestData\\out.index";
         public const string OUT_GRIB = ".\\TestData\\out.grb";
-        public const string GAUSS = ".\\TestData\\reduced_gaussian_model_level.grib1";
-        public const string BIN = ".\\TestData\\ds.waveh.bin";
+		public const string REG_GAUSSIAN_SURFACE_GRB2 = ".\\TestData\\regular_gaussian_surface.grib2";//".\\TestData\\reduced_gaussian_model_level.grib1"
+		public const string REG_GAUSSIAN_MODEL_GRB1 = ".\\TestData\\reduced_gaussian_model_level.grib1";
+		public const string SPHERICAL_PRESS_LVL = ".\\TestData\\spherical_pressure_level.grib1";
         public const string PNG_COMPRESSION = ".\\TestData\\MRMS2.grib2";
-        public const string COMPLEX_GRID = ".\\TestData\\gfs_0p50_2015101500_003.grb";
+        public const string COMPLEX_GRID = ".\\TestData\\spectral_complex.grib1";
         public const string BAD = ".\\TestData\\bad.grb";
         public const string EMPTY = ".\\TestData\\empty.grb";
 		public const string TIME = ".\\TestData\\time.grb";

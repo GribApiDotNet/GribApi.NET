@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -15,6 +15,8 @@ option( ENABLE_RELATIVE_RPATHS  "try to use relative RPATHS, including build dir
 option( ENABLE_WARNINGS         "enable compiler warnings"                        OFF )
 
 option( ENABLE_LARGE_FILE_SUPPORT "build with large file support"   ON  )
+
+option( ENABLE_PROFILING        "build with profiling support" OFF )
 
 mark_as_advanced( ENABLE_LARGE_FILE_SUPPORT )
 

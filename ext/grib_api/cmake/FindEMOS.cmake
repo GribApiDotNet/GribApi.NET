@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -11,8 +11,6 @@
 #  EMOS_FOUND - System has EMOS
 #  EMOS_INCLUDE_DIRS - The EMOS include directories
 #  EMOS_LIBRARIES - The libraries needed to use EMOS
-
-ecbuild_add_extra_search_paths( libemos )
 
 if( NOT DEFINED EMOS_PATH AND DEFINED $ENV{EMOS_PATH} )
 	set( EMOS_PATH $ENV{EMOS_PATH} )

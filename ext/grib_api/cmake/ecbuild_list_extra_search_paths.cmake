@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -8,12 +8,14 @@
 
 ############################################################################################
 #
-# macro for adding search paths to CMAKE_PREFIX_PATH
-# for example the ECMWF /usr/local/apps paths
+# macro for adding search paths for a package to a given CMake variable
 #
 # usage: ecbuild_list_extra_search_paths( netcdf4 VARIABLE )
 
 function( ecbuild_list_extra_search_paths pkg var )
+
+  message( DEPRECATION " ecbuild_list_extra_search_paths should no longer be"
+           " used and is going to be removed in a future version of ecBuild." )
 
 	# debug_var( pkg )
 	# debug_var( var )
@@ -23,73 +25,44 @@ function( ecbuild_list_extra_search_paths pkg var )
 	# PKG_PATH (upper case)
 
 	if( DEFINED ${_PKG}_PATH AND EXISTS ${${_PKG}_PATH} )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending ${_PKG}_PATH = ${${_PKG}_PATH} to ${var}")
 		list( APPEND ${var} ${${_PKG}_PATH} )
 	endif()
 
 	# ENV PKG_PATH (upper case)
 
 	if( DEFINED ENV{${_PKG}_PATH} AND EXISTS $ENV{${_PKG}_PATH}  )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending \$${_PKG}_PATH = $ENV{${_PKG}_PATH} to ${var}")
 		list( APPEND ${var} $ENV{${_PKG}_PATH} )
 	endif()
 
 	# pkg_PATH (lower case)
 
 	if( DEFINED ${pkg}_PATH AND EXISTS ${${pkg}_PATH} )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending ${pkg}_PATH = ${${pkg}_PATH} to ${var}")
 		list( APPEND ${var} ${${pkg}_PATH} )
 	endif()
 
 	# ENV pkg_PATH (lower case)
 
-	if( DEFINED ${pkg}_PATH AND EXISTS ${${pkg}_PATH} )
-		list( APPEND ${var} ${${pkg}_PATH} )
+  if( DEFINED ${pkg}_PATH AND EXISTS $ENV{${pkg}_PATH} )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending \$${pkg}_PATH = $ENV{${pkg}_PATH} to ${var}")
+    list( APPEND ${var} $ENV{${pkg}_PATH} )
 	endif()
 
 	# ENV PKG_DIR (upper case)
 
 	if( DEFINED ENV{${_PKG}_DIR} AND EXISTS $ENV{${_PKG}_DIR}  )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending \$${_PKG}_DIR = $ENV{${_PKG}_DIR} to ${var}")
 		list( APPEND ${var} $ENV{${_PKG}_DIR} )
 	endif()
 
 	# ENV pkg_DIR (lower case)
 
 	if( DEFINED ENV{${pkg}_DIR} AND EXISTS $ENV{${pkg}_DIR} )
+    ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): appending \$${pkg}_DIR = $ENV{${pkg}_DIR} to ${var}")
 		list( APPEND ${var} $ENV{${pkg}_DIR} )
 	endif()
-
-	# directories under /usr/local/apps/${pkg}
-
-	if( SEARCH_ECMWF_PATHS )
-
-		foreach( _apps /usr/local/apps/${pkg} /usr/local/lib/metaps/lib/${pkg} )
-
-			if( EXISTS ${_apps} )
-
-				 file( GLOB ps ${_apps}/[0-9]* )
-				 list( SORT ps )
-				 list( REVERSE ps ) # reversing will give us the newest versions first
-				 foreach( p ${ps} )
-					 if( IS_DIRECTORY ${p} )
-						  list( APPEND ${var}  ${p} )
-						  if( EXISTS ${p}/LP64 )
-							  list( APPEND ${var} ${p}/LP64 )
-						  endif()
-					 endif()
-				 endforeach()
-
-				 foreach( p ${_apps} ${_apps}/current ${_apps}/stable ${_apps}/new ${_apps}/next ${_apps}/prev )
-				   if( EXISTS ${p} )
-					   list( APPEND ${var} ${p} )
-				   endif()
-				   if( EXISTS ${p}/LP64 )
-					   list( APPEND ${var} ${p}/LP64 )
-				   endif()
-				 endforeach()
-
-			endif()
-
-		endforeach()
-
-	endif( SEARCH_ECMWF_PATHS )
 
 	# sanitize the list
 
@@ -99,6 +72,7 @@ function( ecbuild_list_extra_search_paths pkg var )
 
 	# define it out of the function
 
+  ecbuild_debug("ecbuild_list_extra_search_paths(${pkg}): setting ${var} to ${${var}}")
 	set( ${var} ${${var}} PARENT_SCOPE )
 
 # debug_var( ${var} )

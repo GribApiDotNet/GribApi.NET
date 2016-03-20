@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -6,8 +6,35 @@
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
-############################################################################################
-# macro to process rpcgen files
+##############################################################################
+#.rst:
+#
+# ecbuild_generate_rpc
+# ====================
+#
+# Process RPC (Remote Procedure Call) Language files using rpcgen. ::
+#
+#   ecbuild_generate_rpc( SOURCE <file>
+#                         [ TARGET_H <file> ]
+#                         [ TARGET_C <file> ]
+#                         [ DEPENDANT <file1> [ <file2> ... ] ] )
+#
+# Options
+# -------
+#
+# SOURCE : required
+#   RPC source file
+#
+# TARGET_H : optional (required if TARGET_C not given)
+#   name of header file to be generated
+#
+# TARGET_C : optional (required if TARGET_H not given)
+#   name of source file to be generated
+#
+# DEPENDANT : optional
+#  list of files which depend on the generated source and header files
+#
+##############################################################################
 
 macro( ecbuild_generate_rpc )
 

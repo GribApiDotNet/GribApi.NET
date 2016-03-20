@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -125,37 +125,44 @@ if( ENABLE_OS_FUNCTIONS_TEST )
     # test for __attribute__ ((__constructor__)) -- usually present in GCC, Clang, Intel on Linux, Solaris, MacOSX; not present in AIX XLC
     ecbuild_cache_check_c_source_compiles( "#include <stdio.h>\nstatic int argc_;static char** argv_;static char** envp_;\nint main(){printf(\"%d\", argc_);}\n__attribute__ ((__constructor__)) static void before_main(int argc, char* argv[], char* envp[]){argc_ = argc;argv_ = argv;envp_ = envp;}\n" EC_HAVE_ATTRIBUTE_CONSTRUCTOR )
 
-    ecbuild_check_c_source_return("
-        #include <stdio.h>
-        #include <string.h>
-        int main(){return 0;}
-        __attribute__ ((__constructor__))
-        static void before_main(int argc, char* argv[], char* envp[])
-        {
-            printf(\"%d:%d\",argc, strstr(argv[0],\"cmTryCompileExec\")?1:0);
-        }"
-        VAR    EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV
-        OUTPUT EC_ATTRIBUTE_CONSTRUCTOR_INITS_OUTPUT )
+    if( NOT DEFINED EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV )
+        ecbuild_check_c_source_return("
+            #include <stdio.h>
+            #include <string.h>
+            int main(){return 0;}
+            __attribute__ ((__constructor__))
+            static void before_main(int argc, char* argv[], char* envp[])
+            {
+                printf(\"%d:%d\",argc, strstr(argv[0],\"cmTryCompileExec\")?1:0);
+            }"
+            VAR    EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV
+            OUTPUT EC_ATTRIBUTE_CONSTRUCTOR_INITS_OUTPUT )
 
-    if( EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV AND NOT EC_ATTRIBUTE_CONSTRUCTOR_INITS_OUTPUT STREQUAL "1:1" )
-      set(EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV 0 CACHE INTERNAL "ATTRIBUTE_CONSTRUCTOR doesnt init argv correctly")
+        if( EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV AND NOT EC_ATTRIBUTE_CONSTRUCTOR_INITS_OUTPUT STREQUAL "1:1" )
+          set(EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV 0 CACHE INTERNAL "ATTRIBUTE_CONSTRUCTOR doesnt init argv correctly")
+        endif()
     endif()
+    ecbuild_cache_var( EC_ATTRIBUTE_CONSTRUCTOR_INITS_ARGV )
+
 
     #### check for some Linux stuff #############
 
-    ecbuild_check_c_source_return("
-        #include <sys/types.h>
-        #include <dirent.h>
-        int main()
-        {
-            DIR* d = opendir(\"/proc\");
-            if(d)
-                return 0;
-            else
-                return -1;
-        }"
-        VAR    EC_HAVE_PROCFS
-        OUTPUT EC_HAVE_PROCFS_OUTPUT )
+    if( NOT DEFINED EC_HAVE_PROCFS )
+        ecbuild_check_c_source_return("
+            #include <sys/types.h>
+            #include <dirent.h>
+            int main()
+            {
+                DIR* d = opendir(\"/proc\");
+                if(d)
+                    return 0;
+                else
+                    return -1;
+            }"
+            VAR    EC_HAVE_PROCFS
+            OUTPUT EC_HAVE_PROCFS_OUTPUT )
+    endif()
+    ecbuild_cache_var( EC_HAVE_PROCFS )
 
 #    debug_var(EC_HAVE_PROCFS)
 #    debug_var(EC_HAVE_PROCFS_OUTPUT)

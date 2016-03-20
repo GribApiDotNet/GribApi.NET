@@ -7,8 +7,17 @@
 # nor does it submit to any jurisdiction.
 
 ##############################################################################
-# Function setting ${CXX11_FLAGS} to the cxx11 flags for the current compiler
-# based on macros from the project github.com/UCL/GreatCMakeCookOff
+#.rst:
+#
+# ecbuild_get_cxx11_flags
+# =======================
+#
+# Set the CMake variable ``${CXX11_FLAGS}`` to the C++11 flags for the current
+# compiler (based on macros from https://github.com/UCL/GreatCMakeCookOff). ::
+#
+#   ecbuild_get_cxx11_flags( CXX11_FLAGS )
+#
+##############################################################################
 
 function( ecbuild_get_cxx11_flags CXX11_FLAGS )
 

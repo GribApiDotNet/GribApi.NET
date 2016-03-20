@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -1559,11 +1559,15 @@ int grib_f_release(int* hid){
 /*****************************************************************************/
 int grib_f_dump_(int* gid){
   grib_handle *h = get_handle(*gid);
+  const int dump_flags = GRIB_DUMP_FLAG_VALUES
+                |  GRIB_DUMP_FLAG_READ_ONLY
+                |  GRIB_DUMP_FLAG_ALIASES
+                |  GRIB_DUMP_FLAG_TYPE;
 
   if(!h)
     return GRIB_INVALID_GRIB;
   else
-    grib_dump_content(h,stdout,NULL,0,NULL);
+    grib_dump_content(h,stdout,"debug", dump_flags, NULL);
 
   return GRIB_SUCCESS;
 }

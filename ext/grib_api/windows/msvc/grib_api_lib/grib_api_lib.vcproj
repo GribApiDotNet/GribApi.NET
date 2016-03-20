@@ -797,6 +797,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\src\grib_accessor_class_gaussian_grid_name.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\src\grib_accessor_class_gds_is_present.c"
 				>
 			</File>

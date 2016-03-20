@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -64,43 +64,43 @@ extern "C" {
 #include "grib_api_windef.h"
 
 #ifndef GRIB_ON_WINDOWS
-   #include <dirent.h>
-   #include <unistd.h>
-   #include <inttypes.h>
+#include <dirent.h>
+#include <unistd.h>
+#include <inttypes.h>
 #else
-   #include <direct.h>
-   #include <io.h>
+#include <direct.h>
+#include <io.h>
 
-#if _MSC_VER < 1800
-   /* Replace Unix rint() for Windows */
-   extern double rint(double x);
-#endif /* _MSC_VER < 1800 */
+	/* Replace Unix rint() for Windows */
 
-   #ifndef S_ISREG
-     #define S_ISREG(mode) (mode & S_IFREG)
-   #endif
+#if _MSC_VER < 1800 /* Modified for compiling in Visual Studio 2013 which suppors Unix rint() */
+	double rint(double x);
+#endif
+#ifndef S_ISREG
+#define S_ISREG(mode) (mode & S_IFREG)
+#endif
 
-   #ifndef S_ISDIR
-     #define S_ISDIR(mode) (mode & S_IFDIR)
-   #endif
+#ifndef S_ISDIR
+#define S_ISDIR(mode) (mode & S_IFDIR)
+#endif
 
-   #ifndef M_PI
-   #define M_PI 3.14159265358979323846
-   #endif
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
-   #define R_OK 04			/* Needed for Windows */
+#define R_OK 04			/* Needed for Windows */
 
-   #  ifndef F_OK
-   #    define F_OK  0
-   #  endif
+#  ifndef F_OK
+#    define F_OK  0
+#  endif
 
-   #  define mkdir(dirname,mode)   _mkdir(dirname)
+#  define mkdir(dirname,mode)   _mkdir(dirname)
 
-   #  ifdef _MSC_VER
-   #    define access(path,mode)   _access(path,mode)
-   #    define chmod(path,mode)    _chmod(path,mode)
-   #    define strdup(str)         _strdup(str)
-   #  endif
+#  ifdef _MSC_VER
+#    define access(path,mode)   _access(path,mode)
+#    define chmod(path,mode)    _chmod(path,mode)
+#    define strdup(str)         _strdup(str)
+#  endif
 
 #endif
 

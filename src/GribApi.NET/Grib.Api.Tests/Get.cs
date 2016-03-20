@@ -16,6 +16,7 @@ namespace Grib.Api.Tests
     [TestFixture]
     public class Get
     {
+
         [Test]
         public void TestGetCounts ()
         {
@@ -129,7 +130,7 @@ namespace Grib.Api.Tests
         [Test]
         public void TestGetParallel ()
         {
-            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.BIN, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1, Settings.GAUSS, Settings.PACIFIC_WIND };
+            var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1, Settings.REDUCED_LATLON_GRB2, Settings.REG_GAUSSIAN_SURFACE_GRB2, Settings.PACIFIC_WIND };
 
             Parallel.ForEach(files, (path, s) =>
             {
@@ -137,7 +138,7 @@ namespace Grib.Api.Tests
                 {
                     Parallel.ForEach(file, (msg, s2) =>
                     {
-                        if (msg.ShortName == "shww") return;
+						if (!msg.HasBitmap) return;
 
                         try
                         {
@@ -151,7 +152,7 @@ namespace Grib.Api.Tests
                         {
                             Console.WriteLine(e.Message);
                             Console.WriteLine(msg.ShortName);
-                            Console.WriteLine(msg.ToString());
+                            Console.WriteLine(path);
                             Assert.IsTrue(false);
                         }
                     });
@@ -166,7 +167,7 @@ namespace Grib.Api.Tests
 			[Test]
 			public void TestIterateKeyValuePairs()
 			{
-				using (var file = new GribFile(Settings.BIN)) {
+				using (var file = new GribFile(Settings.SPHERICAL_PRESS_LVL)) {
 					Assert.IsTrue(file.MessageCount > 0);
 					Assert.IsTrue(file.First().Any());
 				}
@@ -213,6 +214,42 @@ namespace Grib.Api.Tests
 					Assert.AreEqual(t, msg.Time);
 				}
 				Assert.IsTrue(i > 2);
+			}
+		}
+
+		[Test]
+		public void X()
+		{
+			//CMC_reg_TCDC_SFC_0_ps10km_2016031100_P000.grib2
+			using (GribFile file = new GribFile(@"C:\Users\eric\Documents\Visual Studio 2013\Projects\AccessViolationTest\AccessViolationTest\data\CMC_reg_TCDC_SFC_0_ps10km_2016031100_P000.grib2")) {
+				GribMessage msg = file.First();
+				msg["latitudeWhereDxAndDyAreSpecifiedInDegrees"].AsDouble(60);
+				foreach (GeoSpatialValue val in msg.GeoSpatialValues) {
+					Assert.LessOrEqual(val.Latitude, 360 + 0.6d);
+					Assert.LessOrEqual(val.Longitude, 360 + 0.6d);
+				//	Assert.GreaterOrEqual(val.Latitude, 0);
+					Assert.GreaterOrEqual(val.Longitude, 0);
+				}
+			}
+		}
+
+		//[Test]
+		public void TestGetBox()
+		{
+			using (GribFile file = new GribFile(Settings.REG_GAUSSIAN_MODEL_GRB1)) {
+				Assert.IsTrue(file.MessageCount > 0);
+				foreach (var msg in file) {
+					var pts = msg.Box(new GeoCoordinate(60, -10), new GeoCoordinate(10, 30));
+					foreach (var val in pts.Latitudes) {
+						Assert.GreaterOrEqual(60, val);
+						Assert.LessOrEqual(10, val);
+					}
+
+					foreach (var val in pts.Longitudes) {
+						Assert.GreaterOrEqual(val, -10);
+						Assert.LessOrEqual(val, 30);
+					}
+				}
 			}
 		}
     }

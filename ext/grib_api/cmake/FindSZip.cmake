@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -11,8 +11,6 @@
 #  SZIP_FOUND - System has SZip
 #  SZIP_INCLUDE_DIRS - The SZip include directories
 #  SZIP_LIBRARIES - The libraries needed to use SZip
-
-ecbuild_add_extra_search_paths( szip )
 
 if( DEFINED SZIP_PATH )
     find_path( SZIP_INCLUDE_DIR szlib.h       PATHS ${SZIP_PATH}/include PATH_SUFFIXES szip NO_DEFAULT_PATH )

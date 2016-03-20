@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
@@ -34,7 +35,7 @@ namespace Grib.Api
         private static AutoRef _libHandle;
         private static object _initLock = new object();
 
-        /// <summary>
+		/// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
         /// to ensure the native libraries are bootstrapped and the environment setup correctly.
         /// </summary>
@@ -59,10 +60,13 @@ namespace Grib.Api
                     GribEnvironmentLoadHelper.TryFindDefinitions(out definitions))
                 {
                     DefinitionsPath = definitions;
+					SamplesPath = definitions.Remove(definitions.LastIndexOf("definitions")) + "samples";
                 }
 
 				AssertValidEnvironment();
                 _libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
+
+				GribApiNative.HookGribExceptions();
             }
         }
 
@@ -169,6 +173,25 @@ namespace Grib.Api
                 PutEnvVar("GRIB_DEFINITION_PATH", value);
             }
         }
+
+
+		/// <summary>
+		/// Gets or sets the location of grib_api's samples directory. By default, it is located  next to Grib.Api/definitions.
+		/// </summary>
+		/// <value>
+		/// The definitions path.
+		/// </value>
+		public static string SamplesPath
+		{
+			get
+			{
+				return Environment.GetEnvironmentVariable("GRIB_SAMPLES_PATH") + "";
+			}
+			set
+			{
+				PutEnvVar("GRIB_SAMPLES_PATH", value);
+			}
+		}
 
         /// <summary>
         /// Gets the grib_api version wrapped by this library.

@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -23,6 +23,18 @@ macro( debug_var VAR )
     message( STATUS "${VAR} [${${VAR}}]" )
 
 endmacro( debug_var )
+
+##############################################################################
+# macro for debugging a cmake list
+
+macro( debug_list VAR )
+
+    message( STATUS "${VAR}:" )
+    foreach( _elem ${${VAR}} )
+      message( STATUS "  ${_elem}" )
+    endforeach()
+
+endmacro( debug_list )
 
 ##############################################################################
 # macro for debugging a environment variable within cmake

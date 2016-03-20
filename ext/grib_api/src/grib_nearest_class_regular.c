@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -215,6 +215,14 @@ static int find(grib_nearest* nearest, grib_handle* h,
   return GRIB_SUCCESS;
 }
 #else
+static int is_rotated_grid(grib_handle* h)
+{
+    long is_rotated = 0;
+    int err = grib_get_long(h, "is_rotated_grid", &is_rotated);
+    if (!err && is_rotated ) return 1;
+    return 0;
+}
+
 static int find(grib_nearest* nearest, grib_handle* h,
                 double inlat, double inlon,unsigned long flags,
                 double* outlats,double* outlons,
@@ -261,6 +269,13 @@ static int find(grib_nearest* nearest, grib_handle* h,
       return ret ? ret : GRIB_GEOCALCULUS_PROBLEM;
     }
 
+    /* Support for rotated grids not yet implemented */
+    if (is_rotated_grid(h)) {
+        grib_context_log(h->context,GRIB_LOG_ERROR,
+                 "Nearest neighbour functionality is not supported for rotated grids.");
+        return GRIB_NOT_IMPLEMENTED;
+    }
+
     if ((ret =  grib_get_long(h,self->Ni,&n))!= GRIB_SUCCESS)
      return ret;
     self->lons_count=n;
@@ -282,6 +297,7 @@ static int find(grib_nearest* nearest, grib_handle* h,
     iter=grib_iterator_new(h,0,&ret);
     while(grib_iterator_next(iter,&lat,&lon,&dummy)) {
       if (olat != lat) {
+        Assert( ilat < self->lats_count );
         self->lats[ilat++]=lat;
         olat=lat;
       }
@@ -395,7 +411,6 @@ static int find(grib_nearest* nearest, grib_handle* h,
 }
 #endif
 
-
 static int destroy(grib_nearest* nearest) {
   grib_nearest_regular* self = (grib_nearest_regular*) nearest;
   if (self->lats) grib_context_free(nearest->context,self->lats);
@@ -406,4 +421,3 @@ static int destroy(grib_nearest* nearest) {
   if (self->distances) grib_context_free(nearest->context,self->distances);
   return GRIB_SUCCESS;
 }
-

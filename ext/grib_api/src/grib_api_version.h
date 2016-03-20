@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -11,11 +11,11 @@
 #ifndef grib_api_version_H
 #define grib_api_version_H
 
-#define GRIB_API_VERSION_STR      "1.14.0"
+#define GRIB_API_VERSION_STR      "1.14.5"
 
 #define GRIB_API_MAJOR_VERSION    1
 #define GRIB_API_MINOR_VERSION    14
-#define GRIB_API_REVISION_VERSION 0
+#define GRIB_API_REVISION_VERSION 5
 #define GRIB_API_VERSION (GRIB_API_MAJOR_VERSION*10000+GRIB_API_MINOR_VERSION*100+GRIB_API_REVISION_VERSION)
 
 #endif /* grib_api_version_H */

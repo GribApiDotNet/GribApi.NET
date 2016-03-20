@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -13,8 +13,6 @@
 #  AEC_FOUND - System has AEC
 #  AEC_INCLUDE_DIRS - The AEC include directories
 #  AEC_LIBRARIES - The libraries needed to use AEC
-
-ecbuild_add_extra_search_paths( aec )
 
 if( DEFINED AEC_PATH )
     find_path( AEC_INCLUDE_DIR szlib.h    PATHS ${AEC_PATH}/include PATH_SUFFIXES aec NO_DEFAULT_PATH )

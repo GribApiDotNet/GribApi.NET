@@ -1,8 +1,8 @@
-# (C) Copyright 1996-2014 ECMWF.
-# 
+# (C) Copyright 1996-2015 ECMWF.
+#
 # This software is licensed under the terms of the Apache Licence Version 2.0
-# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
-# In applying this licence, ECMWF does not waive the privileges and immunities 
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# In applying this licence, ECMWF does not waive the privileges and immunities
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
@@ -21,15 +21,18 @@ pkg_check_modules(PC_LIBPANGOCAIRO QUIET pangocairo)
 #debug_var( PC_LIBPANGOCAIRO_FOUND )
 #debug_var( PC_LIBPANGOCAIRO_VERSION )
 #debug_var( PC_LIBPANGOCAIRO_LIBRARIES )
+#debug_var( PC_LIBPANGOCAIRO_LDFLAGS )
+#debug_var( PC_LIBPANGOCAIRO_LDFLAGS_OTHER )
 #debug_var( PC_LIBPANGOCAIRO_INCLUDE_DIRS )
 
-
 if(PC_LIBPANGOCAIRO_FOUND)
+
     include(FindPackageHandleStandardArgs)
     find_package_handle_standard_args( pangocairo DEFAULT_MSG PC_LIBPANGOCAIRO_LIBRARIES PC_LIBPANGOCAIRO_INCLUDE_DIRS )
     set( PANGOCAIRO_VERSION ${PC_LIBPANGOCAIRO_VERSION} )
-    set( PANGOCAIRO_LIBRARIES ${PC_LIBPANGOCAIRO_LIBRARIES} )
+    set( PANGOCAIRO_LIBRARIES "${PC_LIBPANGOCAIRO_LDFLAGS} ${PC_LIBPANGOCAIRO_LDFLAGS_OTHER}" )
     set( PANGOCAIRO_INCLUDE_DIRS ${PC_LIBPANGOCAIRO_INCLUDE_DIRS} )
+
 else()
 
     # this is to get magics compiling on mac with macbrew

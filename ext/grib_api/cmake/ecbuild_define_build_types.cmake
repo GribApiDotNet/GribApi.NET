@@ -1,8 +1,8 @@
-# (C) Copyright 1996-2014 ECMWF.
-# 
+# (C) Copyright 1996-2015 ECMWF.
+#
 # This software is licensed under the terms of the Apache Licence Version 2.0
-# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
-# In applying this licence, ECMWF does not waive the privileges and immunities 
+# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
+# In applying this licence, ECMWF does not waive the privileges and immunities
 # granted to it by virtue of its status as an intergovernmental organisation nor
 # does it submit to any jurisdiction.
 
@@ -126,11 +126,12 @@ foreach( _btype NONE DEBUG BIT PRODUCTION RELEASE RELWITHDEBINFO )
     endif()
   endforeach()
 
-  # APPEND Linker FLAGS per language (we append because CMake typically leaves them empty)
-  foreach( _lang C CXX Fortran )
-    if( ECBUILD_${_lang}_LINK_FLAGS )
-      set( CMAKE_${_lang}_LINK_FLAGS "${CMAKE_${_lang}_LINK_FLAGS} ${ECBUILD_${_lang}_LINK_FLAGS}" )
-    endif()
-  endforeach()
+endforeach()
 
+# APPEND Linker FLAGS per language (we append because CMake typically leaves them empty)
+
+foreach( _lang C CXX Fortran )
+  if( ECBUILD_${_lang}_LINK_FLAGS )
+    set( CMAKE_${_lang}_LINK_FLAGS "${CMAKE_${_lang}_LINK_FLAGS} ${ECBUILD_${_lang}_LINK_FLAGS}" )
+  endif()
 endforeach()

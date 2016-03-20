@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -18,8 +18,6 @@ option( GRIB_API_PNG "use png with grib_api" ON )
 option( GRIB_API_JPG "use jpg with grib_api" ON )
 
 if( NOT grib_api_FOUND AND NOT NO_GRIB_API_BINARIES )
-
-    ecbuild_add_extra_search_paths( grib_api )
 
     if( GRIB_API_JPG ) # jpeg support
         

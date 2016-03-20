@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -284,7 +284,7 @@ grib_handle* grib_handle_new_from_samples ( grib_context* c, const char* name )
 	   g = grib_internal_template(c,name);
 	   if(g) return g;
      */
-    if (c->debug==-1) {
+    if (c->debug) {
         printf("GRIB_API DEBUG: grib_handle_new_from_samples '%s'\n", name);
     }
 

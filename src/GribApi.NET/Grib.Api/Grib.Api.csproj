@@ -148,6 +148,8 @@
     <Compile Include="Interop\SWIG\GribStringList.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_double.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_FILE.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_int__void.cs" />
+    <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__char_p_q_const__char_int__void.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_int_p_q_const__char__void.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_p_void_p_q_const__char__void.cs" />
     <Compile Include="Interop\SWIG\SWIGTYPE_p_f_p_q_const__grib_context_p_void_size_t__p_void.cs" />

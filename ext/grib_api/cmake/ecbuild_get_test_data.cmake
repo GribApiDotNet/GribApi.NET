@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -8,89 +8,122 @@
 
 ##############################################################################
 
-# function to download stuff
-
-function( ecbuild_download_resource _p_OUT _p_URL )
-
-    if( NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/${_p_OUT} )
-
-        find_program( CURL_PROGRAM curl )
-
-        execute_process( COMMAND ${CURL_PROGRAM} --silent --show-error --fail --output ${_p_OUT} ${_p_URL} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} RESULT_VARIABLE CMD_RESULT )
-
-        if(CMD_RESULT)
-            message(FATAL_ERROR \"Error downloading ${_p_URL}\")
-        endif()
-
-    endif()
-
-endfunction()
-
-
 # function for downloading test data
 
 function( _download_test_data _p_NAME _p_DIRNAME )
 
-    # TODO: make that 'at ecmwf'
-    #if(1)
-    #unset(ENV{no_proxy})
-    #unset(ENV{NO_PROXY})
-    #set(ENV{http_proxy} "http://proxy.ecmwf.int:3333")
-    #endif()
+  # TODO: make that 'at ecmwf'
+  #if(1)
+  #unset(ENV{no_proxy})
+  #unset(ENV{NO_PROXY})
+  #set(ENV{http_proxy} "http://proxy.ecmwf.int:3333")
+  #endif()
 
-    find_program( CURL_PROGRAM curl )
+  find_program( CURL_PROGRAM curl )
 
-    if( CURL_PROGRAM )
+  if( CURL_PROGRAM )
 
-		add_custom_command( OUTPUT ${_p_NAME}
-			COMMENT "(curl) downloading http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME}"
-			COMMAND ${CURL_PROGRAM} --silent --show-error --fail --output ${_p_NAME} http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME} )
+    add_custom_command( OUTPUT ${_p_NAME}
+      COMMENT "(curl) downloading http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME}"
+      COMMAND ${CURL_PROGRAM} --silent --show-error --fail --output ${_p_NAME}
+              http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME} )
+
+  else()
+
+    find_program( WGET_PROGRAM wget )
+
+    if( WGET_PROGRAM )
+
+      add_custom_command( OUTPUT ${_p_NAME}
+        COMMENT "(wget) downloading http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME}"
+        COMMAND ${WGET_PROGRAM} -nv -O ${_p_NAME}
+                http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME} )
 
     else()
 
-        find_program( WGET_PROGRAM wget )
-
-        if( WGET_PROGRAM )
-
-				 add_custom_command( OUTPUT ${_p_NAME}
-						COMMENT "(wget) downloading http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME}"
-						COMMAND ${WGET_PROGRAM} -nv -O ${_p_NAME} http://download.ecmwf.org/test-data/${_p_DIRNAME}/${_p_NAME} )
-
-				else()
-
-					if( WARNING_CANNOT_DOWNLOAD_TEST_DATA )
-						message( WARNING "Couldn't find curl neither wget -- cannot download test data from server.\nPlease obtain the test data by other means and pleace it in the build directory." )
-						set( WARNING_CANNOT_DOWNLOAD_TEST_DATA 1 CACHE INTERNAL "Couldn't find curl neither wget -- cannot download test data from server" )
-						mark_as_advanced( WARNING_CANNOT_DOWNLOAD_TEST_DATA )
-					endif()
-
-        endif()
+      if( WARNING_CANNOT_DOWNLOAD_TEST_DATA )
+        message( WARNING "Couldn't find curl neither wget -- cannot download test data from server.\nPlease obtain the test data by other means and pleace it in the build directory." )
+        set( WARNING_CANNOT_DOWNLOAD_TEST_DATA 1 CACHE INTERNAL "Couldn't find curl neither wget -- cannot download test data from server" )
+        mark_as_advanced( WARNING_CANNOT_DOWNLOAD_TEST_DATA )
+      endif()
 
     endif()
 
+  endif()
+
 endfunction()
 
-
 ##############################################################################
-# function for getting test data
+#.rst:
 #
-# examples:
+# ecbuild_get_test_data
+# =====================
 #
-## no check done
-#    ecbuild_get_test_data( NAME msl.grib NOCHECK )
+# Download a test data set at build time. ::
 #
-## checksum agains remote md5 file
-#    ecbuild_get_test_data( NAME msl.grib )
+#   ecbuild_get_test_data( NAME <name>
+#                          [ TARGET <target> ]
+#                          [ DIRNAME <dir> ]
+#                          [ MD5 <hash> ]
+#                          [ EXTRACT ]
+#                          [ NOCHECK ] )
 #
-## checksum agains local md5
-#    ecbuild_get_test_data( NAME msl.grib MD5 f69ca0929d1122c7878d19f32401abe9 )
+# curl or wget is required (curl is preferred if available).
 #
-## (DEPRECATED) checksum agains local sha1
-#    ecbuild_get_test_data( NAME msl.grib SHA1 5a8e8c57c510b64e31863ca47cfc3b65971089d9 )
+# Options
+# -------
+#
+# NAME : required
+#   name of the test data file
+#
+# TARGET : optional, defaults to test_data_<name>
+#   CMake target name
+#
+# DIRNAME : optional, defaults to <project>/<relative path to current dir>
+#   directory in which the test data resides
+#
+# MD5 : optional, ignored if NOCHECK is given
+#   md5 checksum of the data set to verify. If not given and NOCHECK is *not*
+#   set, download the md5 checksum and verify
+#
+# EXTRACT : optional
+#   extract the downloaded file (supported archives: tar, zip, tar.gz, tar.bz2)
+#
+# NOCHECK : optional
+#   do not verify the md5 checksum of the data file
+#
+# Usage
+# -----
+#
+# Download test data from ``http://download.ecmwf.org/test-data/<DIRNAME>/<NAME>``
+#
+# If the ``DIRNAME`` argument is not given, the project name followed by the
+# relative path from the root directory to the current directory is used.
+#
+# By default, the downloaded file is verified against an md5 checksum, either
+# given as the ``MD5`` argument or downloaded from the server otherwise. Use
+# the argument ``NOCHECK`` to disable this check.
+#
+# Examples
+# --------
+#
+# Do not verify the checksum: ::
+#
+#   ecbuild_get_test_data( NAME msl.grib NOCHECK )
+#
+# Checksum agains remote md5 file: ::
+#
+#   ecbuild_get_test_data( NAME msl.grib )
+#
+# Checksum agains local md5: ::
+#
+#   ecbuild_get_test_data( NAME msl.grib MD5 f69ca0929d1122c7878d19f32401abe9 )
+#
+##############################################################################
 
 function( ecbuild_get_test_data )
 
-    set( options NOCHECK )
+    set( options NOCHECK EXTRACT )
     set( single_value_args TARGET URL NAME DIRNAME MD5 SHA1)
     set( multi_value_args  )
 
@@ -133,38 +166,38 @@ function( ecbuild_get_test_data )
 
     if( NOT _p_NOCHECK )
 
-        find_program( MD5SUM md5sum )
-
-        if( MD5SUM AND NOT _p_MD5 AND NOT _p_SHA1) # use remote md5
+        if( NOT _p_MD5 AND NOT _p_SHA1) # use remote md5
 
 #            message( STATUS " ---  getting MD5 sum " )
 
             add_custom_command( OUTPUT ${_p_NAME}.localmd5
-                                COMMAND ${MD5SUM} -t ${_p_NAME} > ${_p_NAME}.localmd5
+                                COMMAND ${CMAKE_COMMAND} -E md5sum ${_p_NAME} > ${_p_NAME}.localmd5
                                 DEPENDS ${_p_NAME} )
 
             _download_test_data( ${_p_NAME}.md5 ${_p_DIRNAME} )
 
-            add_custom_command(	OUTPUT ${_p_NAME}.ok
-                                COMMAND diff ${_p_NAME}.md5 ${_p_NAME}.localmd5 && touch ${_p_NAME}.ok
+            add_custom_command( OUTPUT ${_p_NAME}.ok
+                                COMMAND ${CMAKE_COMMAND} -E compare_files ${_p_NAME}.md5 ${_p_NAME}.localmd5 &&
+                                        ${CMAKE_COMMAND} -E touch ${_p_NAME}.ok
                                 DEPENDS ${_p_NAME}.localmd5 ${_p_NAME}.md5 )
 
             list( APPEND _deps  ${_p_NAME}.localmd5 ${_p_NAME}.ok )
 
         endif()
 
-        if( MD5SUM AND _p_MD5 )
+        if( _p_MD5 )
 
 #            message( STATUS " ---  computing MD5 sum [${_p_MD5}]" )
 
             add_custom_command( OUTPUT ${_p_NAME}.localmd5
-                                COMMAND ${MD5SUM} -t ${_p_NAME} > ${_p_NAME}.localmd5
+                                COMMAND ${CMAKE_COMMAND} -E md5sum ${_p_NAME} > ${_p_NAME}.localmd5
                                 DEPENDS ${_p_NAME} )
 
             configure_file( "${ECBUILD_MACROS_DIR}/md5.in" ${_p_NAME}.md5 @ONLY )
 
             add_custom_command( OUTPUT ${_p_NAME}.ok
-                                COMMAND diff ${_p_NAME}.md5 ${_p_NAME}.localmd5 && touch ${_p_NAME}.ok
+                                COMMAND ${CMAKE_COMMAND} -E compare_files ${_p_NAME}.md5 ${_p_NAME}.localmd5 &&
+                                        ${CMAKE_COMMAND} -E touch ${_p_NAME}.ok
                                 DEPENDS ${_p_NAME}.localmd5 )
 
             list( APPEND _deps ${_p_NAME}.localmd5 ${_p_NAME}.ok )
@@ -194,23 +227,86 @@ function( ecbuild_get_test_data )
 
     add_custom_target( ${_p_TARGET} DEPENDS ${_deps} )
 
+    if( _p_EXTRACT )
+      ecbuild_debug("ecbuild_get_test_data: extracting ${_p_NAME} (post-build for target ${_p_TARGET}")
+      add_custom_command( TARGET ${_p_TARGET} POST_BUILD
+                          COMMAND ${CMAKE_COMMAND} -E tar xv ${_p_NAME} )
+    endif()
+
 endfunction(ecbuild_get_test_data)
 
 ##############################################################################
-# function for getting test data
+#.rst:
 #
-# examples:
+# ecbuild_get_test_multidata
+# ==========================
 #
-## no check done
-#    ecbuild_get_test_multidata( TARGET get_foobar_data NAMES foo.grib bar.grib DIRNAME test/data/dir NOCHECK )
+# Download multiple test data sets at build time. ::
 #
-## check for remote md5
-#    ecbuild_get_test_multidata( TARGET get_foobar_data NAMES foo.grib bar.grib DIRNAME test/data/dir )
+#   ecbuild_get_test_multidata( NAMES <name1> [ <name2> ... ]
+#                               TARGET <target>
+#                               [ DIRNAME <dir> ]
+#                               [ EXTRACT ]
+#                               [ NOCHECK ] )
 #
+# curl or wget is required (curl is preferred if available).
+#
+# Options
+# -------
+#
+# NAMES : required
+#   list of names of the test data files
+#
+# TARGET : optional
+#   CMake target name
+#
+# DIRNAME : optional, defaults to <project>/<relative path to current dir>
+#   directory in which the test data resides
+#
+# EXTRACT : optional
+#   extract downloaded files (supported archives: tar, zip, tar.gz, tar.bz2)
+#
+# NOCHECK : optional
+#   do not verify the md5 checksum of the data file
+#
+# Usage
+# -----
+#
+# Download test data from ``http://download.ecmwf.org/test-data/<DIRNAME>``
+# for each name given in the list of ``NAMES``. Each name may contain a
+# relative path, which is appended to ``DIRNAME`` and may be followed by an
+# md5 checksum, separated with a ``:`` (the name must not contain spaces).
+#
+# If the ``DIRNAME`` argument is not given, the project name followed by the
+# relative path from the root directory to the current directory is used.
+#
+# By default, each downloaded file is verified against an md5 checksum, either
+# given as part of the name as described above or a remote checksum downloaded
+# from the server. Use the argument ``NOCHECK`` to disable this check.
+#
+# Examples
+# --------
+#
+# Do not verify checksums: ::
+#
+#   ecbuild_get_test_multidata( TARGET get_grib_data NAMES foo.grib bar.grib
+#                               DIRNAME test/data/dir NOCHECK )
+#
+# Checksums agains remote md5 file: ::
+#
+#   ecbuild_get_test_multidata( TARGET get_grib_data NAMES foo.grib bar.grib
+#                               DIRNAME test/data/dir )
+#
+# Checksum agains local md5: ::
+#
+#   ecbuild_get_test_multidata( TARGET get_grib_data DIRNAME test/data/dir
+#                               NAMES msl.grib:f69ca0929d1122c7878d19f32401abe9 )
+#
+##############################################################################
 
 function( ecbuild_get_test_multidata )
 
-    set( options NOCHECK )
+    set( options EXTRACT NOCHECK )
     set( single_value_args TARGET DIRNAME )
     set( multi_value_args  NAMES )
 
@@ -233,6 +329,10 @@ function( ecbuild_get_test_multidata )
 #    debug_var( _p_TARGET )
 #    debug_var( _p_NAME )
 #    debug_var( _p_DIRNAME )
+
+    if( _p_EXTRACT )
+        set( _extract EXTRACT )
+    endif()
 
     if( _p_NOCHECK )
         set( _nocheck NOCHECK )
@@ -258,12 +358,11 @@ endfunction()\n\n" )
         get_filename_component( _dir  ${_f} PATH )
 
         list( APPEND _path_comps ${_p_DIRNAME} ${_dir} )
-
         join( _path_comps "/" _dirname )
-
         if( _dirname )
             set( _dirname DIRNAME ${_dirname} )
         endif()
+        unset( _path_comps )
 
         string( REPLACE "." "_" _name "${_file}" )
         string( REGEX MATCH ":.*"  _md5  "${_d}" )
@@ -281,14 +380,17 @@ endfunction()\n\n" )
 
         ecbuild_get_test_data(
             TARGET __get_data_${_p_TARGET}_${_name}
-            NAME ${_file} ${_dirname} ${_md5} ${_nocheck} )
+            NAME ${_file} ${_dirname} ${_md5} ${_extract} ${_nocheck} )
 
+        # The option /fast disables dependency checking on a target, see
+        # https://cmake.org/Wiki/CMake_FAQ#Is_there_a_way_to_skip_checking_of_dependent_libraries_when_compiling.3F
         file( APPEND ${_script}
-            "exec_check( ${CMAKE_COMMAND} --build ${CMAKE_BINARY_DIR} --target __get_data_${_p_TARGET}_${_name} )\n" )
+            "exec_check( \"${CMAKE_COMMAND}\" --build \"${CMAKE_BINARY_DIR}\" --target __get_data_${_p_TARGET}_${_name}/fast )\n" )
 
     endforeach()
 
-    add_test(  NAME ${_p_TARGET} COMMAND ${CMAKE_COMMAND} -P ${_script} )
+    if( ENABLE_TESTS )
+      add_test(  NAME ${_p_TARGET} COMMAND ${CMAKE_COMMAND} -P ${_script} )
+    endif()
 
 endfunction(ecbuild_get_test_multidata)
-

@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -73,19 +73,47 @@ macro( lookup_omp_flags )
 
 endmacro()
 
+##############################################################################
+#.rst:
+#
+# ecbuild_find_omp
+# ================
+#
+# Find OpenMP. ::
+#
+#   ecbuild_find_omp( [ COMPONENTS <component1> [ <component2> ... ] ]
+#                     [ REQUIRED ]
+#                     [ STUBS ] )
+#
+# Options
+# -------
+#
+# COMPONENTS : optional, defaults to C
+#   list of required languages bindings
+#
+# REQUIRED : optional
+#   fail if OpenMP was not found
+#
+# STUBS : optional
+#   search for OpenMP stubs
+#
+# Output variables
+# ----------------
+#
+# The following CMake variables are set if OpenMP was found:
+#
+# :OMP_FOUND: OpenMP was found
+#
+# For each language listed in COMPONENTS, the following variables are set:
+#
+# :OMP_<LANG>_FOUND: OpenMP bindings for LANG were found
+# :OMP_<LANG>_FLAGS: OpenMP compiler flags for LANG
+#
+# If the STUBS option was given, all variables are also set with the OMPSTUBS
+# instead of the OMP prefix.
+#
+##############################################################################
 
-# MACRO ecbuild_find_omp
-#
-# ecbuild_find_omp( COMPONENTS C CXX Fortran
-#                   STUBS )
-# Sets following variables
-#   - OMP_FOUND
-#   - OMP_<lang>_FOUND
-#   - OMP_<lang>_FLAGS
-#
-# If STUBS are available, above flags will still hold TRUE,
-# as OMP code will just work.
-#
 macro( ecbuild_find_omp )
 
   set( options REQUIRED STUBS )
@@ -166,7 +194,15 @@ macro( ecbuild_find_omp )
 endmacro( ecbuild_find_omp )
 
 ##############################################################################
-# macro for enabling openmp
+#.rst:
+#
+# ecbuild_enable_omp
+# ==================
+#
+# Find OpenMP for C, C++ and Fortran and set the compiler flags for each
+# language for which OpenMP support was detected.
+#
+##############################################################################
 
 macro( ecbuild_enable_omp )
 
@@ -187,7 +223,15 @@ macro( ecbuild_enable_omp )
 endmacro( ecbuild_enable_omp )
 
 ##############################################################################
-# macro for enabling openmp stubs
+#.rst:
+#
+# ecbuild_enable_ompstubs
+# =======================
+#
+# Find OpenMP stubs for C, C++ and Fortran and set the compiler flags for each
+# language for which OpenMP stubs were detected.
+#
+##############################################################################
 
 macro( ecbuild_enable_ompstubs )
 

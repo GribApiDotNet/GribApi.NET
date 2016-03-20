@@ -7,7 +7,48 @@
 # does it submit to any jurisdiction.
 
 ##############################################################################
-# macro that runs the given Fortran code and returns its output
+#.rst:
+#
+# ecbuild_check_fortran_source_return
+# ===================================
+#
+# Compile and run a given Fortran code and return its output. ::
+#
+#   ecbuild_check_fortran_source_return( <source>
+#                                        VAR <name>
+#                                        OUTPUT <name>
+#                                        [ INCLUDES <path1> [ <path2> ... ] ]
+#                                        [ LIBS <library1> [ <library2> ... ] ]
+#                                        [ DEFINITIONS <def1> [ <def2> ... ] ] )
+#
+# Options
+# -------
+#
+# VAR : required
+#   name of the check and name of the CMake variable to write result to
+#
+# OUTPUT : required
+#   name of CMake variable to write the output to
+#
+# INCLUDES : optional
+#   list of paths to add to include directories
+#
+# LIBS : optional
+#   list of libraries to link against (CMake targets or external libraries)
+#
+# DEFINITIONS : optional
+#   list of definitions to add to preprocessor defines
+#
+# Usage
+# -----
+#
+# This will write the given source to a .f file and compile and run it with
+# try_run. If successful, ``${VAR}`` is set to 1 and ``${OUTPUT}`` is set to
+# the output of the successful run in the CMake cache.
+#
+# The check will not run if ``${VAR}`` is defined (e.g. from ecBuild cache).
+#
+##############################################################################
 
 macro( ecbuild_check_fortran_source_return SOURCE )
 
@@ -114,10 +155,27 @@ macro( ecbuild_check_fortran_source_return SOURCE )
 endmacro()
 
 ##############################################################################
-# macro that only adds a Fortran flag if compiler supports it
+#.rst:
+#
+# ecbuild_add_fortran_flags
+# =========================
+#
+# Add Fortran compiler flags to CMAKE_Fortran_FLAGS only if supported by the
+# compiler. ::
+#
+#   ecbuild_add_fortran_flags( <flag1> [ <flag2> ... ] [ BUILD <build> ] )
+#
+# Options
+# -------
+#
+# BUILD : optional
+#   add flags to ``CMAKE_Fortran_FLAGS_<build>`` instead of
+#   ``CMAKE_Fortran_FLAGS``
+#
+##############################################################################
 
 include( CheckFortranCompilerFlag )
-macro( cmake_add_fortran_flags m_fortran_flags )
+macro( ecbuild_add_fortran_flags m_fortran_flags )
 
   set( _flags ${m_fortran_flags} )
 
@@ -155,3 +213,7 @@ macro( cmake_add_fortran_flags m_fortran_flags )
 
 endmacro()
 
+macro( cmake_add_fortran_flags m_fortran_flags )
+  message( DEPRECATION " cmake_add_fortran_flags is deprecated, use ecbuild_add_fortran_flags instead." )
+  ecbuild_add_fortran_flags( ${m_fortran_flags} )
+endmacro()

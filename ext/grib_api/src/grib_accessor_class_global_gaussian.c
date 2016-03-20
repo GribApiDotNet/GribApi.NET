@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -278,6 +278,7 @@ static int pack_long(grib_accessor* a, const long* val, size_t *len)
     double* lats;
     double ddi,dlonlast;
     double dfactor,dNi;
+    long plpresent=0;
     grib_context* c=a->parent->h->context;
 
     if (*val == 0) return ret;
@@ -310,6 +311,30 @@ static int pack_long(grib_accessor* a, const long* val, size_t *len)
     }
     if((ret = grib_get_gaussian_latitudes(N, lats)) != GRIB_SUCCESS)
         return ret;
+
+    if((ret = grib_get_long_internal(a->parent->h, self->plpresent,&plpresent)) != GRIB_SUCCESS)
+        return ret;
+
+    /* GRIB-854: For octahedral grids, get max of pl array */
+    if (plpresent) {
+        size_t plsize=0, i=0;
+        long* pl=NULL; /* pl array */
+        long max_pl=0; /* max. element of pl array */
+
+        if((ret = grib_get_size(a->parent->h,self->pl,&plsize)) != GRIB_SUCCESS)
+            return ret;
+        Assert(plsize);
+        pl=(long*)grib_context_malloc_clear(c,sizeof(long)*plsize);
+        grib_get_long_array_internal(a->parent->h,self->pl,pl, &plsize);
+
+        max_pl = pl[0];
+        for (i=1; i<plsize; i++) {
+            Assert( pl[i] > 0 );
+            if (pl[i] > max_pl) max_pl = pl[i];
+        }
+        grib_context_free(c, pl);
+        Ni = max_pl;
+    }
 
     /* rounding */
     latfirst=(long)(lats[0]*factor+0.5);

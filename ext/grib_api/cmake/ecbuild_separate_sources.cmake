@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 #
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -7,7 +7,36 @@
 # does it submit to any jurisdiction.
 
 ##############################################################################
-# macro for separating sources sccording to language
+#.rst:
+#
+# ecbuild_separate_sources
+# ========================
+#
+# Separate a given list of sources according to language. ::
+#
+#   ecbuild_separate_sources( TARGET <name>
+#                             SOURCES <source1> [ <source2> ... ] )
+#
+# Options
+# -------
+#
+# TARGET : required
+#   base name for the CMake output variables to set
+#
+# SOURCES : required
+#   list of source files to separate
+#
+# Output variables
+# ----------------
+#
+# If any file of the following group of extensions is present in the list of
+# sources, the corresponding CMake variable is set:
+#
+# :<target>_h_srcs:   list of sources with extension .h, .hxx, .hh, .hpp, .H
+# :<target>_c_srcs:   list of sources with extension .c
+# :<target>_cxx_srcs: list of sources with extension .cc, .cxx, .cpp, .C
+# :<target>_f_srcs:   list of sources with extension .f, .F, .for, f77, .f90, .f95
+#
 ##############################################################################
 
 macro( ecbuild_separate_sources )
@@ -60,4 +89,3 @@ macro( ecbuild_separate_sources )
 #    debug_var( ${_PAR_TARGET}_f_srcs )
 
 endmacro( ecbuild_separate_sources  )
-

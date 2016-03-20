@@ -9,16 +9,14 @@
 # - Try to find ViennaCL
 # Once done this will define
 #
-#  VIENNACL_FOUND         - system has Intel MKL
-#  VIENNACL_INCLUDE_DIRS  - the MKL include directories
+#  VIENNACL_FOUND         - system has ViennaCL
+#  VIENNACL_INCLUDE_DIRS  - the ViennaCL include directories
 #
 # The following paths will be searched with priority if set in CMake or env
 #
 #  VIENNACL_PATH          - prefix path of the ViennaCL installation
 #
 # ViennaCL is header only, so there are no libraries to be found
-
-ecbuild_add_extra_search_paths( viennacl )
 
 # Search with priority for VIENNACL_PATH if given as CMake or env var
 find_path(VIENNACL_INCLUDE_DIR viennacl/version.hpp

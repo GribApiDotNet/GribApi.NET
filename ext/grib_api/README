@@ -1,41 +1,39 @@
-grib_api is the ECMWF encoding/decoding software for GRIB edition 1 and 2.
+GRIB API is the ECMWF encoding/decoding software for GRIB edition 1 and 2.
 
-Documentation in html format can be found in the html directory of the 
-distribution directory.
+Documentation can be found here:
+    https://software.ecmwf.int/wiki/display/GRIB/Home
 
-INSTALLATION 
 
-Standard Installation
-   1. Download grib_api from https://software.ecmwf.int/wiki/display/GRIB/Releases
-   2. Unpack distribution:
+INSTALLATION
+-------------
 
-        > gunzip grib_api-X.tar.gz
-        > tar xf grib_api-X.tar
+1. Download GRIB API from https://software.ecmwf.int/wiki/display/GRIB/Releases
 
-   3. Create the directory where to install grib_api say /usr/local/grib_api_dir
+2. Unpack distribution:
+   > tar -xzf grib_api-x.y.z-Source.tar.gz
 
-        > mkdir /usr/local/grib_api_dir
+3. Create a separate directory for the build:
+   > mkdir build
+   > cd build
 
-   4. Run the configure in the grib_api-X
+4. Run cmake pointing to the source and specify the installation location:
+   > cmake  ../grib_api-x.y.z-Source -DCMAKE_INSTALL_PREFIX=/path/to/where/you/install/gribapi
 
-        > cd grib_api-X
-        > ./configure --prefix=/usr/local/grib_api_dir 
+5. Compile, test and install:
+   > make
+   > ctest
+   > make install
 
-      Note that the prefix must be the absolute path of the
-	  directory created.
 
-   5. make, check and install
+For more details, please see:
+https://software.ecmwf.int/wiki/display/GRIB/GRIB+API+CMake+installation
 
-        > make
-        ...
-        > make check
-        ...
-        > make install
-        ...
+
 
 COPYRIGHT AND LICENSE
+------------------------
 
-Copyright 2005-2015 ECMWF.
+Copyright 2005-2016 ECMWF.
 
 This software is licensed under the terms of the Apache Licence Version 2.0
 which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.

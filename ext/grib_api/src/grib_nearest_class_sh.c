@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -185,17 +185,17 @@ static void grib_invtrans_legendre(int L,double x,
 
   if (fabs(x) > 1.0) {
     printf("grib_legendreP: invalid x=%g must be abs(x)>0\n",x);
-    exit(1);
+    grib_exit(1);
   }
   if (L<0) {
     printf("grib_legendreP: invalid L=%d must be >0\n",L);
-    exit(1);
+    grib_exit(1);
   }
 
   pP=(double*)malloc(sizeof(double)*(L+1));
   if (!pP) {
     printf("unable to allocate %d bytes\n",(int)sizeof(double)*(L+1));
-    exit(1);
+    grib_exit(1);
   }
 
   y2=(1.0-x*x); fx=1; p0=1; oP=pP; pRI=RI;

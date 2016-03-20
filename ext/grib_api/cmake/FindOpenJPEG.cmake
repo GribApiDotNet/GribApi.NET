@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -16,12 +16,11 @@
 #  OPENJPEG_LIBRARY, where to find the OpenJPEG library.
 #  OPENJPEG_INCLUDE_DIR, where to find the openjpeg.h header
 
-ecbuild_add_extra_search_paths( openjpg )
-
 IF( NOT DEFINED OPENJPEG_PATH AND NOT "$ENV{OPENJPEG_PATH}" STREQUAL "" )
   SET( OPENJPEG_PATH "$ENV{OPENJPEG_PATH}" )
 ENDIF()
 
+# TODO: This only works for OpenJPEG v1.x.y and not for v2 which has a different API, library name etc
 if( DEFINED OPENJPEG_PATH )
         find_path(OPENJPEG_INCLUDE_DIR openjpeg.h PATHS ${OPENJPEG_PATH}/include PATH_SUFFIXES openjpeg  NO_DEFAULT_PATH)
         find_library(OPENJPEG_LIBRARY  openjpeg   PATHS ${OPENJPEG_PATH}/lib     PATH_SUFFIXES openjpeg  NO_DEFAULT_PATH)

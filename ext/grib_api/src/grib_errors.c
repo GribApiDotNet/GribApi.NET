@@ -99,16 +99,44 @@ void grib_check(const char* call,const char*  file,int line,int e,const char* ms
 		} else {
 			grib_context_log(c,GRIB_LOG_ERROR,"%s",grib_get_error_message(e));
 		}
-        exit(e);
+        grib_exit(e);
     }
 }
 
-void grib_fail(const char* expr,const char* file,int line) {
-   fprintf(stderr,"%s at line %d: assertion failure Assert(%s)\n",file,line,expr);
-   if (!getenv("GRIB_API_NO_ABORT"))
-   {
-	   abort();
-   }
+grib_fail_proc _grib_fail = NULL;
 
+void grib_set_fail_proc(grib_fail_proc p) 
+{
+	_grib_fail = p;
 }
 
+void grib_fail_default(const char* expr, const char* file, int line) 
+{
+	fprintf(stderr, "%s at line %d: assertion failure Assert(%s)\n", file, line, expr);
+	abort();
+}
+
+void grib_fail(const char* expr,const char* file,int line)
+{
+	if (_grib_fail) {
+		_grib_fail(expr, file, line);
+	} else {
+		grib_fail_default(expr, file, line);
+	}
+}
+
+grib_exit_proc _grib_exit = NULL;
+
+void grib_set_exit_proc(grib_exit_proc p)
+{
+	_grib_exit = p;
+}
+
+void grib_exit(int code)
+{
+	if (_grib_exit) {
+		_grib_exit(code);
+	} else {
+		exit(code);
+	}
+}

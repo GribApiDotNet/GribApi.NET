@@ -22,8 +22,9 @@
 # NETCDF_USE_STATIC_LIBRARIES variable is set before the call to find_package.
 #
 # To provide the module with a hint about where to find your NETCDF installation,
-# you can set the environment variable NETCDF_ROOT.  The Find module will then
-# look in this path when searching for NETCDF executables, paths, and libraries.
+# set the CMake or environment variable NETCDF_ROOT, NETCDF_DIR, NETCDF_PATH or
+# NETCDF4_DIR. The Find module will then look in this path when searching for
+# NETCDF executables, paths, and libraries.
 #
 # In addition to finding the includes and libraries required to compile an NETCDF
 # client application, this module also makes an effort to find tools that come
@@ -90,11 +91,12 @@ endmacro()
 # try to find the NETCDF wrapper compilers
 find_program( NETCDF_CONFIG_EXECUTABLE
     NAMES nc-config
-    HINTS ENV NETCDF_ROOT
-    PATHS
+    HINTS ${NETCDF_ROOT} ${NETCDF_DIR} ${NETCDF_PATH} ${NETCDF4_DIR}
+          ENV NETCDF_ROOT ENV NETCDF_DIR ENV NETCDF_PATH ENV NETCDF4_DIR
     PATH_SUFFIXES bin Bin
     DOC "NETCDF CONFIG PROGRAM.  Used only to detect NETCDF compile flags." )
 mark_as_advanced( NETCDF_CONFIG_EXECUTABLE )
+ecbuild_debug("FindNetCDF4: nc-config executable = ${NETCDF_CONFIG_EXECUTABLE}")
 
 set(output "no")
 _NETCDF_CONFIG (--has-hdf5 output return)
@@ -154,16 +156,15 @@ else()
     set( NETCDF_REQUIRED netcdf.h netcdfcpp.h netcdf.mod typesizes.mod netcdf netcdff netcdf_c++)
 
     foreach( LANGUAGE ${NETCDF_LANGUAGE_BINDINGS} )
-      # debug_var(LANGUAGE)
+        ecbuild_debug("FindNetCDF4: looking for ${LANGUAGE} language bindings")
         set( NETCDF_${LANGUAGE}_FOUND 1 ) # disable this in following if necessary
       
         # find the NETCDF includes
         foreach( INC ${NETCDF_${LANGUAGE}_INCLUDE_NAMES} )
           find_path( NETCDF_${INC}_INCLUDE_DIR ${INC}
-              HINTS
-                  ${NETCDF_${LANGUAGE}_INCLUDE_FLAGS}
-                      ENV NETCDF_ROOT
-              PATHS
+              HINTS ${NETCDF_${LANGUAGE}_INCLUDE_FLAGS}
+                    ${NETCDF_ROOT} ${NETCDF_DIR} ${NETCDF_PATH} ${NETCDF4_DIR}
+                    ENV NETCDF_ROOT ENV NETCDF_DIR ENV NETCDF_PATH ENV NETCDF4_DIR
               PATH_SUFFIXES
                   include
                   Include
@@ -203,14 +204,14 @@ else()
             find_library( NETCDF_${LIB}_LIBRARY_DEBUG
                 NAMES ${THIS_LIBRARY_SEARCH_DEBUG}
                 HINTS ${NETCDF_${LANGUAGE}_LIBRARY_DIRS}
-                ENV NETCDF_ROOT
-                PATHS
+                      ${NETCDF_ROOT} ${NETCDF_DIR} ${NETCDF_PATH} ${NETCDF4_DIR}
+                      ENV NETCDF_ROOT ENV NETCDF_DIR ENV NETCDF_PATH ENV NETCDF4_DIR
                 PATH_SUFFIXES lib64 Lib64 lib Lib)
             find_library( NETCDF_${LIB}_LIBRARY_RELEASE
                 NAMES ${THIS_LIBRARY_SEARCH_RELEASE}
                 HINTS ${NETCDF_${LANGUAGE}_LIBRARY_DIRS}
-                ENV NETCDF_ROOT
-                PATHS
+                      ${NETCDF_ROOT} ${NETCDF_DIR} ${NETCDF_PATH} ${NETCDF4_DIR}
+                      ENV NETCDF_ROOT ENV NETCDF_DIR ENV NETCDF_PATH ENV NETCDF4_DIR
                 PATH_SUFFIXES lib64 Lib64 lib Lib )
             select_library_configurations( NETCDF_${LIB} )
             # even though we adjusted the individual library names in
@@ -231,7 +232,6 @@ else()
           endif()
           if (NETCDF_${LIB}_LIBRARY_RELEASE OR NETCDF_${LIB}_LIBRARY_DEBUG )
           else()
-            # message( STATUS "\"${LIB}\" is not found." )
             list( FIND NETCDF_REQUIRED ${LIB} location )
             if( ${location} EQUAL -1 )
             else()
@@ -250,8 +250,8 @@ else()
         # Append the libraries for this language binding to the list of all
         # required libraries.
         
-        # debug_var( NETCDF_${LANGUAGE}_FOUND )
         if( NETCDF_${LANGUAGE}_FOUND )
+            ecbuild_debug( "FindNetCDF4: ${LANGUAGE} language bindings found" )
             if( CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE )
                 list( APPEND NETCDF_${LANGUAGE}_LIBRARIES 
                     debug ${NETCDF_${LANGUAGE}_LIBRARIES_DEBUG}

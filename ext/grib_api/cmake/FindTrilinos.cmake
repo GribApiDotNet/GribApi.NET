@@ -1,4 +1,4 @@
-# (C) Copyright 1996-2014 ECMWF.
+# (C) Copyright 1996-2015 ECMWF.
 # 
 # This software is licensed under the terms of the Apache Licence Version 2.0
 # which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
@@ -16,9 +16,6 @@
 #   TRILINOS_FOUND
 
 # Try to find Trilinos using Trilinos recommendations
-
-
-ecbuild_add_extra_search_paths( trilinos )
 
 if( DEFINED $ENV{TRILINOS_PATH} )
     find_package(Trilinos PATHS $ENV{TRILINOS_PATH}/lib/cmake/Trilinos $ENV{TRILINOS_PATH}/include )

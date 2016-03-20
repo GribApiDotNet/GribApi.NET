@@ -15,8 +15,6 @@
 # Copyright (c) 2009 Benoit Jacob <jacob.benoit.1@gmail.com>
 # Redistribution and use is allowed according to the terms of the 2-clause BSD license.
 
-ecbuild_add_extra_search_paths( eigen )
-
 if(NOT Eigen3_FIND_VERSION)
   if(NOT Eigen3_FIND_VERSION_MAJOR)
     set(Eigen3_FIND_VERSION_MAJOR 2)
@@ -76,7 +74,13 @@ else(EIGEN3_INCLUDE_DIR)
       ${EIGEN_PATH}/include
       ${EIGEN_DIR}/include
       ${EIGEN_ROOT}/include
-      PATH_SUFFIXES eigen3 eigen
+      ENV EIGEN3_PATH
+      ENV EIGEN3_DIR
+      ENV EIGEN3_ROOT
+      ENV EIGEN_PATH
+      ENV EIGEN_DIR
+      ENV EIGEN_ROOT
+      PATH_SUFFIXES eigen3 eigen include/eigen3 include/eigen
     )
 
   if(EIGEN3_INCLUDE_DIR)

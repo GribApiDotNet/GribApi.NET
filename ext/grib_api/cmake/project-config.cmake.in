@@ -50,6 +50,9 @@ foreach( _f ${@PNAME@_FEATURES} )
 	set( @PNAME@_HAVE_${_f} 1 )
 endforeach()
 
+# Has this configuration been exported from a build tree?
+set( @PNAME@_IS_BUILD_DIR_EXPORT @_is_build_dir_export@ )
+
 if( EXISTS ${@PNAME@_CMAKE_DIR}/@CONF_IMPORT_FILE@ )
   set( @PNAME@_IMPORT_FILE "${@PNAME@_CMAKE_DIR}/@CONF_IMPORT_FILE@" )
   include( ${@PNAME@_IMPORT_FILE} )
@@ -59,9 +62,7 @@ endif()
 
 if( NOT @PROJECT_NAME@_BINARY_DIR )
 
-	set( IS_BUILD_DIR_EXPORT @_is_build_dir_export@ )
-
-	if( IS_BUILD_DIR_EXPORT )
+  if( @PNAME@_IS_BUILD_DIR_EXPORT )
 		include( "@TOP_PROJECT_TARGETS_FILE@" OPTIONAL )
 	else()
 		include( "${@PNAME@_CMAKE_DIR}/@CMAKE_PROJECT_NAME@-targets.cmake" )
@@ -81,7 +82,7 @@ mark_as_advanced( @PNAME@_IMPORT_FILE )
 # set @PROJECT_NAME@_BASE_DIR for final installations or build directories
 
 if( NOT @PROJECT_NAME@ )
-	if( @_is_build_dir_export@ )
+	if( @PNAME@_IS_BUILD_DIR_EXPORT )
 		set( @PROJECT_NAME@_BASE_DIR @CMAKE_BINARY_DIR@ )
 	else()
 		set( @PROJECT_NAME@_BASE_DIR @CMAKE_INSTALL_PREFIX@ )

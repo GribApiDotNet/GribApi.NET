@@ -1,5 +1,5 @@
 /*
- * Copyright 2005-2015 ECMWF.
+ * Copyright 2005-2016 ECMWF.
  *
  * This software is licensed under the terms of the Apache Licence Version 2.0
  * which can be obtained at http://www.apache.org/licenses/LICENSE-2.0.
@@ -23,7 +23,9 @@ int grib_nearest_find(
         double* outlats,double* outlons,
         double* values, double* distances, int* indexes, size_t *len)
 {
-    grib_nearest_class *c = nearest->cclass;
+    grib_nearest_class *c = NULL;
+    Assert(nearest);
+    c = nearest->cclass;
     Assert( flags <= (GRIB_NEAREST_SAME_GRID|GRIB_NEAREST_SAME_DATA|GRIB_NEAREST_SAME_POINT) );
 
     while(c)
@@ -73,7 +75,9 @@ int grib_nearest_init(grib_nearest* i, grib_handle *h, grib_arguments* args)
 
 int grib_nearest_delete(grib_nearest *i)
 {
-    grib_nearest_class *c = i->cclass;
+    grib_nearest_class *c = NULL;
+    Assert(i);
+    c = i->cclass;
     while(c)
     {
         grib_nearest_class *s = c->super ? *(c->super) : NULL;

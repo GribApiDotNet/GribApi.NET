@@ -7,11 +7,13 @@
 #
 # Define PROJ4_MIN_VERSION for which version desired.
 
-if( NOT PROJ4_PATH AND NOT "$ENV{PROJ4_PATH}" STREQUAL "" )
-    set( PROJ4_PATH "$ENV{PROJ4_PATH}" )
+if( NOT PROJ4_PATH )
+    if ( NOT "$ENV{PROJ4_PATH}" STREQUAL "" )
+        set( PROJ4_PATH "$ENV{PROJ4_PATH}" )
+    elseif ( NOT "$ENV{PROJ4_DIR}" STREQUAL "" )
+        set( PROJ4_PATH "$ENV{PROJ4_DIR}" )
+    endif()
 endif()
-
-ecbuild_add_extra_search_paths( proj4 )
 
 if( NOT PROJ4_PATH )
 
