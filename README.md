@@ -156,7 +156,6 @@ For more examples, checkout the tests.
 ## Building
 The current build is only designed for Windows and Visual Studio. I am eager to get it converted to CMake and make it cross-platform. Even a consistent build using make under msys2 would be great. I'd love some help doing this. :)
 
-<<<<<<< HEAD
 First, install the Nuget packages (this assumes you have nuget on PATH):
 ```shell
 nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
@@ -172,7 +171,6 @@ nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
 
 Install [NUnit 2.6.4](http://www.nunit.org/). Then run:
 ```shell
->>>>>>> cf15e48d61bfb2d6421c541d0d330df02a317332
 build\build_gribapi.cmd [build|rebuild] [VS version, 11|12|14] [Debug|Release] [nuget package version]
 ```
 
