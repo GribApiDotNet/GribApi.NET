@@ -162,14 +162,6 @@ First, install the Nuget packages (this assumes you have nuget on PATH):
 nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
 ```
 
-Make `NUnit 2.6.4` available on PATH. Then run:
-```shell
-=======
-First, install the Nuget packages:
-```shell
-nuget install NUnit -Version 2.6.4 -O src\GribApi.NET\packages\
-```
-
 Install [NUnit 2.6.4](http://www.nunit.org/). Then run:
 ```shell
 build\build_gribapi.cmd [build|rebuild] [VS version, 11|12|14] [Debug|Release] [nuget package version]
