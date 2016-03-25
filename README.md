@@ -10,6 +10,7 @@ Special thanks to John L'Heureux, Meteorological Data Analyst at aWhere, Inc., f
 #### Features
 * Read and write GRIB 1 and 2 messages
 * Easy to understand API
+* Supports x86, x64, and "All CPU"
 * Thread safe
 * JPEG and PNG compression support
 * Multi-field support
