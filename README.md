@@ -15,6 +15,9 @@ Special thanks to John L'Heureux, Meteorological Data Analyst at aWhere, Inc., f
 * JPEG and PNG compression support
 * Multi-field support
 
+#### GRIB Tools
+You can also use grib_api via CLI. Checkout the GRIB tools package on [Chocolatey](https://chocolatey.org/packages/grib-tools). At the very least, you'll find it very helpful for debugging.
+
 --------------------------
 
 ## Docs
