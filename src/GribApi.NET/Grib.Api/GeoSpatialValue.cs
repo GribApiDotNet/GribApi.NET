@@ -18,7 +18,7 @@ namespace Grib.Api
     /// <summary>
     /// A GRIB grid value with coordinates.
     /// </summary>
-    public struct GeoSpatialValue : IGeoCoordinate
+    public struct GeoSpatialValue : IGeoCoordinate, IEquatable<GeoSpatialValue>
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
@@ -44,6 +44,29 @@ namespace Grib.Api
                 (this.Longitude == that.Longitude) && 
                 (this.Value == that.Value);
         }
+
+          /// <summary>
+          /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+          /// </summary>
+          /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+          /// <returns>
+          ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+          /// </returns>
+          public override bool Equals (object obj)
+          {
+              return (obj is GeoSpatialValue) && this.Equals((GeoSpatialValue)obj);
+          }
+ 
+          /// <summary>
+          /// Returns a hash code for this instance.
+          /// </summary>
+          /// <returns>
+          /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+          /// </returns>
+          public override int GetHashCode()
+          {
+              return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode() ^ this.Value.GetHashCode();
+          }
 
         /// <summary>
         /// Implements the operator ==.
