@@ -23,6 +23,7 @@ namespace Grib.Api.Interop
     /// <summary>
     /// Bitwise OR-able bitflags used to filter message keys when iterating.
     /// </summary>
+    [Flags]
     public enum KeyFilters : uint
     {
         All = 0,
