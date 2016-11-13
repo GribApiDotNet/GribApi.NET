@@ -103,8 +103,6 @@ namespace Grib.Api
         {
             AssertTypeSafe(GribValueType.Bytes);
 
-            if (!IsDefined) { return new byte[0]; }
-
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
             byte[] bytes = new byte[sz];
@@ -118,7 +116,7 @@ namespace Grib.Api
         /// Sets the key's value in bytes.
         /// </summary>
         /// <param name="newBytes">The new bytes.</param>
-        public void AsBytes(byte[] newBytes)
+        public void AsBytes (byte[] newBytes)
         {
             AssertTypeSafe(GribValueType.Bytes);
 
@@ -133,8 +131,6 @@ namespace Grib.Api
         public virtual int AsInt ()
         {
             AssertTypeSafe(GribValueType.Int);
-
-            if (!IsDefined) { return 0; }
 
             int val;
 
@@ -158,12 +154,10 @@ namespace Grib.Api
         /// Gets a copy of the key's array value. Changing the values of this array does not affect the owning message.
         /// Call ::AsXArray(alteredArray) to set new values.
         /// </summary>
-        /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns empty array.</returns>
+        /// <returns>Returns a *copy* of the key's array.</returns>
         public virtual int[] AsIntArray ()
         {
             AssertTypeSafe(GribValueType.IntArray);
-
-            if (!IsDefined) { return new int[0]; }
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -196,8 +190,6 @@ namespace Grib.Api
 
             AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
-            if (!IsDefined) { return Double.NaN; }
-
             double val;
 
             GribApiProxy.GribGetDouble(_handle, valueKey, out val);
@@ -223,12 +215,10 @@ namespace Grib.Api
         /// Gets a copy of the key's array value. Changing the values of this array does not affect the owning message.
         /// Call ::AsXArray(alteredArray) to set new values.
         /// </summary>
-        /// <returns>If the value is defined, returns a *copy* of the key's array. Otherwise returns 0-length array.</returns>
+        /// <returns>Returns a *copy* of the key's array.</returns>
         public virtual double[] AsDoubleArray ()
         {
             AssertTypeSafe(GribValueType.DoubleArray);
-
-            if (!IsDefined) { return new double[0]; }
 
             SizeT sz = 0;
             GribApiProxy.GribGetSize(_handle, Key, ref sz);
@@ -413,25 +403,25 @@ namespace Grib.Api
         /// <summary>
         /// Tests for type safety when accessing this value.
         /// </summary>
-        /// <param name="expectedType">The expected type.</param>
-        private void AssertTypeSafe (GribValueType expectedType)
+        /// <param name="requestedType">The expected type.</param>
+        private void AssertTypeSafe (GribValueType requestedType)
         {
-            GribValue.AssertTypeSafe(Key, expectedType, NativeType);
+            GribValue.AssertTypeSafe(Key, requestedType, NativeType);
         }
 
         /// <summary>
         /// Tests for type safety when accessing a GRIB value.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <param name="expectedType">The expected type.</param>
+        /// <param name="requestedType">The requested type.</param>
         /// <param name="actualType">The actual type.</param>
         /// <exception cref="GribValueTypeException"></exception>
-        private static void AssertTypeSafe(string key, GribValueType expectedType, GribValueType actualType)
+        private static void AssertTypeSafe(string key, GribValueType requestedType, GribValueType actualType)
         {
-            if (expectedType != actualType)
+            if (requestedType != actualType)
             {
                 throw new GribValueTypeException(String.Format("Invalid type conversion. Key {0} is GRIB type {1}",
-                                                                key, expectedType.AsString()));
+                                                                key, actualType.AsString()));
             }
         }
     }

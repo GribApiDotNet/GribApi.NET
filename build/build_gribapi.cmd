@@ -128,7 +128,7 @@ if ERRORLEVEL 1 (
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -138,7 +138,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -148,7 +148,7 @@ if ERRORLEVEL 1 (
 )
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
 
 @ECHO OFF
 if ERRORLEVEL 1 (

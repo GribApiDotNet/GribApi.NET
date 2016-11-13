@@ -336,9 +336,15 @@ extern "C" {
       return NULL;
     }
 
-    FileHandleProxy* fhp = 0;
+    FileHandleProxy* fhp = NULL;
     fhp = new FileHandleProxy();
     fhp->File = _fdopen(fd, "r");
+
+	if (fhp->File == NULL)
+	{
+		delete fhp;
+		fhp = NULL;
+	}
 
     return fhp;
   }

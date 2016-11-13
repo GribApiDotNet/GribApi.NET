@@ -618,7 +618,7 @@ namespace Grib.Api
         {
             get
             {
-                return this["changeDecimalPrecision"].AsInt();
+                return this["decimalPrecision"].AsInt();
             }
             set
             {

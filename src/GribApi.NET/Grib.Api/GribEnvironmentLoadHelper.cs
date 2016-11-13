@@ -43,16 +43,19 @@ namespace Grib.Api
         internal static bool TryBuildDescriptorPath (string target, out string path)
         {
             path = "";
+			target += "";
             string varDef = Environment.GetEnvironmentVariable("GRIB_API_DIR_ROOT") + "";
 
             string envDir = Path.Combine(varDef, target);
-            string thisDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), target);
-            string exeDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, target);
+            string thisDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+"", target);
+            string baseDomainDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory+"", target);
+			string relDomainDir = Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath+"", target);
 
-			return TryBuildGriApiPath(thisDir, out path) ||   // try using the directory that contains this binary
-				   TryBuildGriApiPath(exeDir, out path) ||	  // try using the directory that contains the exe
-				   TryBuildGriApiPath(envDir, out path) ||    // try using environment variable
-				   TryBuildGriApiPath(target, out path);      // try using relative path;      
+			return TryBuildGriApiPath(thisDir, out path) ||
+				   TryBuildGriApiPath(relDomainDir, out path) ||      // try using the directory that contains this binary
+				   TryBuildGriApiPath(baseDomainDir, out path) ||	  // try using the directory that contains the exe
+				   TryBuildGriApiPath(envDir, out path) ||            // try using environment variable
+				   TryBuildGriApiPath(target, out path);              // try using relative path;      
         }
 
         internal static bool TryBuildGriApiPath (string root, out string path)

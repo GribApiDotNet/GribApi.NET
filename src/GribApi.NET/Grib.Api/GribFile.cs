@@ -31,6 +31,9 @@ namespace Grib.Api
     /// </summary>
     public class GribFile: AutoRef, IEnumerable<GribMessage>
     {
+		static readonly byte[] GRIB_FILE_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
+		static readonly byte[] GRIB_FILE_END = { 0x37, 0x37, 0x37, 0x37 };
+
         private IntPtr _pFileHandleProxy = IntPtr.Zero;
         private FileHandleProxy _fileHandleProxy = null;
 
@@ -62,7 +65,7 @@ namespace Grib.Api
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
-                throw new IOException("Could not open file. See inner exception for more detail.", new Win32Exception(Marshal.GetLastWin32Error()));
+				throw new FileLoadException("Could not open file. See inner exception for more detail.", new Win32Exception(Marshal.GetLastWin32Error()));
             }
 
             _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
@@ -174,47 +177,37 @@ namespace Grib.Api
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        private static bool FileIsValid(string fileName)
-        {
-            bool isValid = false;
+		private static bool FileIsValid(string fileName)
+		{
+			bool isValid = false;
 
-            try
-            {
-				// all we're doing is looking for 7777 (0x37 4 times), which is the GRIB end of message.
-				// we start with the last byte and move backward. If we hit data before we see 7777, we throw.
-                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-                {
-                    if (fs.Length < 8) { return isValid; }
- 
-                    Debug.Assert(fs.CanRead && fs.CanSeek);
+			try {
+				using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+					if (fs.Length < 8) { return isValid; }
+
+					Debug.Assert(fs.CanRead && fs.CanSeek);
 
 					long offset = -1;
-                    fs.Seek(offset, SeekOrigin.End);
-
-					while (fs.Position > 0 && fs.ReadByte() == 0x00)
-					{
-						fs.Seek(--offset, SeekOrigin.End);
-					}
-
-					long start = Math.Abs(offset);
 					fs.Seek(offset, SeekOrigin.End);
 
-					while (fs.Position > 0 &&
-						   fs.ReadByte() == 0x37 &&
-						   start + offset > -4)
-					{
+					// ignore any empty bytes at the end of the file
+					while (fs.Position > 0 && fs.ReadByte() == 0x00) {
 						fs.Seek(--offset, SeekOrigin.End);
 					}
 
-					isValid = start + offset == -4;
-                }
-            } catch (Exception)
-            {
-                isValid = false;
-            }
+					byte[] buffer = new byte[4];
 
-            return isValid;
-        }
+					fs.Seek(offset - 3, SeekOrigin.End);
+					fs.Read(buffer, 0, 4);
+
+					isValid = buffer.SequenceEqual(GRIB_FILE_END) || buffer.SequenceEqual(GRIB_FILE_END_GTS);
+				}
+			} catch (Exception) {
+				isValid = false;
+			}
+
+			return isValid;
+		}
 
         /// <summary>
         /// Gets the name of the file.

@@ -13,12 +13,13 @@
 // limitations under the License.
 
 
+using System;
 namespace Grib.Api
 {
     /// <summary>
     /// A GRIB grid value with coordinates.
     /// </summary>
-    public struct GeoSpatialValue : IGeoCoordinate, IEquatable<GeoSpatialValue>
+	public struct GeoSpatialValue : IGeoCoordinate, IEquatable<GeoSpatialValue>
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
