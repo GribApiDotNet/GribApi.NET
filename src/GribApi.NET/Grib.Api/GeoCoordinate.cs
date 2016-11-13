@@ -23,7 +23,7 @@ namespace Grib.Api
     /// <summary>
     /// A geospatial coordinate.
     /// </summary>
-    public struct GeoCoordinate : IGeoCoordinate
+    public struct GeoCoordinate : IGeoCoordinate, IEquatable<GeoCoordinate>
     {
         /// <summary>
         /// Gets or sets the latitude for this coordinate.
@@ -60,6 +60,29 @@ namespace Grib.Api
         {
             return (this.Latitude == that.Latitude) &&
                    (this.Longitude == that.Longitude);
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
+        public override bool Equals (object obj)
+        {
+            return (obj is GeoCoordinate) && this.Equals((GeoCoordinate)obj);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode()
+        {
+            return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
         }
 
         /// <summary>
