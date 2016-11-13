@@ -49,7 +49,7 @@ namespace Grib.Api
         {
             Handle = handle;
             Namespace = Namespaces[0];
-            KeyFilters |= Interop.KeyFilters.All;
+            KeyFilters = Interop.KeyFilters.All;
             Index = index;
         }
 
