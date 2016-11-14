@@ -218,22 +218,6 @@ namespace Grib.Api.Tests
 		}
 
 		[Test]
-		public void X()
-		{
-			//CMC_reg_TCDC_SFC_0_ps10km_2016031100_P000.grib2
-			using (GribFile file = new GribFile(@"C:\Users\eric\Documents\Visual Studio 2013\Projects\AccessViolationTest\AccessViolationTest\data\CMC_reg_TCDC_SFC_0_ps10km_2016031100_P000.grib2")) {
-				GribMessage msg = file.First();
-				msg["latitudeWhereDxAndDyAreSpecifiedInDegrees"].AsDouble(60);
-				foreach (GeoSpatialValue val in msg.GeoSpatialValues) {
-					Assert.LessOrEqual(val.Latitude, 360 + 0.6d);
-					Assert.LessOrEqual(val.Longitude, 360 + 0.6d);
-				//	Assert.GreaterOrEqual(val.Latitude, 0);
-					Assert.GreaterOrEqual(val.Longitude, 0);
-				}
-			}
-		}
-
-		//[Test]
 		public void TestGetBox()
 		{
 			using (GribFile file = new GribFile(Settings.REG_GAUSSIAN_MODEL_GRB1)) {
