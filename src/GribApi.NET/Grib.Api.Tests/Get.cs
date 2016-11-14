@@ -217,7 +217,7 @@ namespace Grib.Api.Tests
 			}
 		}
 
-		[Test]
+		// [Test] -- feature currently not supported
 		public void TestGetBox()
 		{
 			using (GribFile file = new GribFile(Settings.REG_GAUSSIAN_MODEL_GRB1)) {

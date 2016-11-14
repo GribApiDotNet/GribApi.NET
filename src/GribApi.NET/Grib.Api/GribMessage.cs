@@ -101,20 +101,24 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Returns a subdomain defined by the given north/west/south/east boundaries.
+        /// [NOT SUPPORTED] Returns a subdomain defined by the given north/west/south/east boundaries.
         /// At this time, boxes are only supported for regular and reduced Gaussian grids.
         /// </summary>
         /// <param name="nw">The NW corner of the box.</param>
         /// <param name="se">The SE corner of the box.</param>
-        /// <returns></returns>
+        /// <returns></return>
+		/// <exception cref="System.NotSupportedException"></exception>
         public GribBox Box(GeoCoordinate nw, GeoCoordinate se)
         {
-            if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg")) 
-            {
-                throw new GribApiException("Only regular and reduced Gaussian grids support boxes.");
-            }
+			// GribPoints_latitudes_get returns an array -- marshalling needs to be changes to properly allocate
+			// array size
+			throw new NotSupportedException("MarshalDirectiveException : Cannot marshal 'return value'");
+			//if (!GridType.Contains("regular_gg") && !GridType.Contains("reduced_gg")) 
+			//{
+			//	throw new GribApiException("Only regular and reduced Gaussian grids support boxes.");
+			//}
 
-            return new GribBox(Handle, nw, se);
+			//return new GribBox(Handle, nw, se);
         }
 
         /// <summary>

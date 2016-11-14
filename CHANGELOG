@@ -1,5 +1,13 @@
 CHANGELOG
 
+0.7.1
+=====
+* Fixed GribContext null log event handler invocation.
+* Fixed GribFile FileIsValid error for GTS header trailers.
+* Improved Grib definition directory location logic.
+* Fixed GribKey All bitwise OR bug.
+* GribMessage::Box now throws NotSupportedException
+
 0.7.0
 =====
 * Updated grib_api to 1.14.5.
