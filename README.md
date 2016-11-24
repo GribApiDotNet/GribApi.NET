@@ -29,7 +29,10 @@ The documentation is very much a WIP, but you'll find [grib_api's wiki](https://
 --------------------------
 
 ## Usage
-Make sure you have the [MSVC 2013 redistributables](https://www.microsoft.com/en-us/download/details.aspx?id=40784) installed.
+Make sure you have the [MSVC 2015 redistributables](https://www.microsoft.com/en-us/download/details.aspx?id=48145) installed. If you don't, you can use `chocolatey`, 
+```shell
+C:\> choco install vcredist2015
+```
 
 Install [GribApi.NET using Nuget](https://www.nuget.org/packages/Grib.Api). From Package Manager Console run
 ```shell

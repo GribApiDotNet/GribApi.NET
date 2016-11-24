@@ -60,9 +60,8 @@ namespace Grib.Api
         /// <summary>
         /// Gets the key's value.
         /// </summary>
-        /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will convert the value to degrees when possible.</param>
         /// <returns></returns>
-        public virtual string AsString (bool inDegrees = true)
+        public virtual string AsString ()
         {
             if (!IsDefined || _asStringBlacklist.Contains(NativeType) ) { return String.Empty; }
 
@@ -71,7 +70,7 @@ namespace Grib.Api
 
             if (CanConvertToDegrees)
             {
-                valueKey = BuildTokenForDouble(inDegrees);
+                valueKey = BuildTokenForDouble();
             }
 
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
@@ -182,11 +181,10 @@ namespace Grib.Api
         /// <summary>
         /// Gets the key's value.
         /// </summary>
-        /// <param name="inDegrees">if set to <c>true</c>, GribApi.NET will return the value [in degrees] when possible.</param>
         /// <returns></returns>
-        public virtual double AsDouble (bool inDegrees = true)
+        public virtual double AsDouble ()
         {
-            string valueKey = BuildTokenForDouble(inDegrees);
+            string valueKey = BuildTokenForDouble();
 
             AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
@@ -201,10 +199,9 @@ namespace Grib.Api
         /// Sets the key's value.
         /// </summary>
         /// <param name="newValue">The new value.</param>
-        /// <param name="inDegrees">if set to <c>true</c> [in degrees], GribApi.NET will set the value [in degrees] when possible.</param>
-        public virtual void AsDouble (double newValue, bool inDegrees = true)
+        public virtual void AsDouble (double newValue)
         {
-            string valueKey = BuildTokenForDouble(inDegrees);
+            string valueKey = BuildTokenForDouble();
 
             AssertTypeSafe(valueKey, NativeTypeForKey(valueKey), GribValueType.Double);
 
@@ -250,18 +247,14 @@ namespace Grib.Api
         /// <summary>
         /// Builds the token for accesing/mutating double values, accounting for degree conversions.
         /// </summary>
-        /// <param name="inDegrees">if set to <c>true</c> [in degrees].</param>
         /// <returns></returns>
-        protected string BuildTokenForDouble (bool inDegrees)
+        protected string BuildTokenForDouble ()
         {
             string valueKey = Key;
 
-            if (inDegrees && CanConvertToDegrees && !Key.EndsWith("InDegrees"))
+            if (CanConvertToDegrees && !Key.EndsWith("InDegrees"))
             {
                 valueKey += "InDegrees";
-            } else if (!inDegrees && Key.EndsWith("InDegrees"))
-            {
-                valueKey = valueKey.Substring(0, Key.Length - "InDegrees".Length);
             }
 
             return valueKey;

@@ -97,23 +97,23 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(latitudeOfFirstGridPointInDegrees, 90, delta);
 
                 // degree conversion via accessor
-                double longitudeOfFirstGridPointInDegrees = msg["longitudeOfFirstGridPoint"].AsDouble(/* inDegrees == true */);
+                double longitudeOfFirstGridPointInDegrees = msg["longitudeOfFirstGridPoint"].AsDouble();
                 Assert.AreEqual(longitudeOfFirstGridPointInDegrees, 0, delta);
 
                 // degree conversion via accessor
-                double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPoint"].AsDouble(/* inDegrees == true */);
+                double latitudeOfLastGridPointInDegrees = msg["latitudeOfLastGridPoint"].AsDouble();
                 Assert.AreEqual(latitudeOfLastGridPointInDegrees, -90, delta);
 
                 // degree conversion via accessor
-                double longitudeOfLastGridPointInDegrees = msg["longitudeOfLastGridPoint"].AsDouble(/* inDegrees == true */);
+                double longitudeOfLastGridPointInDegrees = msg["longitudeOfLastGridPoint"].AsDouble();
                 Assert.AreEqual(longitudeOfLastGridPointInDegrees, 360, .5);
 
                 // degree conversion via accessor
-                double jDirectionIncrementInDegrees = msg["jDirectionIncrement"].AsDouble(/* inDegrees == true */);
+                double jDirectionIncrementInDegrees = msg["jDirectionIncrement"].AsDouble();
                 Assert.AreEqual(jDirectionIncrementInDegrees, 0.36, delta);
 
                 // degree conversion via accessor
-                double iDirectionIncrementInDegrees = msg["iDirectionIncrement"].AsDouble(/* inDegrees == true */);
+                double iDirectionIncrementInDegrees = msg["iDirectionIncrement"].AsDouble();
                 Assert.AreEqual(iDirectionIncrementInDegrees, -1.0E+100, delta);
 
                 int numberOfPointsAlongAParallel = msg["numberOfPointsAlongAParallel"].AsInt();

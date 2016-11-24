@@ -108,6 +108,7 @@ namespace Grib.Api
         /// <param name="se">The SE corner of the box.</param>
         /// <returns></return>
 		/// <exception cref="System.NotSupportedException"></exception>
+		[Obsolete]
         public GribBox Box(GeoCoordinate nw, GeoCoordinate se)
         {
 			// GribPoints_latitudes_get returns an array -- marshalling needs to be changes to properly allocate
