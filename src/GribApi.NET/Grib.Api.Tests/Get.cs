@@ -172,9 +172,10 @@ namespace Grib.Api.Tests
 				Console.WriteLine("foo");
 
 				using (var file = new GribFile(Settings.SPHERICAL_PRESS_LVL)) {
-					file.Context.OnLog += Setup.GribContext_OnLog;
-					Console.WriteLine("foo2");
+					//	file.Context.OnLog += Setup.GribContext_OnLog;
+					var f = file.First();
                     Assert.IsTrue(file.MessageCount > 0);
+					Console.WriteLine("foo2");
 					Assert.IsTrue(file.First().Any());
 				}
 			}
