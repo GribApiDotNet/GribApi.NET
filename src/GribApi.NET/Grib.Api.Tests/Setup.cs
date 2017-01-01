@@ -17,8 +17,10 @@ namespace Grib.Api.Tests
         [SetUp]
         public void OnSetup()
 		{
+			Console.WriteLine("Testing with grib_api v{0}", GribEnvironment.GribApiVersion);
+
 			//GribContext.OnLog += GribContext_OnLog;
-            if (Environment.GetEnvironmentVariable("_GRIB_BREAK") == "1")
+			if (Environment.GetEnvironmentVariable("_GRIB_BREAK") == "1")
             {
                 Console.WriteLine("Breaking on start...");
                 var mre = new ManualResetEvent(false);
@@ -28,7 +30,7 @@ namespace Grib.Api.Tests
             }
         }
 
-		void GribContext_OnLog(int lvl, string msg)
+		public static void GribContext_OnLog(int lvl, string msg)
 		{
 			Console.WriteLine(String.Format("Lvl {0}: {1}", lvl, msg));
 		}

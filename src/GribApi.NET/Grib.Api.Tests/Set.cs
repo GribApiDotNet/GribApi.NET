@@ -9,12 +9,14 @@ namespace Grib.Api.Tests
     [TestFixture]
     public class Set
     {
-        [Test]
+        [Test, Timeout(2000)]
         public void TestSetBitmapMissing ()
         {
             using (GribFile file = new GribFile(Settings.REG_LATLON_GRB1))
             {
-                var msg = file.First();
+				file.Context.OnLog += Setup.GribContext_OnLog;
+
+				var msg = file.First();
                 int missing = 3333;
                 // set the value used to represent missing data
                 msg.MissingValue = missing;
@@ -51,12 +53,14 @@ namespace Grib.Api.Tests
             }
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void TestSetBitmap()
         {
             using (GribFile file = new GribFile(Settings.REG_LATLON_GRB1))
             {
-                var msg = file.First();
+				file.Context.OnLog += Setup.GribContext_OnLog;
+
+				var msg = file.First();
 
                 int numVals = 10;
                 double[] vals = new double[numVals];  
@@ -80,15 +84,17 @@ namespace Grib.Api.Tests
             }
         }
 
-		[Test]
+		[Test, Timeout(2000)]
 		public void TestPrecision()
 		{
-			var file = new GribFile(Settings.REG_GAUSSIAN_SURFACE_GRB2);
-			var msg = file.First();
-			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 14);
-			msg.DecimalPrecision = 4;
-			Assert.AreEqual(msg["bitsPerValue"].AsInt(), 20);
+			using (var file = new GribFile(Settings.REG_GAUSSIAN_SURFACE_GRB2))
+			{
+				file.Context.OnLog += Setup.GribContext_OnLog;
+				var msg = file.First();
+				Assert.AreEqual(msg["bitsPerValue"].AsInt(), 14);
+				msg.DecimalPrecision = 4;
+				Assert.AreEqual(msg["bitsPerValue"].AsInt(), 20);
+			}
 		}
-
-    }
+	}
 }

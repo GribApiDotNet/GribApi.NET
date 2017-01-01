@@ -203,6 +203,8 @@ namespace Grib.Api
         {
             get
             {
+				if (!Initialized) { Init(); }
+
                 string version = GribApiProxy.GribGetApiVersion().ToString();
                 string major = version[0].ToString();
                 string minor = Int32.Parse(version.Substring(1, 2)).ToString();

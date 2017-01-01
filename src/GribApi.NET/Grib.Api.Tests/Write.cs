@@ -16,7 +16,7 @@ namespace Grib.Api.Tests
 
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void TestWrite()
         {
             if (File.Exists(Settings.OUT_GRIB))
@@ -29,7 +29,8 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.PACIFIC_WIND))
             {
-                var msg = readFile.First();
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+				var msg = readFile.First();
                 Assert.AreNotEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
                 msg["latitudeOfFirstGridPoint"].AsDouble(33);
                 valCount = msg.ValuesCount;
@@ -38,7 +39,9 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.OUT_GRIB))
             {
-                var msg = readFile.First();
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+
+				var msg = readFile.First();
                 count = readFile.MessageCount;
                 Assert.AreEqual(valCount, msg.ValuesCount);
                 Assert.AreEqual(count, readFile.MessageCount);
@@ -47,13 +50,17 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.PACIFIC_WIND))
             {
-                GribFile.Write(Settings.OUT_GRIB, readFile as IEnumerable<GribMessage>, FileMode.Append);
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+
+				GribFile.Write(Settings.OUT_GRIB, readFile as IEnumerable<GribMessage>, FileMode.Append);
                 count += readFile.MessageCount;
             }
 
             using (var readFile = new GribFile(Settings.OUT_GRIB))
             {
-                Assert.AreEqual(count, readFile.MessageCount);
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+
+				Assert.AreEqual(count, readFile.MessageCount);
                 Assert.AreEqual(33, readFile.First()["latitudeOfFirstGridPoint"].AsDouble());
             }
         }
@@ -72,7 +79,9 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
-                var msg = readFile.First();
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+
+				var msg = readFile.First();
                 count = msg.ValuesCount;
                 val = msg["latitudeOfFirstGridPoint"].AsDouble();
                 Assert.AreNotEqual(val, Double.NaN);
@@ -128,7 +137,9 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.OUT_GRIB))
             {
-                var msg = readFile.First();
+				readFile.Context.OnLog += Setup.GribContext_OnLog;
+
+				var msg = readFile.First();
                 Assert.AreEqual(count, msg.ValuesCount);
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 Assert.AreEqual(msg["packingType"].AsString(), grid);
@@ -145,13 +156,13 @@ namespace Grib.Api.Tests
         }
 
 
-        [Test]
+        [Test, Timeout(2000)]
         public void TestPng ()
         {
             TestCompression("grid_png");
         }
 
-        [Test]
+        [Test, Timeout(2000)]
         public void TestJpeg ()
         {
             TestCompression("grid_jpeg");
