@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using Grib.Api.Interop;
-using System.Text.RegularExpressions;
 using System.Threading;
+using System.Text;
 
 namespace Grib.Api.Tests
 {
@@ -21,8 +16,6 @@ namespace Grib.Api.Tests
 		{
 			try {
 				using (GribFile file = new GribFile(Settings.BAD)) {
-					file.Context.OnLog += Setup.GribContext_OnLog;
-
 					// shouldn't get here
 					Assert.IsTrue(false);
 				}
@@ -30,26 +23,32 @@ namespace Grib.Api.Tests
 
 			try {
 				using (GribFile file = new GribFile(Settings.EMPTY)) {
-					file.Context.OnLog += Setup.GribContext_OnLog;
-
 					// shouldn't get here
 					Assert.IsTrue(false);
 				}
 			} catch (FileLoadException) { }
 		}
 
-		[Test, Timeout(2000)]
+		[Test, Timeout(5000)]
+		public void TestSteographic()
+		{
+			using (GribFile file = new GribFile(Settings.STEREO)) {
+				GribMessage msg = file.First();
+				Assert.Greater(msg.ValuesCount, 1);
+				foreach (GeoSpatialValue gs in msg.GeoSpatialValues) {
+					Assert.Greater(gs.Latitude, 15);
+				}
+			}
+		}
+
+		[Test, Timeout(5000)]
 		public void TestOpenPng()
 		{
 			using (GribFile file = new GribFile(Settings.PNG_COMPRESSION)) {
-				file.Context.OnLog += Setup.GribContext_OnLog;
-
 				Assert.IsTrue(file.MessageCount > 0);
 
 				var msg = file.First();
-				Console.WriteLine(msg["packingType"].AsString());
 				try {
-					Console.WriteLine(msg["packingType"].AsString());
 					Assert.IsTrue(msg["packingType"].AsString().ToLower().EndsWith("_png"));
 					Assert.IsTrue(msg.ValuesCount > 0);
 					Assert.IsTrue(msg.GeoSpatialValues.Any());
@@ -67,15 +66,13 @@ namespace Grib.Api.Tests
 			}
 		}
 
-	//	[Test, Timeout(2000)]
+		[Test, Timeout(2000)]
 		public void TestOpenComplex()
 		{
-			using (GribFile file = new GribFile(Settings.COMPLEX_GRID)) {
-				file.Context.OnLog += Setup.GribContext_OnLog;
-
+			using (GribFile file = new GribFile(Settings.COMPLEX_GRID))
+			{
 				Assert.IsTrue(file.MessageCount > 0);
 				foreach (var msg in file) {
-					Console.WriteLine(msg["packingType"].AsString());
 					try {
 						Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
 						Assert.IsTrue(msg.ValuesCount > 0);

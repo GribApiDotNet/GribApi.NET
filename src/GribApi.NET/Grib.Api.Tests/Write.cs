@@ -11,61 +11,45 @@ namespace Grib.Api.Tests
     [TestFixture]
     public class Write
     {
-        public Write()
-        {
 
-        }
+		[Test, Timeout(2000)]
+		public void TestWrite()
+		{
+			if (File.Exists(Settings.OUT_GRIB)) {
+				File.Delete(Settings.OUT_GRIB);
+			}
 
-        [Test, Timeout(2000)]
-        public void TestWrite()
-        {
-            if (File.Exists(Settings.OUT_GRIB))
-            {
-                File.Delete(Settings.OUT_GRIB);
-            }
+			int count = 0;
+			int valCount = 0;
 
-            int count = 0;
-            int valCount = 0;
-
-            using (var readFile = new GribFile(Settings.PACIFIC_WIND))
-            {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
+			using (var readFile = new GribFile(Settings.PACIFIC_WIND)) {
 				var msg = readFile.First();
-                Assert.AreNotEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
-                msg["latitudeOfFirstGridPoint"].AsDouble(33);
-                valCount = msg.ValuesCount;
-                GribFile.Write(Settings.OUT_GRIB, msg);
-            }
+				Assert.AreNotEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
+				msg["latitudeOfFirstGridPoint"].AsDouble(33);
+				valCount = msg.ValuesCount;
+				GribFile.Write(Settings.OUT_GRIB, msg);
+			}
 
-            using (var readFile = new GribFile(Settings.OUT_GRIB))
-            {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
-
+			using (var readFile = new GribFile(Settings.OUT_GRIB)) {
 				var msg = readFile.First();
-                count = readFile.MessageCount;
-                Assert.AreEqual(valCount, msg.ValuesCount);
-                Assert.AreEqual(count, readFile.MessageCount);
-                Assert.AreEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
-            }
-
-            using (var readFile = new GribFile(Settings.PACIFIC_WIND))
-            {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
-
-				GribFile.Write(Settings.OUT_GRIB, readFile as IEnumerable<GribMessage>, FileMode.Append);
-                count += readFile.MessageCount;
-            }
-
-            using (var readFile = new GribFile(Settings.OUT_GRIB))
-            {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
-
+				count = readFile.MessageCount;
+				Assert.AreEqual(valCount, msg.ValuesCount);
 				Assert.AreEqual(count, readFile.MessageCount);
-                Assert.AreEqual(33, readFile.First()["latitudeOfFirstGridPoint"].AsDouble());
-            }
-        }
+				Assert.AreEqual(33, msg["latitudeOfFirstGridPoint"].AsDouble());
+			}
 
-        public void TestCompression (string grid)
+			using (var readFile = new GribFile(Settings.PACIFIC_WIND)) {
+				GribFile.Write(Settings.OUT_GRIB, readFile as IEnumerable<GribMessage>, FileMode.Append);
+				count += readFile.MessageCount;
+			}
+
+			using (var readFile = new GribFile(Settings.OUT_GRIB)) {
+				Assert.AreEqual(count, readFile.MessageCount);
+				Assert.AreEqual(33, readFile.First()["latitudeOfFirstGridPoint"].AsDouble());
+			}
+		}
+
+		public void TestCompression (string grid)
         {
             if (File.Exists(Settings.OUT_GRIB))
             {
@@ -79,8 +63,6 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
-
 				var msg = readFile.First();
                 count = msg.ValuesCount;
                 val = msg["latitudeOfFirstGridPoint"].AsDouble();
@@ -137,8 +119,6 @@ namespace Grib.Api.Tests
 
             using (var readFile = new GribFile(Settings.OUT_GRIB))
             {
-				readFile.Context.OnLog += Setup.GribContext_OnLog;
-
 				var msg = readFile.First();
                 Assert.AreEqual(count, msg.ValuesCount);
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
@@ -156,20 +136,20 @@ namespace Grib.Api.Tests
         }
 
 
-        [Test, Timeout(2000)]
-        public void TestPng ()
-        {
-            TestCompression("grid_png");
-        }
+		[Test, Timeout(2000)]
+		public void TestPng()
+		{
+			TestCompression("grid_png");
+		}
 
-        [Test, Timeout(2000)]
-        public void TestJpeg ()
-        {
-            TestCompression("grid_jpeg");
-        }
+		[Test, Timeout(2000)]
+		public void TestJpeg()
+		{
+			TestCompression("grid_jpeg");
+		}
 
-        //Function to get random number
-        private static readonly Random getrandom = new Random();
+		//Function to get random number
+		private static readonly Random getrandom = new Random();
 
         public static int GetRandomNumber (int min, int max)
         {

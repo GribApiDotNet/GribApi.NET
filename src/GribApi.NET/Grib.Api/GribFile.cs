@@ -74,6 +74,11 @@ namespace Grib.Api
             Reference = new HandleRef(this, _fileHandleProxy.File);
             Context = GribApiProxy.GribContextGetDefault();
 
+			if (Context == null)
+			{
+				throw new GribApiException("Failed to get context!");
+			}
+
             // set the message count here; the result seems to be connected to the message iterator so
             // that after you begin iterating messages, the count decreases until it reaches 1.
             int count = 0;
@@ -181,8 +186,10 @@ namespace Grib.Api
 		{
 			bool isValid = false;
 
-			try {
-				using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
+			try
+			{
+				using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+				{
 					if (fs.Length < 8) { return isValid; }
 
 					Debug.Assert(fs.CanRead && fs.CanSeek);
@@ -202,7 +209,8 @@ namespace Grib.Api
 
 					isValid = buffer.SequenceEqual(GRIB_FILE_END) || buffer.SequenceEqual(GRIB_FILE_END_GTS);
 				}
-			} catch (Exception) {
+			} catch (Exception)
+			{
 				isValid = false;
 			}
 

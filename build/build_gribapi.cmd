@@ -53,7 +53,8 @@ taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
+
+"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="%CONFIG%" /property:Platform="AnyCPU" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
 @ECHO OFF
 if ERRORLEVEL 1 (
@@ -61,49 +62,6 @@ if ERRORLEVEL 1 (
 	ECHO BUILD FAILED
 	EXIT /B 1
 )
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="x64"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="%CONFIG%" /property:Platform="AnyCPU" /tv:4.0 %REBUILD% /p:NoWarn="1591" /nowarn:1591
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
@@ -128,55 +86,6 @@ if ERRORLEVEL 1 (
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\zlib\zlib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext\lpng\projects\vstudio\libpng\libpng.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32"  %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/jasper-1.900.1/src/msvc\libjasper.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%ext/grib_api/windows/msvc/grib_api_lib/grib_api_lib.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32" %TV% /property:VCTargetsPath=%CRT% %REBUILD%
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
-
-"%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Native\Grib.Api.Native.vcxproj"  /property:Configuration="%CONFIG%" /property:Platform="Win32"  %TV% /property:VCTargetsPath=%CRT% /t:Clean,Build 
-
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO BUILD FAILED
-	EXIT /B 1
-)
-@ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x86" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 

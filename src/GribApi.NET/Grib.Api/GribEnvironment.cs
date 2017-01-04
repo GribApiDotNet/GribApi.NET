@@ -49,8 +49,6 @@ namespace Grib.Api
                 Initialized = true;
                 string definitions = "";
 
-				PutEnvVar("GRIB_API_LOG_STREAM", "stdout");
-
 				if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GRIB_API_NO_ABORT"))) 
 				{
 					NoAbort = true;
@@ -94,7 +92,7 @@ namespace Grib.Api
 
             if (!exists)
             {
-                throw new GribApiException("GribEnvironment::DefinitionsPath must be a valid path. If you're using ASP.NET or NUnit, this exception is usually caused by shadow copying. Please see GribApi.NET's documentation for help. Path: " + DefinitionsPath);
+                throw new GribApiException("GribEnvironment::DefinitionsPath must be a valid path. Please see GribApi.NET's documentation for help. Path: " + DefinitionsPath);
             }
 
             if (!File.Exists(Path.Combine(existingPath, "boot.def")))
