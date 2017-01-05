@@ -32,6 +32,8 @@ namespace Grib.Api.Tests
 		[Test, Timeout(5000)]
 		public void TestSteographic()
 		{
+			Console.WriteLine("foo2");
+
 			using (GribFile file = new GribFile(Settings.STEREO)) {
 				GribMessage msg = file.First();
 				Assert.Greater(msg.ValuesCount, 1);
@@ -44,6 +46,8 @@ namespace Grib.Api.Tests
 		[Test, Timeout(5000)]
 		public void TestOpenPng()
 		{
+			Console.WriteLine("foo2");
+
 			using (GribFile file = new GribFile(Settings.PNG_COMPRESSION)) {
 				Assert.IsTrue(file.MessageCount > 0);
 
@@ -69,9 +73,11 @@ namespace Grib.Api.Tests
 		[Test, Timeout(2000)]
 		public void TestOpenComplex()
 		{
+
 			using (GribFile file = new GribFile(Settings.COMPLEX_GRID))
 			{
-				Assert.IsTrue(file.MessageCount > 0);
+                Assert.IsTrue(file.MessageCount > 0);
+				Console.WriteLine("foo4");
 				foreach (var msg in file) {
 					try {
 						Assert.IsTrue(msg["packingType"].AsString().ToLower().Contains("complex"));
@@ -95,6 +101,7 @@ namespace Grib.Api.Tests
 		[Test, Timeout(2000)]
 		public void TestEnumDisposal ()
 		{
+			Console.WriteLine("foo");
 			using (var file1 = new GribFile(Settings.COMPLEX_GRID))
 			using (var file2 = new GribFile(Settings.TIME)) {
 				var msg1 = file1.First();

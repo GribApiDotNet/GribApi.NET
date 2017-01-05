@@ -72,15 +72,7 @@ if ERRORLEVEL 1 (
 	EXIT /B 1
 )
 
-@ECHO ON
-	
-call %~dp0run_tests.cmd x64 %CONFIG%
-@ECHO OFF
-if ERRORLEVEL 1 (
-	@ECHO ON
-	ECHO TEST FAILED
-	EXIT /B 1
-)
+
 :::::::::: X86 NATIVE
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
@@ -111,6 +103,15 @@ if ERRORLEVEL 1 (
 	EXIT /B 1
 )
 @ECHO ON
+	
+call %~dp0run_tests.cmd x64 %CONFIG%
+@ECHO OFF
+if ERRORLEVEL 1 (
+	@ECHO ON
+	ECHO TEST FAILED
+	EXIT /B 1
+)
+@ECHO ON
 
 call %~dp0run_tests.cmd x86 %CONFIG%
 @ECHO OFF
@@ -119,6 +120,8 @@ if ERRORLEVEL 1 (
 	ECHO TEST FAILED
 	EXIT /B 1
 )
+
+
 
 if NOT "%PKG_VERSION%"=="" (
 	@ECHO ON
