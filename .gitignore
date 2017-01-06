@@ -200,4 +200,4 @@ nuget.package/definitions
 nuget.package/**/*.dll
 nuget.package/**/*.pdb
 nuget.package/**/*.xml
-src/GribApi.NET/Grib.Api
+src/GribApi.NET/Grib.Api/Grib.Api

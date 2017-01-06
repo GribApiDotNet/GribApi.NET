@@ -49,7 +49,7 @@ taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
 
 @ECHO ON
 
-:::::::::: X64 NATIVE
+:::::::::: X64
 
 SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
 
@@ -95,6 +95,7 @@ if ERRORLEVEL 1 (
 xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.dll" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.dll"  /S /Y /I /Q
 xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.xml" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.xml"  /S /Y /I /Q
 xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api.pdb" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api.pdb"  /S /Y /I /Q
+xcopy "%BASEDIR%bin\x64\%CONFIG%\Grib.Api" "%BASEDIR%bin\x86\%CONFIG%\Grib.Api"  /S /Y /I /Q
 
 @ECHO OFF
 if ERRORLEVEL 1 (
