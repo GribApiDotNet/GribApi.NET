@@ -50,9 +50,10 @@ namespace Grib.Api.Interop
 		/// <param name="msg">The MSG.</param>
 		private void OnLogReceived(IntPtr ctx, int lvl, [MarshalAs(UnmanagedType.LPStr)]string msg)
 		{
-			if (this.OnLog != null)
+			var onLog = this.OnLog;
+			if (onLog != null)
 			{
-				this.OnLog(lvl, msg);
+				onLog(lvl, msg);
 			}
 		}
 
