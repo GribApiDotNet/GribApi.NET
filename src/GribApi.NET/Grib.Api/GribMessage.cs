@@ -371,9 +371,18 @@ namespace Grib.Api
 		{
 			get
 			{
-				return new DateTime(this["year"].AsInt(), this["month"].AsInt(), this["day"].AsInt(),
+				// some grib values do not require a date and this will throw; set a default value
+				var time = new DateTime(1, 1, 1, 0 ,0 ,0, DateTimeKind.Utc);
+
+				try
+				{
+					time = new DateTime(this["year"].AsInt(), this["month"].AsInt(), this["day"].AsInt(),
 									this["hour"].AsInt(), this["minute"].AsInt(), this["second"].AsInt(),
 									DateTimeKind.Utc);
+				}
+				catch (Exception) { }
+
+				return time;
 			}
 			set
 			{
