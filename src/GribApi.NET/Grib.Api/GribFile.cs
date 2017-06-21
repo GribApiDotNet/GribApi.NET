@@ -182,7 +182,7 @@ namespace Grib.Api
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-		private static bool FileIsValid(string fileName)
+		public static bool FileIsValid(string fileName)
 		{
 			bool isValid = false;
 
