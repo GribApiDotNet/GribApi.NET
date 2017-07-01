@@ -24,11 +24,11 @@ namespace Grib.Api.Interop.Util
         [DllImport("Grib.Api.Native.dll")]
         internal static extern bool GribKeyIsReadOnly(HandleRef gribHandle, [MarshalAs(UnmanagedType.LPStr)]string keyName);
 
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-		internal delegate void GribLogProc(IntPtr gribContext, int level, [MarshalAs(UnmanagedType.LPStr)]string msg);
+		//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		//internal delegate void GribLogProc(IntPtr gribContext, int level, [MarshalAs(UnmanagedType.LPStr)]string msg);
 
-		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribSetContextLogger")]
-		internal static extern void GribSetContextLogger(IntPtr gribContext, GribLogProc proc);
+		//[DllImport("Grib.Api.Native.dll", EntryPoint = "GribSetContextLogger")]
+		//internal static extern void GribSetContextLogger(IntPtr gribContext, GribLogProc proc);
 
 		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribSetOnFatal")]
 		internal static extern void GribSetOnFatal();

@@ -90,10 +90,10 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Clones this instance.
+        /// Creates a shallow copy of this instance.
         /// </summary>
         /// <returns></returns>
-        public GribMessage Clone()
+        public GribMessage Copy ()
         {
             var newHandle = GribApiProxy.GribHandleClone(this.Handle);
 
@@ -106,7 +106,7 @@ namespace Grib.Api
         /// <param name="file">The file.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        public static GribMessage Create(GribFile file, int index) 
+        public static GribMessage Create (GribFile file, int index) 
         {
             GribMessage msg = null;
             int err = 0;
@@ -152,7 +152,7 @@ namespace Grib.Api
         /// this on the native side.
         /// </remarks>
         /// <param name="values">The values.</param>
-        public void Values(out double[] values)
+        public void Values (out double[] values)
         {
             values = this["values"].AsDoubleArray();
         }
@@ -161,7 +161,7 @@ namespace Grib.Api
         /// Sets the raw data associated with this message. The array is *copied*.
         /// </summary>
         /// <param name="values">The values.</param>
-        public void SetValues(double[] values)
+        public void SetValues (double[] values)
         {
             this["values"].AsDoubleArray(values);
         }
