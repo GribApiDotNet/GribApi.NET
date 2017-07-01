@@ -42,6 +42,17 @@ namespace Grib.Api.Tests
 		}
 
 		[Test, Timeout(5000)]
+		public void TestMulti()
+		{
+			using (GribFile file = new GribFile(Settings.COMPLEX_GRID)) {
+			//	Assert.IsTrue(file.IsMultifield);
+			}
+			using (GribFile file = new GribFile(Settings.PACIFIC_WIND)) {
+			//	Assert.IsFalse(file.IsMultifield);
+			}
+		}
+
+		[Test, Timeout(5000)]
 		public void TestOpenPng()
 		{
 			using (GribFile file = new GribFile(Settings.PNG_COMPRESSION)) {

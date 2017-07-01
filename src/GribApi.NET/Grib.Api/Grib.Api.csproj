@@ -129,6 +129,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GribEnvironmentLoadHelper.cs" />
+    <Compile Include="GribNearest.cs" />
+    <Compile Include="GribNearestValue.cs" />
     <Compile Include="Interop\GribApiException.cs" />
     <Compile Include="GribBox.cs" />
     <Compile Include="Interop\GribContext.cs" />

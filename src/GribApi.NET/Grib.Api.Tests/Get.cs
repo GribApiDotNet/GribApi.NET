@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Grib.Api.Interop;
 using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Grib.Api.Tests
 {

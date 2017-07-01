@@ -29,6 +29,8 @@ namespace Grib.Api
     /// </summary>
     public class GribMessage: IEnumerable<GribValue>
     {
+		private static readonly object _fileLock = new object();
+
         private static readonly string[] _ignoreKeys = { "zero","one","eight","eleven","false","thousand","file",
                        "localDir","7777","oneThousand" };
 
@@ -109,11 +111,16 @@ namespace Grib.Api
         public static GribMessage Create (GribFile file, int index) 
         {
             GribMessage msg = null;
+			GribHandle handle = null;
             int err = 0;
-            // grib_api moves to the next message in a stream for each new handle
-            GribHandle handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
 
-            if (err != 0)
+			lock(_fileLock)
+			{
+				// grib_api moves to the next message in a stream for each new handle
+				handle = GribApiProxy.GribHandleNewFromFile(file.Context, file, out err);
+			}
+
+			if (err != 0)
             {
                 throw GribApiException.Create(err);
             }
