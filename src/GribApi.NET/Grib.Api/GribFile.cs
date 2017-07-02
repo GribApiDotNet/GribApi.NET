@@ -125,9 +125,9 @@ namespace Grib.Api
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-			if (this.Nearest != null)
+			if (this._nearest != null)
 			{
-				this.Nearest.Dispose();
+				this._nearest.Dispose();
 			}
 
             if (_pFileHandleProxy != IntPtr.Zero)

@@ -23,6 +23,6 @@ namespace Grib.Api.Tests
         public const string EMPTY = ".\\TestData\\empty.grb";
 		public const string TIME = ".\\TestData\\time.grb";
 		public const string STEREO = ".\\TestData\\polar_stereo.grib2";
-		public const string MULTI = ".\\TestData\\v.grib2";
+		public const string MULTI = ".\\TestData\\gfs.c255.grib2";
 	}
 }

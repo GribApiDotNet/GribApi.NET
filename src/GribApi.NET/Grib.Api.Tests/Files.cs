@@ -44,11 +44,14 @@ namespace Grib.Api.Tests
 		[Test, Timeout(5000)]
 		public void TestMulti()
 		{
-			using (GribFile file = new GribFile(Settings.COMPLEX_GRID)) {
-			//	Assert.IsTrue(file.IsMultifield);
-			}
 			using (GribFile file = new GribFile(Settings.PACIFIC_WIND)) {
-			//	Assert.IsFalse(file.IsMultifield);
+				var v = file.First().GeoSpatialValues.First();
+				Console.WriteLine(file.GetNearestValue(v.Latitude, v.Longitude).Values[0]);
+				Assert.IsFalse(file.IsMultifield);
+			}
+			using (GribFile file = new GribFile(Settings.MULTI)) {
+
+				Assert.IsTrue(file.IsMultifield);
 			}
 		}
 

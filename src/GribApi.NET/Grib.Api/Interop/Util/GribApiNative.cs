@@ -19,10 +19,13 @@ namespace Grib.Api.Interop.Util
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
 
 		[DllImport("Grib.Api.Native.dll")]
-		internal static extern void RewindFileHandleProxy(IntPtr fileHandleProxy);
+		internal static extern void RewindFileHandleProxy (IntPtr fileHandleProxy);
 
         [DllImport("Grib.Api.Native.dll")]
-        internal static extern bool GribKeyIsReadOnly(HandleRef gribHandle, [MarshalAs(UnmanagedType.LPStr)]string keyName);
+        internal static extern bool GribKeyIsReadOnly (HandleRef gribHandle, [MarshalAs(UnmanagedType.LPStr)]string keyName);
+
+		[DllImport("Grib.Api.Native.dll", CharSet = CharSet.Ansi)]
+		internal static extern void GetGribErrorMsg (int err, StringBuilder name);
 
 		//[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		//internal delegate void GribLogProc(IntPtr gribContext, int level, [MarshalAs(UnmanagedType.LPStr)]string msg);
@@ -52,7 +55,6 @@ namespace Grib.Api.Interop.Util
 		[DllImport("Grib.Api.Native.dll", EntryPoint = "GribExceptionRegisterCallback")]
 		private static extern
 			   void GribExceptionRegisterCallback(GribExceptionDelegate customCallback);
-
 
 		private static void OnGribFatalException([MarshalAs(UnmanagedType.LPStr)]string msg)
 		{

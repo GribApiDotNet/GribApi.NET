@@ -120,7 +120,7 @@ namespace Grib.Api.Tests
 		[Test, Timeout(5000)]
 		public void TestGetParallel()
 		{
-			var files = new[] { Settings.REDUCED_LATLON_GRB2, Settings.COMPLEX_GRID, Settings.REG_LATLON_GRB1, Settings.REDUCED_LATLON_GRB2, Settings.REG_GAUSSIAN_SURFACE_GRB2, Settings.PACIFIC_WIND };
+			var files = new[] { Settings.TIME, Settings.COMPLEX_GRID, Settings.PACIFIC_WIND, Settings.REDUCED_LATLON_GRB2, Settings.REG_GAUSSIAN_SURFACE_GRB2, Settings.GRIB };
 
 			Parallel.ForEach(files, (path, s) => {
 				using (var file = new GribFile(path)) {

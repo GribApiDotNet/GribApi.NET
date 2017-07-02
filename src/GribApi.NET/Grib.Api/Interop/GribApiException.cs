@@ -13,7 +13,10 @@
 // limitations under the License.
 
 using Grib.Api.Interop.SWIG;
+using Grib.Api.Interop.Util;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Grib.Api.Interop
 {
@@ -37,10 +40,19 @@ namespace Grib.Api.Interop
         /// <returns></returns>
         public static GribApiException Create(int errCode)
         {
-            string msg = GribApiProxy.GribGetErrorMessage(errCode);
-            return new GribApiException(msg);
+			StringBuilder sb = new StringBuilder(255);
+			GribApiNative.GetGribErrorMsg(errCode, sb);
+
+            return new GribApiException("Error occurred: " + errCode + ". " + sb.ToString());
         }
-    }
+
+		//protected Dictionary<int, string> ErrorMessages = new Dictionary<int, string>
+		//{
+		//	{ 0, "No error" },
+		//	{ -1, "End of resource reached. " },
+		//	{ -2, "Internal error." },
+		//};
+	}
 
 	public class GribApiFatalException: Exception
 	{
