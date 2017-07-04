@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace Grib.Api
 {
+	[Flags]
 	public enum GribNearestToSame: uint
 	{
-		POINT = 1<<0,
-		GRID = 1<<1,
-		DATA = 1<<2
+		GRID = 1<<0,
+		DATA = 1<<1,
+		POINT = 1<<2
 	}
 
 	public class GribNearest: AutoRef
