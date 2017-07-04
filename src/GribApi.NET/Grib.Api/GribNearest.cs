@@ -9,6 +9,13 @@ using System.Threading.Tasks;
 
 namespace Grib.Api
 {
+	public enum GribNearestToSame: uint
+	{
+		POINT = 1<<0,
+		GRID = 1<<1,
+		DATA = 1<<2
+	}
+
 	public class GribNearest: AutoRef
 	{
 		public SWIGTYPE_p_grib_nearest Nearest = null;
@@ -31,23 +38,42 @@ namespace Grib.Api
 			}
 		}
 
-		public GribNearestValue FindNearestValue (double latitude, double longitude)
+
+		public GribNearestValue[] FindNearestValue (double latitude, double longitude, GribNearestToSame flags = GribNearestToSame.POINT)
 		{
-			return new GribNearestValue(this, latitude, longitude);
+			var latitudes = new double[] { 0, 0, 0, 0 };
+			var longitudes = new double[] { 0, 0, 0, 0 };
+			var distances = new double[] { 0, 0, 0, 0 };
+			var values = new double[] { 0, 0, 0, 0 };
+			var indexes = new int[] { 0, 0, 0, 0 };
+
+			Interop.SizeT len = 0;
+			Interop.SWIG.GribApiProxy.GribNearestFind(this.Nearest, this.FileHandle, latitude, longitude, (uint)flags,
+													latitudes, longitudes, values, distances,
+													indexes, ref len);
+
+			var vals = new GribNearestValue[len];
+
+			for (var i = 0; i < len; i++)
+			{
+				vals[i] = new GribNearestValue(latitudes[i], longitudes[i], values[i], distances[i], indexes[i]);
+			}
+
+			return vals;
 		}
 
-		public static GribNearest Create(GribHandle fileHandle)
+		public static GribNearest Create(GribHandle handle)
 		{
 			int err = 0;
 
-			var nearest = GribApiProxy.GribNearestNew(fileHandle, out err);
+			var nearest = GribApiProxy.GribNearestNew(handle, out err);
 
 			if (err != 0)
 			{
 				throw GribApiException.Create(err);
 			}
 			
-			return new GribNearest(nearest, fileHandle);
+			return new GribNearest(nearest, handle);
 		}
 	}
 }

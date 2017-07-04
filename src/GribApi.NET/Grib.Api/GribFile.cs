@@ -175,18 +175,18 @@ namespace Grib.Api
             throw new NotImplementedException();
         }
 
-		public GribNearestValue GetNearestValue (double latitude, double longitude)
+		public GribNearestValue[] GetNearestValue(double latitude, double longitude, GribNearestToSame nearest)
 		{
-			return this.Nearest.FindNearestValue(latitude, longitude);
+			return this.Nearest.FindNearestValue(latitude, longitude, nearest);
 		}
 
-        /// <summary>
-        /// Writes a message to the specified path.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="mode">The mode.</param>
-        public static void Write (string path, GribMessage message, FileMode mode = FileMode.Create)
+		/// <summary>
+		/// Writes a message to the specified path.
+		/// </summary>
+		/// <param name="path">The path.</param>
+		/// <param name="message">The message.</param>
+		/// <param name="mode">The mode.</param>
+		public static void Write (string path, GribMessage message, FileMode mode = FileMode.Create)
         {
             Write(path, new [] { message }, mode);
         }

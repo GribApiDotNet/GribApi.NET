@@ -46,7 +46,7 @@ namespace Grib.Api.Tests
 		{
 			using (GribFile file = new GribFile(Settings.PACIFIC_WIND)) {
 				var v = file.First().GeoSpatialValues.First();
-				Console.WriteLine(file.GetNearestValue(v.Latitude, v.Longitude).Values[0]);
+			//	Console.WriteLine(file.GetNearestValue(v.Latitude, v.Longitude).Values[0]);
 				Assert.IsFalse(file.IsMultifield);
 			}
 			using (GribFile file = new GribFile(Settings.MULTI)) {

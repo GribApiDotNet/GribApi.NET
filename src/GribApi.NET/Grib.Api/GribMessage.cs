@@ -27,7 +27,7 @@ namespace Grib.Api
     /// Parameter names are are given by the name, shortName and paramID keys. When iterated, returns instances of the
     /// <seealso cref="Grib.Api.GribValue"/> class.
     /// </summary>
-    public class GribMessage: IEnumerable<GribValue>
+    public class GribMessage: IEnumerable<GribValue>, IDisposable
     {
 		private static readonly object _fileLock = new object();
 
@@ -173,15 +173,20 @@ namespace Grib.Api
             this["values"].AsDoubleArray(values);
         }
 
-        #region Properties
+		public GribNearestValue[] GetNearestValue(double latitude, double longitude, GribNearestToSame nearest)
+		{
+			return this.Nearest.FindNearestValue(latitude, longitude, nearest);
+		}
 
-        /// <summary>
-        /// Gets the parameter name.
-        /// </summary>
-        /// <value>
-        /// The name.
-        /// </value>
-        public string Name
+		#region Properties
+
+		/// <summary>
+		/// Gets the parameter name.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public string Name
         {
             get { return this["parameterName"].AsString(); }
         }
@@ -484,13 +489,26 @@ namespace Grib.Api
 			return multiplier;
 		}
 
-        /// <summary>
-        /// The total number of points on the grid and includes missing as well as 'real' values. DataPointsCount = <see cref="ValuesCount"/> + <see cref="MissingCount"/>.
-        /// </summary>
-        /// <value>
-        /// The data points count.
-        /// </value>
-        public int DataPointsCount
+		protected GribNearest Nearest
+		{
+			get
+			{
+				if (_nearest == null) {
+					_nearest = GribNearest.Create(this.Handle);
+				}
+
+				return _nearest;
+			}
+		}
+		private GribNearest _nearest = null;
+
+		/// <summary>
+		/// The total number of points on the grid and includes missing as well as 'real' values. DataPointsCount = <see cref="ValuesCount"/> + <see cref="MissingCount"/>.
+		/// </summary>
+		/// <value>
+		/// The data points count.
+		/// </value>
+		public int DataPointsCount
         {
             get
             {
@@ -711,5 +729,35 @@ namespace Grib.Api
         {
             get { return new GribValue(Handle, keyName); }
         }
-    }
+
+		#region IDisposable Support
+		private bool disposedValue = false; // To detect redundant calls
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (!disposedValue) {
+				if (this._nearest != null) {
+					this._nearest.Dispose();
+				}
+
+				disposedValue = true;
+			}
+		}
+
+         ~GribMessage()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(false);
+		}
+
+		// This code added to correctly implement the disposable pattern.
+		public void Dispose()
+		{
+			// Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+			Dispose(true);
+			// TODO: uncomment the following line if the finalizer is overridden above.
+			GC.SuppressFinalize(this);
+		}
+		#endregion
+	}
 }
