@@ -44,6 +44,7 @@ namespace Grib.Api
         static GribFile()
         {
             GribEnvironment.Init();
+			GribContext.Default.EnableMultipleFieldMessages = true;
         }
 
         /// <summary>
