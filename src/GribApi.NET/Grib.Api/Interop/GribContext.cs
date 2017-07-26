@@ -10,6 +10,8 @@ namespace Grib.Api.Interop
     /// </summary>
     public class GribContext : AutoRef
     {
+		public static readonly GribContext Default = GribApiProxy.GribContextGetDefault();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GribContext"/> class.
         /// </summary>

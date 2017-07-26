@@ -50,11 +50,9 @@ namespace Grib.Api
         /// Initializes a new instance of the <see cref="GribFile" /> class. File read rights are shared between processes.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-		/// <param name="checkIfMultifield">By default, GribApi.NET will check if the file contains messages with multiple fields.
-		/// This is inefficient, but user-friendly. Set to <c>false</c> if the messages are single-field (most use cases).</param>
         /// <exception cref="System.IO.IOException">Could not open file. See inner exception for more detail.</exception>
         /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
-        public GribFile (string fileName, bool checkIfMultifield = true)
+        public GribFile (string fileName)
         {
             FileInfo fi = new FileInfo(fileName);
 
@@ -75,49 +73,13 @@ namespace Grib.Api
 
             FileName = fileName;
             Reference = new HandleRef(this, _fileHandleProxy.File);
-            Context = GribApiProxy.GribContextGetDefault();
 
-			if (Context == null)
-			{
-				throw new GribApiException("Failed to get context!");
-			}
-
-			SetCount(checkIfMultifield);
-		}
-
-		/// <summary>
-		/// Set the message count.
-		/// </summary>
-		/// <param name="checkIfMultifield"></param>
-		protected void SetCount (bool checkIfMultifield)
-		{
 			// set the message count here; the result seems to be connected to the message iterator so
 			// that after you begin iterating messages, the count decreases until it reaches 1.
 			int count = 0;
 			GribApiProxy.GribCountInFile(Context, this, out count);
-
-			// some grib messages contain multiple fields; check by comparing the number of messages with
-			// the multi-field feature on and off
-			if (checkIfMultifield)
-			{
-				Context.EnableMultipleFieldMessages = true;
-
-				int multiCount = 0;
-				GribApiProxy.GribCountInFile(Context, this, out multiCount);
-
-				if (count != multiCount)
-				{
-					IsMultifield = true;
-					count = multiCount;
-				}
-				else
-				{
-					Context.EnableMultipleFieldMessages = false;
-				}
-			}
-
 			MessageCount = count;
-		}
+        }
 
         /// <summary>
         /// Called when [dispose].
@@ -276,18 +238,18 @@ namespace Grib.Api
         /// </value>
         public int MessageCount { get; protected set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsMultifield { get; protected set;  }
-
         /// <summary>
         /// Gets or sets the context.
         /// </summary>
         /// <value>
         /// The context.
         /// </value>
-        public GribContext Context { get; protected set; }
+        public GribContext Context {
+			get
+			{
+				return GribContext.Default;
+			}
+		}
 
 		/// <summary>
 		/// The handle to the native grib_api file object.
