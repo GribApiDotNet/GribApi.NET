@@ -58,7 +58,8 @@ namespace Grib.Api.Interop.Util
 
 		private static void OnGribFatalException([MarshalAs(UnmanagedType.LPStr)]string msg)
 		{
-			Grib.Api.Interop.SWIG.GribApiProxyPINVOKE.SWIGPendingException.Set(new GribApiFatalException(msg));
+			throw new GribApiFatalException(msg);
+			//Grib.Api.Interop.SWIG.GribApiProxyPINVOKE.SWIGPendingException.Set(new GribApiFatalException(msg));
 		}
 
 		internal static void HookGribExceptions()

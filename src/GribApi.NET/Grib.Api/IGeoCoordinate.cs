@@ -15,7 +15,7 @@
 using System;
 namespace Grib.Api
 {
-    interface IGeoCoordinate
+    public interface IGeoCoordinate
     {
         double Latitude { get; set; }
         double Longitude { get; set; }

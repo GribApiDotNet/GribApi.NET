@@ -44,6 +44,8 @@ namespace Grib.Api
         static GribFile()
         {
             GribEnvironment.Init();
+			// grib_api discourages enabling multi-fields, however leaving it disabled has caused
+			// considerable confusion among users. 
 			GribContext.Default.EnableMultipleFieldMessages = true;
         }
 
@@ -137,12 +139,7 @@ namespace Grib.Api
         {
             throw new NotImplementedException();
         }
-
-		public GribNearestValue[] GetNearestValue(double latitude, double longitude, GribNearestToSame nearest)
-		{
-			return this.Nearest.FindNearestValue(latitude, longitude, nearest);
-		}
-
+		
 		/// <summary>
 		/// Writes a message to the specified path.
 		/// </summary>
@@ -245,50 +242,6 @@ namespace Grib.Api
         /// <value>
         /// The context.
         /// </value>
-        public GribContext Context {
-			get
-			{
-				return GribContext.Default;
-			}
-		}
-
-		/// <summary>
-		/// The handle to the native grib_api file object.
-		/// </summary>
-		/// <value>
-		/// The grib_api file handle.
-		/// </value>
-		public GribHandle Handle
-		{
-			get
-			{
-				if (_handle == null)
-				{
-					int error = 0;
-					_handle = GribApiProxy.GribHandleNewFromFile(Context, this, out error);
-
-					if (error != 0)
-					{
-						throw new GribApiException("Failed to get GribHandle");
-					}
-				}
-
-				return _handle;
-			}
-		}
-		private GribHandle _handle = null;
-
-		protected GribNearest Nearest
-		{
-			get
-			{
-				if (_nearest == null) 
-				{
-					_nearest = GribNearest.Create(this.Handle);
-				}
-
-				return _nearest;
-			}
-		}
+        public GribContext Context { get { return GribContext.Default; }  }
     }
 }

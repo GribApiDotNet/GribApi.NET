@@ -145,6 +145,22 @@ namespace Grib.Api.Tests
 			});
 		}
 
+		[Test, Timeout(2000)]
+		public void TesNearest()
+		{
+			using (var file = new GribFile(Settings.REDUCED_LATLON_GRB2)) {
+				Assert.IsTrue(file.MessageCount > 0);
+				foreach (var msg in file) {
+					var val = msg.GeoSpatialValues.First();
+					var nearest = msg.FindNearestCoordinates(val);
+					Assert.IsTrue(nearest.Length == 4);
+					foreach (var n in nearest) {
+						Assert.IsTrue(n.Value.Latitude >= 80 && n.Value.Latitude < 82);
+					}
+				}
+			}
+		}
+
 		[TestFixture]
 		public class IterateValues
 		{

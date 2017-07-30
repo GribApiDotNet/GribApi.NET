@@ -173,9 +173,27 @@ namespace Grib.Api
             this["values"].AsDoubleArray(values);
         }
 
-		public GribNearestValue[] GetNearestValue(double latitude, double longitude, GribNearestToSame nearest)
+		/// <summary>
+		/// Find the nearest four points to a coordinate.
+		/// </summary>
+		/// <param name="latitude">The reference latitude.</param>
+		/// <param name="longitude">The reference longitude.</param>
+		/// <param name="searchType">The type of search to perform. Bitwise "or-able".</param>
+		/// <returns>An array of the nearest four coordinates sorted by distance.</returns>
+		public GribNearestCoordinate[] FindNearestCoordinates(double latitude, double longitude, GribNearestToSame searchType = GribNearestToSame.POINT)
 		{
-			return this.Nearest.FindNearestValue(latitude, longitude, nearest);
+			return this.Nearest.FindNearestCoordinates(latitude, longitude, searchType);
+		}
+
+		/// <summary>
+		/// Find the nearest four points to a coordinate.
+		/// </summary>
+		/// <param name="coord">The reference coordinate.</param>
+		/// <param name="searchType">The type of search to perform. Bitwise "or-able".</param>
+		/// <returns>An array of the nearest four coordinates sorted by distance.</returns>
+		public GribNearestCoordinate[] FindNearestCoordinates(IGeoCoordinate coord, GribNearestToSame searchType = GribNearestToSame.POINT)
+		{
+			return this.FindNearestCoordinates(coord.Latitude, coord.Longitude, searchType);
 		}
 
 		#region Properties

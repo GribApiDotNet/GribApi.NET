@@ -130,7 +130,7 @@
   <ItemGroup>
     <Compile Include="GribEnvironmentLoadHelper.cs" />
     <Compile Include="GribNearest.cs" />
-    <Compile Include="GribNearestValue.cs" />
+    <Compile Include="GribNearestCoordinate.cs" />
     <Compile Include="Interop\GribApiException.cs" />
     <Compile Include="GribBox.cs" />
     <Compile Include="Interop\GribContext.cs" />
@@ -5100,7 +5100,6 @@
     <Content Include="Grib.Api\lib\win\x86\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\samples\CMakeLists.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>
