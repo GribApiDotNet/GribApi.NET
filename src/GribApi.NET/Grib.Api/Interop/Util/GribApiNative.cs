@@ -15,7 +15,10 @@ namespace Grib.Api.Interop.Util
         [DllImport("Grib.Api.Native.dll")]
         internal static extern IntPtr CreateFileHandleProxy ([MarshalAs(UnmanagedType.LPStr)]string filename);
 
-        [DllImport("Grib.Api.Native.dll")]
+		[DllImport("Grib.Api.Native.dll")]
+		internal static extern void SetDefaultDefinitionsPath([MarshalAs(UnmanagedType.LPStr)]string path);
+
+		[DllImport("Grib.Api.Native.dll")]
         internal static extern void DestroyFileHandleProxy (IntPtr fileHandleProxy);
 
 		[DllImport("Grib.Api.Native.dll")]

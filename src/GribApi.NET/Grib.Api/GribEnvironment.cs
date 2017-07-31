@@ -47,26 +47,27 @@ namespace Grib.Api
                 if (Initialized) { return; }
 
                 Initialized = true;
-                string definitions = "";
 
 				if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GRIB_API_NO_ABORT"))) 
 				{
 					NoAbort = true;
 				}
 
-                if (String.IsNullOrWhiteSpace(DefinitionsPath) &&
-                    GribEnvironmentLoadHelper.TryFindDefinitions(out definitions))
+				string definitions = Environment.GetEnvironmentVariable("GRIB_DEFINITION_PATH");
+				if (String.IsNullOrWhiteSpace(definitions))
                 {
-                    DefinitionsPath = definitions;
-					SamplesPath = definitions.Remove(definitions.LastIndexOf("definitions")) + "samples";
+					GribEnvironmentLoadHelper.TryFindDefinitions(out definitions);
                 }
 
-				AssertValidEnvironment();
-                _libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
+				AssertValidEnvironment(definitions);
 
+				_libHandle = GribEnvironmentLoadHelper.BootStrapLibrary();
 				GribApiNative.HookGribExceptions();
-            }
-        }
+
+				SamplesPath = definitions.Remove(definitions.LastIndexOf("definitions")) + "samples";
+				DefinitionsPath = definitions;
+			}
+		}
 
         /// <summary>
         /// Asserts the valid environment.
@@ -76,9 +77,9 @@ namespace Grib.Api
         /// or
         /// Could not locate 'definitions/boot.def'.
         /// </exception>
-        private static void AssertValidEnvironment ()
+        private static void AssertValidEnvironment (string definitions)
         {
-            string[] paths = GribEnvironment.DefinitionsPath.Split(new [] { ';' });
+            string[] paths = definitions.Split(new [] { ';' });
             string existingPath = "";
             bool exists = false;
 
@@ -164,13 +165,14 @@ namespace Grib.Api
         {
             get
             {
-                return Environment.GetEnvironmentVariable("GRIB_DEFINITION_PATH") + "";
+                return _definitions;
             }
             set
             {
-                PutEnvVar("GRIB_DEFINITION_PATH", value);
-            }
-        }
+				GribApiNative.SetDefaultDefinitionsPath(value);
+			}
+		}
+		private static string _definitions = "";
 
 
 		/// <summary>

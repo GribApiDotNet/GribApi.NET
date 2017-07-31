@@ -193,6 +193,7 @@
     <Compile Include="Templates\ParameterNumbers.cs" />
     <Compile Include="Templates\RegularLatLon.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Grib.Api\definitions\check_grib_defs.pl" />
     <None Include="Grib.Api\definitions\compare_concepts.pl" />

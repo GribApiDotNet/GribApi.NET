@@ -44,9 +44,7 @@ namespace Grib.Api
         {
             path = "";
 			target += "";
-            string varDef = Environment.GetEnvironmentVariable("GRIB_API_DIR_ROOT") + "";
 
-            string envDir = Path.Combine(varDef, target);
             string thisDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+"", target);
             string baseDomainDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory+"", target);
 			string relDomainDir = Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath+"", target);
@@ -54,7 +52,6 @@ namespace Grib.Api
 			return TryBuildGriApiPath(thisDir, out path) ||
 				   TryBuildGriApiPath(relDomainDir, out path) ||      // try using the directory that contains this binary
 				   TryBuildGriApiPath(baseDomainDir, out path) ||	  // try using the directory that contains the exe
-				   TryBuildGriApiPath(envDir, out path) ||            // try using environment variable
 				   TryBuildGriApiPath(target, out path);              // try using relative path;      
         }
 
