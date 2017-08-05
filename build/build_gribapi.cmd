@@ -122,8 +122,6 @@ if ERRORLEVEL 1 (
 	EXIT /B 1
 )
 
-
-
 if NOT "%PKG_VERSION%"=="" (
 	@ECHO ON
 	call %~dp0build_nuget.cmd %PKG_VERSION% %CONFIG%

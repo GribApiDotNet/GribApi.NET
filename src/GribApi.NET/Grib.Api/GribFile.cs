@@ -29,24 +29,24 @@ namespace Grib.Api
     /// GRIB file iterator object that provides methods for reading and writing messages. When iterated, returns
     /// instances of the <see cref="Grib.Api.GribMessage"/> class.
     /// </summary>
-    public class GribFile: AutoRef, IEnumerable<GribMessage>
+    public class GribFile : AutoRef, IEnumerable<GribMessage>
     {
-		static readonly byte[] GRIB_FILE_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
-		static readonly byte[] GRIB_FILE_END = { 0x37, 0x37, 0x37, 0x37 };
+        static readonly byte[] GRIB_FILE_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
+        static readonly byte[] GRIB_FILE_END = { 0x37, 0x37, 0x37, 0x37 };
 
         private IntPtr _pFileHandleProxy = IntPtr.Zero;
         private FileHandleProxy _fileHandleProxy = null;
-		private GribNearest _nearest = null; 
+        private GribNearest _nearest = null;
 
         /// <summary>
         /// Initializes the <see cref="GribFile"/> class.
         /// </summary>
-        static GribFile()
+        static GribFile ()
         {
             GribEnvironment.Init();
-			// grib_api discourages enabling multi-fields, however leaving it disabled has caused
-			// considerable confusion among users. 
-			GribContext.Default.EnableMultipleFieldMessages = true;
+            // grib_api discourages enabling multi-fields, however leaving it disabled has caused
+            // considerable confusion among users. 
+            GribContext.Default.EnableMultipleFieldMessages = true;
         }
 
         /// <summary>
@@ -69,19 +69,19 @@ namespace Grib.Api
 
             if (_pFileHandleProxy == IntPtr.Zero)
             {
-				throw new FileLoadException("Could not open file. See inner exception for more detail.", new Win32Exception(Marshal.GetLastWin32Error()));
+                throw new FileLoadException("Could not open file. See inner exception for more detail.", new Win32Exception(Marshal.GetLastWin32Error()));
             }
 
-            _fileHandleProxy = (FileHandleProxy) Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
+            _fileHandleProxy = (FileHandleProxy)Marshal.PtrToStructure(_pFileHandleProxy, typeof(FileHandleProxy));
 
             FileName = fileName;
             Reference = new HandleRef(this, _fileHandleProxy.File);
 
-			// set the message count here; the result seems to be connected to the message iterator so
-			// that after you begin iterating messages, the count decreases until it reaches 1.
-			int count = 0;
-			GribApiProxy.GribCountInFile(Context, this, out count);
-			MessageCount = count;
+            // set the message count here; the result seems to be connected to the message iterator so
+            // that after you begin iterating messages, the count decreases until it reaches 1.
+            int count = 0;
+            GribApiProxy.GribCountInFile(Context, this, out count);
+            MessageCount = count;
         }
 
         /// <summary>
@@ -90,10 +90,10 @@ namespace Grib.Api
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
         protected override void OnDispose (bool disposing)
         {
-			if (this._nearest != null)
-			{
-				this._nearest.Dispose();
-			}
+            if (this._nearest != null)
+            {
+                this._nearest.Dispose();
+            }
 
             if (_pFileHandleProxy != IntPtr.Zero)
             {
@@ -117,16 +117,16 @@ namespace Grib.Api
                 yield return msg;
             }
 
-			this.Rewind();
+            this.Rewind();
         }
 
-		/// <summary>
-		/// Resets the underlying file pointer to the beginning of the file.
-		/// </summary>
-		public void Rewind ()
-		{
-			GribApiNative.RewindFileHandleProxy(this._pFileHandleProxy);
-		}
+        /// <summary>
+        /// Resets the underlying file pointer to the beginning of the file.
+        /// </summary>
+        public void Rewind ()
+        {
+            GribApiNative.RewindFileHandleProxy(this._pFileHandleProxy);
+        }
 
         /// <summary>
         /// NOT IMPLEMENTED.
@@ -139,16 +139,16 @@ namespace Grib.Api
         {
             throw new NotImplementedException();
         }
-		
-		/// <summary>
-		/// Writes a message to the specified path.
-		/// </summary>
-		/// <param name="path">The path.</param>
-		/// <param name="message">The message.</param>
-		/// <param name="mode">The mode.</param>
-		public static void Write (string path, GribMessage message, FileMode mode = FileMode.Create)
+
+        /// <summary>
+        /// Writes a message to the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <param name="message">The message.</param>
+        /// <param name="mode">The mode.</param>
+        public static void Write (string path, GribMessage message, FileMode mode = FileMode.Create)
         {
-            Write(path, new [] { message }, mode);
+            Write(path, new[] { message }, mode);
         }
 
         /// <summary>
@@ -185,40 +185,42 @@ namespace Grib.Api
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-		public static bool FileIsValid(string fileName)
-		{
-			bool isValid = false;
+		public static bool FileIsValid (string fileName)
+        {
+            bool isValid = false;
 
-			try
-			{
-				using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-				{
-					if (fs.Length < 8) { return isValid; }
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+                {
+                    if (fs.Length < 8) { return isValid; }
 
-					Debug.Assert(fs.CanRead && fs.CanSeek);
+                    Debug.Assert(fs.CanRead && fs.CanSeek);
 
-					long offset = -1;
-					fs.Seek(offset, SeekOrigin.End);
+                    long offset = -1;
+                    fs.Seek(offset, SeekOrigin.End);
 
-					// ignore any empty bytes at the end of the file
-					while (fs.Position > 0 && fs.ReadByte() == 0x00) {
-						fs.Seek(--offset, SeekOrigin.End);
-					}
+                    // ignore any empty bytes at the end of the file
+                    while (fs.Position > 0 && fs.ReadByte() == 0x00)
+                    {
+                        fs.Seek(--offset, SeekOrigin.End);
+                    }
 
-					byte[] buffer = new byte[4];
+                    byte[] buffer = new byte[4];
 
-					fs.Seek(offset - 3, SeekOrigin.End);
-					fs.Read(buffer, 0, 4);
+                    fs.Seek(offset - 3, SeekOrigin.End);
+                    fs.Read(buffer, 0, 4);
 
-					isValid = buffer.SequenceEqual(GRIB_FILE_END) || buffer.SequenceEqual(GRIB_FILE_END_GTS);
-				}
-			} catch (Exception)
-			{
-				isValid = false;
-			}
+                    isValid = buffer.SequenceEqual(GRIB_FILE_END) || buffer.SequenceEqual(GRIB_FILE_END_GTS);
+                }
+            }
+            catch (Exception)
+            {
+                isValid = false;
+            }
 
-			return isValid;
-		}
+            return isValid;
+        }
 
         /// <summary>
         /// Gets the name of the file.
@@ -242,6 +244,6 @@ namespace Grib.Api
         /// <value>
         /// The context.
         /// </value>
-        public GribContext Context { get { return GribContext.Default; }  }
+        public GribContext Context { get { return GribContext.Default; } }
     }
 }

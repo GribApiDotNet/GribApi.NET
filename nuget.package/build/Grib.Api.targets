@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<Target Name="AfterBuild">
+	<Target Name="BeforeBuild">
 		<ItemGroup>
 			<_Definitions Include="$(MSBuildThisFileDirectory)..\Grib.Api\**\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(_Definitions)" 
 		  DestinationFiles="@(_Definitions->'$(TargetDir)\Grib.Api\%(RecursiveDir)%(Filename)%(Extension)')"
 		  UseHardlinksIfPossible="true" 
-		  SkipUnchangedFiles="true" />
+		  SkipUnchangedFiles="false" />
 	</Target>
 </Project>

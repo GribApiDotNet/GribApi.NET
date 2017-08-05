@@ -251,6 +251,9 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_DUMP_FLAG_ALL_DATA_get")]
   public static extern int GRIB_DUMP_FLAG_ALL_DATA_get();
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_DUMP_FLAG_ALL_ATTRIBUTES_get")]
+  public static extern int GRIB_DUMP_FLAG_ALL_ATTRIBUTES_get();
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_NEAREST_SAME_GRID_get")]
   public static extern int GRIB_NEAREST_SAME_GRID_get();
 
@@ -259,6 +262,9 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_NEAREST_SAME_POINT_get")]
   public static extern int GRIB_NEAREST_SAME_POINT_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_KEYS_ITERATOR_DUMP_ONLY_get")]
+  public static extern int GRIB_KEYS_ITERATOR_DUMP_ONLY_get();
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribFieldsetNewFromFiles")]
   public static extern global::System.IntPtr GribFieldsetNewFromFiles(System.Runtime.InteropServices.HandleRef jarg1, string[] jarg2, int jarg3, string[] jarg4, int jarg5, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg6, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg7, out int jarg8);
@@ -339,6 +345,12 @@ class GribApiProxyPINVOKE {
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribStringList_value_get(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribStringList_count_set")]
+  public static extern void GribStringList_count_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribStringList_count_get")]
+  public static extern int GribStringList_count_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribStringList_next_set")]
   public static extern void GribStringList_next_set(global::System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2);
 
@@ -368,9 +380,6 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribHandleNewFromMessageCopy")]
   public static extern System.IntPtr GribHandleNewFromMessageCopy(System.Runtime.InteropServices.HandleRef jarg1, byte[] jarg2, System.UIntPtr jarg3);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribHandleNewFromTemplate")]
-  public static extern System.IntPtr GribHandleNewFromTemplate(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribHandleNewFromSamples")]
   public static extern System.IntPtr GribHandleNewFromSamples(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2);
@@ -403,7 +412,7 @@ class GribApiProxyPINVOKE {
   public static extern System.IntPtr GribIteratorNew(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2, out int jarg3);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetData")]
-  public static extern int GribGetData(System.Runtime.InteropServices.HandleRef jarg1, double[] jarg2, double[] jarg3, double[] jarg4, ref System.UIntPtr jarg5);
+  public static extern int GribGetData(System.Runtime.InteropServices.HandleRef jarg1, double[] jarg2, double[] jarg3, double[] jarg4);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribIteratorNext")]
   public static extern int GribIteratorNext(System.Runtime.InteropServices.HandleRef jarg1, out double jarg2, out double jarg3, out double jarg4);
@@ -456,6 +465,9 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetString")]
   public static extern int GribGetString(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2, System.Text.StringBuilder jarg3, ref System.UIntPtr jarg4);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetStringArray")]
+  public static extern int GribGetStringArray(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2, string[] jarg3, ref System.UIntPtr jarg4);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetBytes")]
   public static extern int GribGetBytes(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2, byte[] jarg3, ref System.UIntPtr jarg4);
 
@@ -489,6 +501,9 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetLongArray")]
   public static extern int GribSetLongArray(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2, int[] jarg3, System.UIntPtr jarg4);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetStringArray")]
+  public static extern int GribSetStringArray(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2, string[] jarg3, System.UIntPtr jarg4);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribDumpContent")]
   public static extern void GribDumpContent(System.Runtime.InteropServices.HandleRef jarg1, System.Runtime.InteropServices.HandleRef jarg2, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg3, uint jarg4, byte[] jarg5);
 
@@ -497,9 +512,6 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextGetDefault")]
   public static extern System.IntPtr GribContextGetDefault();
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextNew")]
-  public static extern System.IntPtr GribContextNew(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextDelete")]
   public static extern void GribContextDelete(System.Runtime.InteropServices.HandleRef jarg1);
@@ -518,6 +530,12 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGribexModeOff")]
   public static extern void GribGribexModeOff(System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextSetDefinitionsPath")]
+  public static extern void GribContextSetDefinitionsPath(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextSetSamplesPath")]
+  public static extern void GribContextSetSamplesPath(System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribContextSetMemoryProc")]
   public static extern void GribContextSetMemoryProc(System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, global::System.Runtime.InteropServices.HandleRef jarg4);
@@ -547,6 +565,10 @@ class GribApiProxyPINVOKE {
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribSamplesPath(System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribDefinitionPath")]
+  [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
+  public static extern string GribDefinitionPath(System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetApiVersion")]
   public static extern int GribGetApiVersion();
 
@@ -554,24 +576,47 @@ class GribApiProxyPINVOKE {
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribGetGitSha1();
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetPackageName")]
+  [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
+  public static extern string GribGetPackageName();
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribPrintApiVersion")]
   public static extern void GribPrintApiVersion(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorNew")]
   public static extern System.IntPtr GribKeysIteratorNew(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg3);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrKeysIteratorNew")]
+  public static extern global::System.IntPtr CodesBufrKeysIteratorNew(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrDataSectionKeysIteratorNew")]
+  public static extern global::System.IntPtr CodesBufrDataSectionKeysIteratorNew(System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorNext")]
   public static extern int GribKeysIteratorNext(System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrKeysIteratorNext")]
+  public static extern int CodesBufrKeysIteratorNext(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorGetName")]
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribKeysIteratorGetName(System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrKeysIteratorGetName")]
+  [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
+  public static extern string CodesBufrKeysIteratorGetName(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorDelete")]
   public static extern int GribKeysIteratorDelete(System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrKeysIteratorDelete")]
+  public static extern int CodesBufrKeysIteratorDelete(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorRewind")]
   public static extern int GribKeysIteratorRewind(System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesBufrKeysIteratorRewind")]
+  public static extern int CodesBufrKeysIteratorRewind(global::System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorSetFlags")]
   public static extern int GribKeysIteratorSetFlags(System.Runtime.InteropServices.HandleRef jarg1, uint jarg2);
@@ -588,21 +633,15 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribKeysIteratorGetBytes")]
   public static extern int GribKeysIteratorGetBytes(System.Runtime.InteropServices.HandleRef jarg1, byte[] jarg2, ref System.UIntPtr jarg3);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesCopyKey")]
+  public static extern int CodesCopyKey(System.Runtime.InteropServices.HandleRef jarg1, System.Runtime.InteropServices.HandleRef jarg2, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg3, int jarg4);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUpdateSectionsLengths")]
   public static extern void GribUpdateSectionsLengths(System.Runtime.InteropServices.HandleRef jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetErrorMessage")]
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
   public static extern string GribGetErrorMessage(int jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetFailProc")]
-  public static extern void GribSetFailProc(global::System.Runtime.InteropServices.HandleRef jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribSetExitProc")]
-  public static extern void GribSetExitProc(global::System.Runtime.InteropServices.HandleRef jarg1);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribExit")]
-  public static extern void GribExit(int jarg1);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetTypeName")]
   [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
@@ -673,15 +712,6 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_WmoReadBufrFromFileMalloc")]
   public static extern byte[] WmoReadBufrFromFileMalloc(System.Runtime.InteropServices.HandleRef jarg1, int jarg2, ref System.UIntPtr jarg3, ref System.UIntPtr jarg4, out int jarg5);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_EccodeGtsNewFromFile")]
-  public static extern System.IntPtr EccodeGtsNewFromFile(System.Runtime.InteropServices.HandleRef jarg1, System.Runtime.InteropServices.HandleRef jarg2, int jarg3, out int jarg4);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_EccodeBufrNewFromFile")]
-  public static extern System.IntPtr EccodeBufrNewFromFile(System.Runtime.InteropServices.HandleRef jarg1, System.Runtime.InteropServices.HandleRef jarg2, int jarg3, out int jarg4);
-
-  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_EccodeGribNewFromFile")]
-  public static extern System.IntPtr EccodeGribNewFromFile(System.Runtime.InteropServices.HandleRef jarg1, System.Runtime.InteropServices.HandleRef jarg2, int jarg3, out int jarg4);
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribGetMessageOffset")]
   public static extern int GribGetMessageOffset(System.Runtime.InteropServices.HandleRef jarg1, ref System.UIntPtr jarg2);
@@ -929,6 +959,163 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_delete_GribUtilGridSpec")]
   public static extern void delete_GribUtilGridSpec(global::System.Runtime.InteropServices.HandleRef jarg1);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_gridType_set")]
+  public static extern void GribUtilGridSpec2_gridType_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_gridType_get")]
+  public static extern int GribUtilGridSpec2_gridType_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_gridName_set")]
+  public static extern void GribUtilGridSpec2_gridName_set(global::System.Runtime.InteropServices.HandleRef jarg1, [global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]string jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_gridName_get")]
+  [return: global::System.Runtime.InteropServices.MarshalAs(global::System.Runtime.InteropServices.UnmanagedType.LPStr)]
+  public static extern string GribUtilGridSpec2_gridName_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_ni_set")]
+  public static extern void GribUtilGridSpec2_ni_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_ni_get")]
+  public static extern int GribUtilGridSpec2_ni_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_nj_set")]
+  public static extern void GribUtilGridSpec2_nj_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_nj_get")]
+  public static extern int GribUtilGridSpec2_nj_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_iDirectionIncrementInDegrees_set")]
+  public static extern void GribUtilGridSpec2_iDirectionIncrementInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_iDirectionIncrementInDegrees_get")]
+  public static extern double GribUtilGridSpec2_iDirectionIncrementInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_jDirectionIncrementInDegrees_set")]
+  public static extern void GribUtilGridSpec2_jDirectionIncrementInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_jDirectionIncrementInDegrees_get")]
+  public static extern double GribUtilGridSpec2_jDirectionIncrementInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfFirstGridPointInDegrees_set")]
+  public static extern void GribUtilGridSpec2_longitudeOfFirstGridPointInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfFirstGridPointInDegrees_get")]
+  public static extern double GribUtilGridSpec2_longitudeOfFirstGridPointInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfLastGridPointInDegrees_set")]
+  public static extern void GribUtilGridSpec2_longitudeOfLastGridPointInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfLastGridPointInDegrees_get")]
+  public static extern double GribUtilGridSpec2_longitudeOfLastGridPointInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfFirstGridPointInDegrees_set")]
+  public static extern void GribUtilGridSpec2_latitudeOfFirstGridPointInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfFirstGridPointInDegrees_get")]
+  public static extern double GribUtilGridSpec2_latitudeOfFirstGridPointInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfLastGridPointInDegrees_set")]
+  public static extern void GribUtilGridSpec2_latitudeOfLastGridPointInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfLastGridPointInDegrees_get")]
+  public static extern double GribUtilGridSpec2_latitudeOfLastGridPointInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_uvRelativeToGrid_set")]
+  public static extern void GribUtilGridSpec2_uvRelativeToGrid_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_uvRelativeToGrid_get")]
+  public static extern int GribUtilGridSpec2_uvRelativeToGrid_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfSouthernPoleInDegrees_set")]
+  public static extern void GribUtilGridSpec2_latitudeOfSouthernPoleInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_latitudeOfSouthernPoleInDegrees_get")]
+  public static extern double GribUtilGridSpec2_latitudeOfSouthernPoleInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfSouthernPoleInDegrees_set")]
+  public static extern void GribUtilGridSpec2_longitudeOfSouthernPoleInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_longitudeOfSouthernPoleInDegrees_get")]
+  public static extern double GribUtilGridSpec2_longitudeOfSouthernPoleInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_angleOfRotationInDegrees_set")]
+  public static extern void GribUtilGridSpec2_angleOfRotationInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_angleOfRotationInDegrees_get")]
+  public static extern double GribUtilGridSpec2_angleOfRotationInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_iScansNegatively_set")]
+  public static extern void GribUtilGridSpec2_iScansNegatively_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_iScansNegatively_get")]
+  public static extern int GribUtilGridSpec2_iScansNegatively_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_jScansPositively_set")]
+  public static extern void GribUtilGridSpec2_jScansPositively_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_jScansPositively_get")]
+  public static extern int GribUtilGridSpec2_jScansPositively_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_n_set")]
+  public static extern void GribUtilGridSpec2_n_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_n_get")]
+  public static extern int GribUtilGridSpec2_n_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_bitmapPresent_set")]
+  public static extern void GribUtilGridSpec2_bitmapPresent_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_bitmapPresent_get")]
+  public static extern int GribUtilGridSpec2_bitmapPresent_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_missingValue_set")]
+  public static extern void GribUtilGridSpec2_missingValue_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_missingValue_get")]
+  public static extern double GribUtilGridSpec2_missingValue_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_pl_set")]
+  public static extern void GribUtilGridSpec2_pl_set(global::System.Runtime.InteropServices.HandleRef jarg1, int[] jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_pl_get")]
+  public static extern int[] GribUtilGridSpec2_pl_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_plSize_set")]
+  public static extern void GribUtilGridSpec2_plSize_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_plSize_get")]
+  public static extern int GribUtilGridSpec2_plSize_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_truncation_set")]
+  public static extern void GribUtilGridSpec2_truncation_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_truncation_get")]
+  public static extern int GribUtilGridSpec2_truncation_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_orientationOfTheGridInDegrees_set")]
+  public static extern void GribUtilGridSpec2_orientationOfTheGridInDegrees_set(global::System.Runtime.InteropServices.HandleRef jarg1, double jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_orientationOfTheGridInDegrees_get")]
+  public static extern double GribUtilGridSpec2_orientationOfTheGridInDegrees_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_dyInMetres_set")]
+  public static extern void GribUtilGridSpec2_dyInMetres_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_dyInMetres_get")]
+  public static extern int GribUtilGridSpec2_dyInMetres_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_dxInMetres_set")]
+  public static extern void GribUtilGridSpec2_dxInMetres_set(global::System.Runtime.InteropServices.HandleRef jarg1, int jarg2);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilGridSpec2_dxInMetres_get")]
+  public static extern int GribUtilGridSpec2_dxInMetres_get(global::System.Runtime.InteropServices.HandleRef jarg1);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_new_GribUtilGridSpec2")]
+  public static extern global::System.IntPtr new_GribUtilGridSpec2();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_delete_GribUtilGridSpec2")]
+  public static extern void delete_GribUtilGridSpec2(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_UTIL_PACKING_TYPE_SAME_AS_INPUT_get")]
   public static extern int GRIB_UTIL_PACKING_TYPE_SAME_AS_INPUT_get();
 
@@ -1058,6 +1245,12 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilSetSpec")]
   public static extern System.IntPtr GribUtilSetSpec(System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, int jarg4, double[] jarg5, System.UIntPtr jarg6, out int jarg7);
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GribUtilSetSpec2")]
+  public static extern System.IntPtr GribUtilSetSpec2(System.Runtime.InteropServices.HandleRef jarg1, global::System.Runtime.InteropServices.HandleRef jarg2, global::System.Runtime.InteropServices.HandleRef jarg3, int jarg4, double[] jarg5, System.UIntPtr jarg6, out int jarg7);
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_CodesSetCodesAssertionFailedProc")]
+  public static extern void CodesSetCodesAssertionFailedProc(global::System.Runtime.InteropServices.HandleRef jarg1);
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_SUCCESS_get")]
   public static extern int GRIB_SUCCESS_get();
 
@@ -1169,6 +1362,9 @@ class GribApiProxyPINVOKE {
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_CONCEPT_NO_MATCH_get")]
   public static extern int GRIB_CONCEPT_NO_MATCH_get();
 
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_HASH_ARRAY_NO_MATCH_get")]
+  public static extern int GRIB_HASH_ARRAY_NO_MATCH_get();
+
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_NO_DEFINITIONS_get")]
   public static extern int GRIB_NO_DEFINITIONS_get();
 
@@ -1225,6 +1421,36 @@ class GribApiProxyPINVOKE {
 
   [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_INVALID_KEY_VALUE_get")]
   public static extern int GRIB_INVALID_KEY_VALUE_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_STRING_TOO_SMALL_get")]
+  public static extern int GRIB_STRING_TOO_SMALL_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_WRONG_CONVERSION_get")]
+  public static extern int GRIB_WRONG_CONVERSION_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_MISSING_BUFR_ENTRY_get")]
+  public static extern int GRIB_MISSING_BUFR_ENTRY_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_NULL_POINTER_get")]
+  public static extern int GRIB_NULL_POINTER_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_ATTRIBUTE_CLASH_get")]
+  public static extern int GRIB_ATTRIBUTE_CLASH_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_TOO_MANY_ATTRIBUTES_get")]
+  public static extern int GRIB_TOO_MANY_ATTRIBUTES_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_ATTRIBUTE_NOT_FOUND_get")]
+  public static extern int GRIB_ATTRIBUTE_NOT_FOUND_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_UNSUPPORTED_EDITION_get")]
+  public static extern int GRIB_UNSUPPORTED_EDITION_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_OUT_OF_RANGE_get")]
+  public static extern int GRIB_OUT_OF_RANGE_get();
+
+  [global::System.Runtime.InteropServices.DllImport("Grib.Api.Native.dll", EntryPoint="CSharp_GRIB_WRONG_BITMAP_SIZE_get")]
+  public static extern int GRIB_WRONG_BITMAP_SIZE_get();
 }
 
 }

@@ -48,6 +48,16 @@ public class GribStringList : global::System.IDisposable {
     } 
   }
 
+  public int count {
+    set {
+      GribApiProxyPINVOKE.GribStringList_count_set(swigCPtr, value);
+    } 
+    get {
+      int ret = GribApiProxyPINVOKE.GribStringList_count_get(swigCPtr);
+      return ret;
+    } 
+  }
+
   public SWIGTYPE_p_grib_string_list next {
     set {
       GribApiProxyPINVOKE.GribStringList_next_set(swigCPtr, SWIGTYPE_p_grib_string_list.getCPtr(value));

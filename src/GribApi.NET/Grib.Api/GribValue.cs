@@ -33,18 +33,9 @@ namespace Grib.Api
         const uint MAX_VAL_LEN = 1024;
 
         private GribHandle _handle;
-        private readonly static GribValueType[] _asStringBlacklist = { GribValueType.IntArray, 
+        private readonly static GribValueType[] _asStringBlacklist = { GribValueType.IntArray,
                                                                        GribValueType.DoubleArray,
                                                                        GribValueType.Bytes };
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GribValue" /> class.
-        /// </summary>
-        /// <param name="keyName">Name of the key.</param>
-        internal GribValue (string keyName)
-        {
-            Key = keyName;
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribValue"/> class.
@@ -63,7 +54,7 @@ namespace Grib.Api
         /// <returns></returns>
         public virtual string AsString ()
         {
-            if (!IsDefined || _asStringBlacklist.Contains(NativeType) ) { return String.Empty; }
+            if (!IsDefined || _asStringBlacklist.Contains(NativeType)) { return String.Empty; }
 
             SizeT ptLen = 0;
             string valueKey = Key;
@@ -75,7 +66,7 @@ namespace Grib.Api
 
             // not sure it's worth checking the length here--could just use MAX_VAL_LEN
             GribApiProxy.GribGetLength(_handle, valueKey, ref ptLen);
-            StringBuilder msg = new StringBuilder((int) ptLen);
+            StringBuilder msg = new StringBuilder((int)ptLen);
 
             GribApiProxy.GribGetString(_handle, valueKey, msg, ref ptLen);
 
@@ -90,7 +81,7 @@ namespace Grib.Api
         {
             AssertTypeSafe(GribValueType.String);
 
-            SizeT len = (SizeT) newValue.Length;
+            SizeT len = (SizeT)newValue.Length;
             GribApiProxy.GribSetString(_handle, Key, newValue, ref len);
         }
 
@@ -119,7 +110,7 @@ namespace Grib.Api
         {
             AssertTypeSafe(GribValueType.Bytes);
 
-            SizeT sz = (SizeT) newBytes.Length;
+            SizeT sz = (SizeT)newBytes.Length;
             GribApiProxy.GribSetBytes(_handle, Key, newBytes, ref sz);
         }
 
@@ -236,7 +227,8 @@ namespace Grib.Api
             if (force)
             {
                 GribApiProxy.GribSetForceDoubleArray(_handle, Key, newValues, (SizeT)newValues.Length);
-            } else
+            }
+            else
             {
                 AssertTypeSafe(GribValueType.DoubleArray);
 
@@ -307,7 +299,7 @@ namespace Grib.Api
                 int err;
 
                 bool isMissing = GribApiProxy.GribIsMissing(_handle, Key, out err);
-                
+
                 if (err != 0)
                 {
                     throw GribApiException.Create(err);
@@ -327,8 +319,19 @@ namespace Grib.Api
         {
             get
             {
-                return GribApiProxy.GribIsDefined(_handle, Key);
+                return GribValue.IsKeyDefined(_handle, Key);
             }
+        }
+
+        /// <summary>
+        /// Return true if the key name exists (is defined) in the grib message.
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="keyName"></param>
+        /// <returns></returns>
+        public static bool IsKeyDefined (GribHandle handle, string keyName)
+        {
+            return GribApiProxy.GribIsDefined(handle, keyName);
         }
 
         /// <summary>
@@ -357,7 +360,6 @@ namespace Grib.Api
                                         GribValueType.IntArray :
                                         GribValueType.DoubleArray;
                     }
-
                 }
 
                 return nativeType;
@@ -383,13 +385,13 @@ namespace Grib.Api
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        private GribValueType NativeTypeForKey(string key)
+        private GribValueType NativeTypeForKey (string key)
         {
             int type = 0;
 
             GribApiProxy.GribGetNativeType(_handle, key, out type);
 
-            return (GribValueType) type;
+            return (GribValueType)type;
         }
 
         /// <summary>
@@ -408,7 +410,7 @@ namespace Grib.Api
         /// <param name="requestedType">The requested type.</param>
         /// <param name="actualType">The actual type.</param>
         /// <exception cref="GribValueTypeException"></exception>
-        private static void AssertTypeSafe(string key, GribValueType requestedType, GribValueType actualType)
+        private static void AssertTypeSafe (string key, GribValueType requestedType, GribValueType actualType)
         {
             if (requestedType != actualType)
             {
