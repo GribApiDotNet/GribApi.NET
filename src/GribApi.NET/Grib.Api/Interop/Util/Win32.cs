@@ -15,7 +15,7 @@ namespace Grib.Api.Interop.Util
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         internal static extern int _putenv_s (string e, string v);
 
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
         internal static extern IntPtr LoadLibrary ([MarshalAs(UnmanagedType.LPStr)]string lpFileName);
 
         internal static AutoRef LoadWin32Library (string libPath)
