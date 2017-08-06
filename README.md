@@ -5,7 +5,7 @@ GribApi.NET is a C# wrapper around the [European Centre for Medium Range Weather
 
 GRIB is a format commonly used in meteorology to store weather data. GribApi.NET makes it easy to encode and decode these data by providing access to both GRIB editions through a set of [GRIB API keys](https://software.ecmwf.int/wiki/display/GRIB/GRIB%20API%20keys). It can handle all common GRIB formats from centres such as NOAA's NCEP and the ECMWF. GribApi.NET and grib_api are licensed under the friendly [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-Special thanks to John L'Heureux, Meteorological Data Analyst at aWhere, Inc., for his contributions as scientific advisor.
+Special thanks to John L'Heureux, for his contributions as scientific advisor.
 
 #### Features
 * Read and write GRIB 1 and 2 messages

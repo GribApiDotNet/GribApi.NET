@@ -1,5 +1,15 @@
 CHANGELOG
 
+1.0.0
+=====
+* Moved from grib_api to ecCodes 2.4.0
+* Added GribNearest feature
+* Improved manual setting of definitions path
+* EnableMultiFieldMessages now defaults to 'true'
+* Many bug fixes
+* Moved native code to GribApi.XP and GribApi.Native repos
+* Building much easier
+
 0.7.1
 =====
 * Fixed GribContext null log event handler invocation.
