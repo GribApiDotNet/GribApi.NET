@@ -49,11 +49,6 @@ taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"
 
 @ECHO ON
 
-:::::::::: X64
-
-SET _OUT=/p:OutputPath="..\..\..\bin\x64\Release\"
-
-
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api\Grib.Api.csproj"  /property:Configuration="%CONFIG%" /property:Platform="AnyCPU" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
 @ECHO OFF
@@ -62,6 +57,10 @@ if ERRORLEVEL 1 (
 	ECHO BUILD FAILED
 	EXIT /B 1
 )
+
+:::::::::: X64 TEST
+
+@ECHO ON
 
 "%FrameworkDir%\%FrameworkVersion%\msbuild.exe" "%BASEDIR%src\GribApi.NET\Grib.Api.Tests\Grib.Api.Tests.csproj"  /property:Configuration="%CONFIG%" /property:Platform="x64" /tv:4.0 %REBUILD% /p:NoWarn="1591"
 
@@ -73,9 +72,8 @@ if ERRORLEVEL 1 (
 )
 
 
-:::::::::: X86 NATIVE
+:::::::::: X86 TEST
 
-SET _OUT=/p:OutputPath="..\..\..\bin\x86\Release\"
 @ECHO ON
 
 
