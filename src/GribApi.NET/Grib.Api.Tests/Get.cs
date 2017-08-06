@@ -128,6 +128,7 @@ namespace Grib.Api.Tests
             var files = new[] { Settings.PNG_COMPRESSION, Settings.COMPLEX_GRID, Settings.PACIFIC_WIND, Settings.REDUCED_LATLON_GRB2, Settings.REG_GAUSSIAN_SURFACE_GRB2, Settings.SPHERICAL_PRESS_LVL };
 
             var l = files.Select(x => new FileInfo(x)).Select(x => new GribFile(x.FullName)).OrderBy(x => x.First().Time).ToList();
+            Assert.IsTrue(l.Any());
         }
 
         [Test, Timeout(5000)]

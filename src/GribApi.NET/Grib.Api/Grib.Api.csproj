@@ -1494,6 +1494,7 @@
     <Content Include="Grib.Api\lib\win\x86\Release\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\samples\CMakeLists.txt" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="Grib.Api\definitions\bufr\descriptor_template" />
     <None Include="Grib.Api\definitions\bufr\section1_flags.table" />
@@ -15476,7 +15477,6 @@
     <None Include="Grib.Api\samples\sh_sfc_grib2.tmpl" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>

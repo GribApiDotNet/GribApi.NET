@@ -14,7 +14,7 @@ namespace Grib.Api
 
             if (!TryFindBootstrapLibrary(out path))
             {
-                throw new FileNotFoundException("Could not find Grib.Api.Native. If you're using ASP.NET or NUnit, this is usually caused by shadow copying. Please see GribApi.NET's documentation for help.");
+                throw new FileNotFoundException("Could not find Grib.Api.Native. Please see GribApi.NET's documentation for help.");
             }
 
             return Win32.LoadWin32Library(path);
