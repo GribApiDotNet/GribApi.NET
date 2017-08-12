@@ -19,15 +19,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.IO;
+using System.Text;
 
 namespace Grib.Api
 {
     /// <summary>
     /// Grib message object. Each grib message has attributes corresponding to grib message keys for GRIB1 and GRIB2.
     /// Parameter names are are given by the name, shortName and paramID keys. When iterated, returns instances of the
-    /// <seealso cref="Grib.Api.GribValue"/> class.
+    /// <seealso cref="Grib.Api.GribKeyValue"/> class.
     /// </summary>
-    public class GribMessage : IEnumerable<GribValue>, IDisposable
+    public class GribMessage : IEnumerable<GribKeyValue>, IDisposable
     {
         private static readonly object _fileLock = new object();
 
@@ -61,7 +63,7 @@ namespace Grib.Api
         /// <returns>
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.
         /// </returns>
-        public IEnumerator<GribValue> GetEnumerator ()
+        public IEnumerator<GribKeyValue> GetEnumerator ()
         {
             // null returns keys from all namespaces
             string nspace = Namespace == "all" ? null : Namespace;
@@ -134,6 +136,42 @@ namespace Grib.Api
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bits"></param>
+        /// <param name="ctx"></param>
+        /// <returns></returns>
+        public static GribMessage Create (byte[] bits, GribContext ctx)
+        {
+            var buff = Marshal.AllocCoTaskMem(bits.Length);
+            Marshal.Copy(bits, 0, buff, bits.Length);
+            int err = 0;
+            SizeT sz = (SizeT)bits.Length;
+
+
+            GribMessage msg = null;
+            GribHandle handle = null;
+
+            lock (_fileLock)
+            {
+                // grib_api moves to the next message in a stream for each new handle
+                handle = GribApiProxy.GribHandleNewFromMultiMessage(GribContext.Default, out buff, ref sz, out err);
+            }
+
+            if (err != 0)
+            {
+                throw GribApiException.Create(err);
+            }
+
+            if (handle != null)
+            {
+                msg = new GribMessage(handle, ctx, 0);
+            }
+
+            return msg;
+        }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> containing metadata about this instance.
         /// </summary>
         /// <returns>
@@ -145,7 +183,32 @@ namespace Grib.Api
             string stepType = this["stepType"].AsString();
             string timeQaulifier = stepType == "avg" ? String.Format("({0})", stepType) : "";
 
-            return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HHmm"), ShortName);
+            return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HH:mm:ss"), ShortName);
+        }
+
+        public void WriteValuesToCsv (Stream stream)
+        {
+            // write column headers
+            var bytes = Encoding.UTF8.GetBytes("Time0,Time1,Field,Level,Longitude,Latitude,Grib Value\n");
+            stream.Write(bytes, 0, bytes.Length);
+
+            foreach (var v in this.GeoSpatialValues)
+            {
+                // "time0","time1","field","level",longitude,latitude,grid-value
+                var line = String.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4},{5},{6}\n", this.ReferenceTime.ToString("yyyy-MM-dd HH:mm:ss"), this.Time.ToString("yyyy-MM-dd HH:mm:ss"), this.Name, this.Level, v.Longitude, v.Latitude, v.Value);
+                bytes = Encoding.ASCII.GetBytes(line);
+                stream.Write(bytes, 0, bytes.Length);
+                stream.Flush();
+            }
+        }
+
+        public void WriteValuesToCsv (string filePath, FileMode mode = FileMode.Create)
+        {
+            using (var fs = File.Open(filePath, mode))
+            {
+                this.WriteValuesToCsv(fs);
+                fs.Flush();
+            }
         }
 
         /// <summary>
@@ -208,15 +271,15 @@ namespace Grib.Api
         {
             get
             {
-                if (GribValue.IsKeyDefined(this.Handle, "parameterName"))
+                if (GribKeyValue.IsKeyDefined(this.Handle, "parameterName"))
                 {
                     return this["parameterName"].AsString();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "name"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "name"))
                 {
                     return this["name"].AsString();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "nameECMF"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "nameECMF"))
                 {
                     return this["nameECMF"].AsString();
                 }
@@ -234,11 +297,11 @@ namespace Grib.Api
         {
             get
             {
-                if (GribValue.IsKeyDefined(this.Handle, "shortName"))
+                if (GribKeyValue.IsKeyDefined(this.Handle, "shortName"))
                 {
                     return this["shortName"].AsString();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "shortNameECMF"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "shortNameECMF"))
                 {
                     return this["shortNameECMF"].AsString();
                 }
@@ -291,15 +354,15 @@ namespace Grib.Api
         {
             get
             {
-                if (GribValue.IsKeyDefined(this.Handle, "parameterNumber"))
+                if (GribKeyValue.IsKeyDefined(this.Handle, "parameterNumber"))
                 {
                     return this["parameterNumber"].AsInt();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "paramId"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "paramId"))
                 {
                     return this["paramId"].AsInt();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "paramIdECMF"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "paramIdECMF"))
                 {
                     return this["paramIdECMF"].AsInt();
                 }
@@ -308,11 +371,11 @@ namespace Grib.Api
 
             set
             {
-                if (GribValue.IsKeyDefined(this.Handle, "parameterNumber"))
+                if (GribKeyValue.IsKeyDefined(this.Handle, "parameterNumber"))
                 {
                     this["parameterNumber"].AsInt(value);
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "paramId"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "paramId"))
                 {
                     this["paramId"].AsInt(value);
                 }
@@ -333,15 +396,15 @@ namespace Grib.Api
         {
             get
             {
-                if (GribValue.IsKeyDefined(this.Handle, "parameterUnits"))
+                if (GribKeyValue.IsKeyDefined(this.Handle, "parameterUnits"))
                 {
                     return this["parameterUnits"].AsString();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "units"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "units"))
                 {
                     return this["units"].AsString();
                 }
-                else if (GribValue.IsKeyDefined(this.Handle, "unitsECMF"))
+                else if (GribKeyValue.IsKeyDefined(this.Handle, "unitsECMF"))
                 {
                     return this["unitsECMF"].AsString();
                 }
@@ -752,11 +815,11 @@ namespace Grib.Api
         /// <value>
         /// The geo spatial values.
         /// </value>
-        public IEnumerable<GeoSpatialValue> GeoSpatialValues
+        public IEnumerable<GeoCoordinateValue> GeoSpatialValues
         {
             get
             {
-                GeoSpatialValue gsVal;
+                GeoCoordinateValue gsVal;
 
                 using (GribValuesIterator iter = GribValuesIterator.Create(Handle, (uint)KeyFilters))
                 {
@@ -814,16 +877,16 @@ namespace Grib.Api
         #endregion Properties
 
         /// <summary>
-        /// Gets the <see cref="GribValue"/> with the specified key name.
+        /// Gets the <see cref="GribKeyValue"/> with the specified key name.
         /// </summary>
         /// <value>
-        /// The <see cref="GribValue"/>.
+        /// The <see cref="GribKeyValue"/>.
         /// </value>
         /// <param name="keyName">Name of the key.</param>
         /// <returns></returns>
-        public GribValue this[string keyName]
+        public GribKeyValue this[string keyName]
         {
-            get { return new GribValue(Handle, keyName); }
+            get { return new GribKeyValue(Handle, keyName); }
         }
 
         #region IDisposable Support

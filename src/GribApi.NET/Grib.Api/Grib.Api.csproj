@@ -131,6 +131,7 @@
     <Compile Include="GribEnvironmentLoadHelper.cs" />
     <Compile Include="GribNearest.cs" />
     <Compile Include="GribNearestCoordinate.cs" />
+    <Compile Include="GribStream.cs" />
     <Compile Include="Interop\GribApiException.cs" />
     <Compile Include="GribBox.cs" />
     <Compile Include="Interop\GribContext.cs" />
@@ -1488,8 +1489,6 @@
     <Content Include="Grib.Api\lib\win\x64\Release\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\lib\win\x86\Debug\Grib.Api.Native.dll" />
     <Content Include="Grib.Api\lib\win\x86\Debug\Grib.Api.Native.pdb" />
-    <Content Include="Grib.Api\lib\win\x86\Grib.Api.Native.dll" />
-    <Content Include="Grib.Api\lib\win\x86\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\lib\win\x86\Release\Grib.Api.Native.dll" />
     <Content Include="Grib.Api\lib\win\x86\Release\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\samples\CMakeLists.txt" />

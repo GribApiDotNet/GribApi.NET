@@ -1,7 +1,7 @@
 ﻿using Grib.Api.Interop;
 using Grib.Api.Interop.SWIG;
 
-namespace Grib.Api
+namespace Grib.Api.Interop
 {
     /// <summary>
     /// A subdomain of field measurements.

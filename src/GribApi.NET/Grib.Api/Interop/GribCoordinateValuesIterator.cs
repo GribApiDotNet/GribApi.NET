@@ -24,12 +24,12 @@ namespace Grib.Api.Interop
         /// <param name="isMissingFlag">The is missing flag.</param>
         /// <param name="gsVal">The gs value.</param>
         /// <returns>False if there are no more values.</returns>
-        public bool Next (double isMissingFlag, out GeoSpatialValue gsVal)
+        public bool Next (double isMissingFlag, out GeoCoordinateValue gsVal)
         {
             double lat, lon, val;
             bool success = GribApiProxy.GribIteratorNext(this, out lat, out lon, out val) != 0;
 
-            gsVal = new GeoSpatialValue(lat, lon, val, val == isMissingFlag);
+            gsVal = new GeoCoordinateValue(lat, lon, val, val == isMissingFlag);
 
             return success;
         }

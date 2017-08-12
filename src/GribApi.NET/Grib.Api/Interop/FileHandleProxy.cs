@@ -14,6 +14,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+
 namespace Grib.Api.Interop
 {
     [StructLayout(LayoutKind.Sequential)]

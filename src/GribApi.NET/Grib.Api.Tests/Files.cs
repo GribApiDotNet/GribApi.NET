@@ -34,6 +34,28 @@ namespace Grib.Api.Tests
             }
             catch (FileLoadException) { }
         }
+        [Test, Timeout(5000)]
+        public void TestStream ()
+        {
+            using (GribFile file = new GribFile(Settings.STEREO))
+            {
+                GribMessage msg = file.First();
+                Assert.Greater(msg.ValuesCount, 1);
+            }
+
+            using (var fs = File.OpenRead(".\\TestData\\gen_ext_bitmap.grib"))
+            {
+                var s = new GribStream(fs);
+                s.GetNextMessage();
+                Console.WriteLine("oi");
+                //GribMessage msg = file.First();
+                //Assert.Greater(msg.ValuesCount, 1);
+                //foreach (GeoCoordinateValue gs in msg.GeoSpatialValues)
+                //{
+                //    Assert.Greater(gs.Latitude, 15);
+                //}
+            }
+        }
 
         [Test, Timeout(5000)]
         public void TestSteographic ()
@@ -42,7 +64,7 @@ namespace Grib.Api.Tests
             {
                 GribMessage msg = file.First();
                 Assert.Greater(msg.ValuesCount, 1);
-                foreach (GeoSpatialValue gs in msg.GeoSpatialValues)
+                foreach (GeoCoordinateValue gs in msg.GeoSpatialValues)
                 {
                     Assert.Greater(gs.Latitude, 15);
                 }

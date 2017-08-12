@@ -64,7 +64,7 @@ namespace Grib.Api.Tests
             int count = 0;
             double val = Double.NaN;
 
-            Dictionary<int, GeoSpatialValue> orig = new Dictionary<int, GeoSpatialValue>();
+            Dictionary<int, GeoCoordinateValue> orig = new Dictionary<int, GeoCoordinateValue>();
 
             using (var readFile = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
@@ -86,7 +86,7 @@ namespace Grib.Api.Tests
                         }
                         while (orig.ContainsKey(k));
 
-                        orig.Add(k, new GeoSpatialValue());
+                        orig.Add(k, new GeoCoordinateValue());
                     }
 
                     int x = 0;

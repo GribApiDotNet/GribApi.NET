@@ -27,7 +27,7 @@ namespace Grib.Api
     /// <summary>
     /// Encapsulates logic for encoding and decoding a value within a GRIB message.
     /// </summary>
-    public class GribValue
+    public class GribKeyValue
     {
         const uint MAX_KEY_LEN = 255;
         const uint MAX_VAL_LEN = 1024;
@@ -38,11 +38,11 @@ namespace Grib.Api
                                                                        GribValueType.Bytes };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GribValue"/> class.
+        /// Initializes a new instance of the <see cref="GribKeyValue"/> class.
         /// </summary>
         /// <param name="handle">The handle.</param>
         /// <param name="keyName">Name of the key.</param>
-        internal GribValue (GribHandle handle, string keyName)
+        internal GribKeyValue (GribHandle handle, string keyName)
         {
             _handle = handle;
             Key = keyName;
@@ -319,7 +319,7 @@ namespace Grib.Api
         {
             get
             {
-                return GribValue.IsKeyDefined(_handle, Key);
+                return GribKeyValue.IsKeyDefined(_handle, Key);
             }
         }
 
@@ -400,7 +400,7 @@ namespace Grib.Api
         /// <param name="requestedType">The expected type.</param>
         private void AssertTypeSafe (GribValueType requestedType)
         {
-            GribValue.AssertTypeSafe(Key, requestedType, NativeType);
+            GribKeyValue.AssertTypeSafe(Key, requestedType, NativeType);
         }
 
         /// <summary>

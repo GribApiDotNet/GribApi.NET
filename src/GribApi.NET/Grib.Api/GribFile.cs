@@ -31,8 +31,9 @@ namespace Grib.Api
     /// </summary>
     public class GribFile : AutoRef, IEnumerable<GribMessage>
     {
-        static readonly byte[] GRIB_FILE_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
-        static readonly byte[] GRIB_FILE_END = { 0x37, 0x37, 0x37, 0x37 };
+        static readonly byte[] GRIB_MSG_START = { 0x47, 0x52, 0x49, 0x42 };
+        static readonly byte[] GRIB_MSG_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
+        static readonly byte[] GRIB_MSG_END = { 0x37, 0x37, 0x37, 0x37 };
 
         private IntPtr _pFileHandleProxy = IntPtr.Zero;
         private FileHandleProxy _fileHandleProxy = null;
@@ -44,9 +45,6 @@ namespace Grib.Api
         static GribFile ()
         {
             GribEnvironment.Init();
-            // grib_api discourages enabling multi-fields, however leaving it disabled has caused
-            // considerable confusion among users. 
-            GribContext.Default.EnableMultipleFieldMessages = true;
         }
 
         /// <summary>
@@ -211,7 +209,7 @@ namespace Grib.Api
                     fs.Seek(offset - 3, SeekOrigin.End);
                     fs.Read(buffer, 0, 4);
 
-                    isValid = buffer.SequenceEqual(GRIB_FILE_END) || buffer.SequenceEqual(GRIB_FILE_END_GTS);
+                    isValid = buffer.SequenceEqual(GRIB_MSG_END) || buffer.SequenceEqual(GRIB_MSG_END_GTS);
                 }
             }
             catch (Exception)

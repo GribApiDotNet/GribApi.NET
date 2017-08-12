@@ -131,6 +131,24 @@ namespace Grib.Api.Tests
             Assert.IsTrue(l.Any());
         }
 
+        [Test, Timeout(500000)]
+        public void TestDs ()
+        {
+            // using (var fs = File.AppendText("C:\\Users\\eric\\ds_vals.txt"))
+           // using (var fs = File.AppendText("C:\\Users\\eric\\raw.csv"))
+             //   weird
+            //using (var file = new GribFile(".\\TestData\\weird.grb"))
+            using (var file = new GribFile(".\\TestData\\RawFileBadETOGrib.os"))
+            {
+                var msg = file.First();
+                foreach(var k in msg)
+                {
+                    Console.WriteLine("{0}: {1}", k.Key, k.AsString());
+                }
+                msg.WriteValuesToCsv("C:\\Users\\eric\\raw.csv");
+            }
+        }
+
         [Test, Timeout(5000)]
         public void TestGetParallel ()
         {

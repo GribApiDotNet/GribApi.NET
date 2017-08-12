@@ -1,7 +1,5 @@
 ﻿using Grib.Api.Interop.SWIG;
-using Grib.Api.Interop.Util;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Grib.Api.Interop
 {

@@ -1,13 +1,7 @@
-﻿using Grib.Api.Interop;
-using Grib.Api.Interop.SWIG;
+﻿using Grib.Api.Interop.SWIG;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Grib.Api
+namespace Grib.Api.Interop
 {
     [Flags]
     public enum GribNearestToSame : uint

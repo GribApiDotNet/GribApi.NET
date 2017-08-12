@@ -19,14 +19,14 @@ namespace Grib.Api
     /// <summary>
     /// A GRIB grid value with coordinates.
     /// </summary>
-	public struct GeoSpatialValue : IGeoCoordinate, IEquatable<GeoSpatialValue>
+	public struct GeoCoordinateValue : IGeoCoordinate, IEquatable<GeoCoordinateValue>
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Value { get; set; }
         public bool IsMissing { get; private set; }
 
-        public GeoSpatialValue (double lat, double lon, double val, bool isMissing) : this()
+        public GeoCoordinateValue (double lat, double lon, double val, bool isMissing) : this()
         {
             this.Latitude = lat;
             this.Longitude = lon;
@@ -39,7 +39,7 @@ namespace Grib.Api
         /// </summary>
         /// <param name="that">The that.</param>
         /// <returns></returns>
-        public bool Equals (GeoSpatialValue that)
+        public bool Equals (GeoCoordinateValue that)
         {
             return (this.Latitude == that.Latitude) &&
                 (this.Longitude == that.Longitude) &&
@@ -55,7 +55,7 @@ namespace Grib.Api
         /// </returns>
         public override bool Equals (object obj)
         {
-            return (obj is GeoSpatialValue) && this.Equals((GeoSpatialValue)obj);
+            return (obj is GeoCoordinateValue) && this.Equals((GeoCoordinateValue)obj);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Grib.Api
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(GeoSpatialValue a, GeoSpatialValue b)
+        public static bool operator ==(GeoCoordinateValue a, GeoCoordinateValue b)
         {
             if (System.Object.ReferenceEquals(a, b))
             {
@@ -95,7 +95,7 @@ namespace Grib.Api
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(GeoSpatialValue a, GeoSpatialValue b)
+        public static bool operator !=(GeoCoordinateValue a, GeoCoordinateValue b)
         {
             return !(a.Equals(b));
         }
