@@ -91,7 +91,7 @@ namespace Grib.Api.Tests
 
                     int x = 0;
                     int y = 0;
-                    foreach (var gsv in msg.GeoSpatialValues)
+                    foreach (var gsv in msg.GeoCoordinateValues)
                     {
                         if (orig.ContainsKey(x))
                         {
@@ -112,7 +112,7 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 GribFile.Write(Settings.OUT_GRIB, msg);
 
-                var newGsv = msg.GeoSpatialValues.ToArray();
+                var newGsv = msg.GeoCoordinateValues.ToArray();
                 Assert.IsTrue(newGsv.Any());
 
                 foreach (var kvp in orig)
@@ -129,7 +129,7 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 Assert.AreEqual(msg["packingType"].AsString(), grid);
 
-                var newGsv = msg.GeoSpatialValues.ToArray();
+                var newGsv = msg.GeoCoordinateValues.ToArray();
                 Assert.IsTrue(newGsv.Any());
 
                 foreach (var kvp in orig)

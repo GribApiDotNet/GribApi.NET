@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Grib.Api.Interop;
+using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
-    public class GribStream//: IEnumerable<GribMessage>
+    public class GribStream: IEnumerable<GribMessage>, IDisposable
     {
         static readonly byte[] GRIB_MSG_START = { 0x47, 0x52, 0x49, 0x42 };
         static readonly byte[] GRIB_MSG_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
@@ -39,24 +40,31 @@ namespace Grib.Api
 
         //}
 
-        public void GetNextMessage ()
+        public GribMessage GetNextMessage (int index)
         {
-            var start = this.Stream.Position;
-            long offset = 0;
+            // the starting position of the stream
+            var streamStartPos = this.Stream.Position;
+            // if there are headers in the file, the message may not align with the beginning of the stream
+            // or the end of the previous message.
+            long msgOffset = 0;
+
+            byte[] buffer64 = new byte[8];
             byte[] buffer32 = new byte[4];
             byte[] buffer24 = new byte[3];
-            bool foundStart = false;
 
             /*
-            Octets Content
-            1-4    'GRIB' (Coded CCITT-ITA No. 5) (ASCII);
-            5-7	    GRIB1: Total length of GRIB message (including Section 0)
-            9-16    GRIB2: Total length, in octets, of GRIB message(including Sections 0 & 5);
+            GRIB Message Octets Content (0 indexed)
+            0-3    'GRIB' (Coded CCITT-ITA No. 5) (ASCII);
+            4-6	    GRIB1: Total length of GRIB message (including Section 0)
+            7       Edition number
+            8-15    GRIB2: Total length of GRIB message(including Sections 0 & 5);
             */
+
+            bool foundStart = false;
 
             while (this.Stream.Position + 1 < this.Stream.Length && !foundStart)
             {
-                offset = this.Stream.Position;
+                msgOffset = this.Stream.Position;
 
                 if (this.Stream.ReadByte() == GRIB_MSG_START[0])
                 {
@@ -69,33 +77,134 @@ namespace Grib.Api
                     }
                     else
                     {
-                        this.Stream.Seek(offset + 1, SeekOrigin.Begin);
+                        this.Stream.Seek(msgOffset + 1, SeekOrigin.Begin);
                     }
                 }
             }
 
-            if (!foundStart) { return; }
+            if (!foundStart) { return null; }
 
-            // At this point, the stream should be pointing to the "B" octet in the "GRIB" sequence
-
-            // try to get the message length from GRIB 1
+            // at this point, the stream should be pointing to the "B" octet in the "GRIB" sequence
+            // if this is an edition 1, the next 3 bytes are the length of the message
             this.Stream.Read(buffer24, 0, 3);
-            buffer32.Initialize();
-            Array.Copy(buffer24, 0, buffer32, 1, 3);
+
+            // get the edition number and read the message length per ed spec
+            var ed = this.Stream.ReadByte();
+
+            if (ed == 0)
+            {
+                throw GribApiException.Create(-12);
+            }
+            else if (ed == 1)
+            {
+                buffer32.Initialize();
+                Array.Copy(buffer24, 0, buffer64, 5, 3);
+            }
+            else if (ed == 2)
+            {
+                this.Stream.Read(buffer64, 0, 8);
+            }
 
             if (BitConverter.IsLittleEndian)
             {
-                Array.Reverse(buffer32);
+                Array.Reverse(buffer64);
             }
-            var msgLen = BitConverter.ToInt32(buffer32, 0);
-            var end = msgLen + start;
-           
-            Console.WriteLine(msgLen);
+
+            long msgLen = BitConverter.ToInt64(buffer64, 0);
+            long end = msgLen + streamStartPos;
+            // get the length of the message, including any headers
+            long totalLen = (msgOffset - streamStartPos) + msgLen;
+
+            this.Stream.Seek(streamStartPos, SeekOrigin.Begin);
+            byte[] msgBytes = new byte[totalLen];
+            this.Stream.Read(msgBytes, 0, (int)totalLen);
+
+            return GribMessage.Create(msgBytes, index, GribContext.Default);
 
         }
-        //IEnumerator IEnumerable.GetEnumerator ()
-        //{
-        //    throw new NotImplementedException();
-        //}
+
+        /// <summary>
+        /// Resets the underlying file pointer to the beginning of the file.
+        /// </summary>
+        public void Rewind ()
+        {
+            this.Stream.Seek(0, SeekOrigin.Begin);
+            //foreach (var b in buffers)
+            //{
+            //    Console.WriteLine("oi");
+            //    Marshal.FreeCoTaskMem(b);
+            //}
+            //buffers.Clear();
+        }
+
+        /// <summary>
+        /// NOT IMPLEMENTED.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        IEnumerator IEnumerable.GetEnumerator ()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<IntPtr> buffers = new List<IntPtr>();
+
+        public IEnumerator<GribMessage> GetEnumerator ()
+        {
+            GribMessage msg;
+            int i = 0;
+
+            while ((msg = this.GetNextMessage(i++)) != null)
+            {
+                buffers.Add(msg.NativeBuffer);
+                yield return msg;
+            }
+
+            this.Rewind();
+        }
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        public Action OnDispose;
+
+        protected virtual void Dispose (bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects).
+                }
+
+                //foreach(var b in buffers)
+                //{
+                //    Console.WriteLine("oi");
+                //    Marshal.FreeHGlobal(b);
+                //}
+               // buffers.Clear();                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
+                // TODO: set large fields to null.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
+        // ~GribStream() {
+        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+        //   Dispose(false);
+        // }
+
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose ()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+            // TODO: uncomment the following line if the finalizer is overridden above.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

@@ -297,10 +297,10 @@ public class GribApiProxy {
 	}
   }
 
-  public static GribValuesIterator GribIteratorNew(GribHandle h, uint flags, out int error) {
+  public static GribCoordinateValuesIterator GribIteratorNew(GribHandle h, uint flags, out int error) {
 		System.IntPtr pVal = GribApiProxyPINVOKE.GribIteratorNew(h.Reference, flags, out error);
 
-		return pVal == System.IntPtr.Zero ? null : new GribValuesIterator(pVal);
+		return pVal == System.IntPtr.Zero ? null : new GribCoordinateValuesIterator(pVal);
 	}
 
   public static void GribGetData(GribHandle h, double[] lats, double[] lons, double[] values) {
@@ -312,11 +312,11 @@ public class GribApiProxy {
 	}
   }
 
-  public static int GribIteratorNext(GribValuesIterator i, out double lat, out double lon, out double value) {
+  public static int GribIteratorNext(GribCoordinateValuesIterator i, out double lat, out double lon, out double value) {
     return GribApiProxyPINVOKE.GribIteratorNext(i.Reference, out lat, out lon, out value);
 }
 
-  public static void GribIteratorPrevious(GribValuesIterator i, out double lat, out double lon, out double value) {
+  public static void GribIteratorPrevious(GribCoordinateValuesIterator i, out double lat, out double lon, out double value) {
     int ret = GribApiProxyPINVOKE.GribIteratorPrevious(i.Reference, out lat, out lon, out value);
 	
 	if (ret != 0)
@@ -325,7 +325,7 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorHasNext(GribValuesIterator i) {
+  public static void GribIteratorHasNext(GribCoordinateValuesIterator i) {
     int ret = GribApiProxyPINVOKE.GribIteratorHasNext(i.Reference);
 	
 	if (ret != 0)
@@ -334,7 +334,7 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorReset(GribValuesIterator i) {
+  public static void GribIteratorReset(GribCoordinateValuesIterator i) {
     int ret = GribApiProxyPINVOKE.GribIteratorReset(i.Reference);
 	
 	if (ret != 0)
@@ -343,7 +343,7 @@ public class GribApiProxy {
 	}
   }
 
-  public static void GribIteratorDelete(GribValuesIterator i) {
+  public static void GribIteratorDelete(GribCoordinateValuesIterator i) {
     int ret = GribApiProxyPINVOKE.GribIteratorDelete(i.Reference);
 	
 	if (ret != 0)

@@ -134,18 +134,18 @@ namespace Grib.Api.Tests
         [Test, Timeout(500000)]
         public void TestDs ()
         {
-            // using (var fs = File.AppendText("C:\\Users\\eric\\ds_vals.txt"))
-           // using (var fs = File.AppendText("C:\\Users\\eric\\raw.csv"))
-             //   weird
-            //using (var file = new GribFile(".\\TestData\\weird.grb"))
+         //   using (var fs = File.AppendText("C:\\Users\\eric\\ds_vals.txt"))
+          //  using (var fs = File.AppendText("C:\\Users\\eric\\raw_ex.csv"))
+           //     weird
+           // using (var file = new GribFile(".\\TestData\\weird.grb"))
             using (var file = new GribFile(".\\TestData\\RawFileBadETOGrib.os"))
             {
                 var msg = file.First();
-                foreach(var k in msg)
-                {
-                    Console.WriteLine("{0}: {1}", k.Key, k.AsString());
-                }
-                msg.WriteValuesToCsv("C:\\Users\\eric\\raw.csv");
+                //foreach (var k in msg)
+                //{
+                //    Console.WriteLine("{0}: {1}", k.Key, k.AsString());
+                //}
+                msg.WriteValuesToCsv("C:\\Users\\eric\\raw_ex.csv");
             }
         }
 
@@ -164,7 +164,7 @@ namespace Grib.Api.Tests
 
                         try
                         {
-                            foreach (var v in msg.GeoSpatialValues)
+                            foreach (var v in msg.GeoCoordinateValues)
                             {
                                 Assert.AreNotEqual(Double.NaN, v.Latitude);
                                 Assert.AreNotEqual(Double.NaN, v.Longitude);
@@ -192,7 +192,7 @@ namespace Grib.Api.Tests
                 Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
-                    var val = msg.GeoSpatialValues.First();
+                    var val = msg.GeoCoordinateValues.First();
                     var nearest = msg.FindNearestCoordinates(val);
                     Assert.IsTrue(nearest.Length == 4);
                     foreach (var n in nearest)
@@ -230,7 +230,7 @@ namespace Grib.Api.Tests
 
                         Assert.AreNotEqual(c, msg.Count());
 
-                        Assert.IsTrue(msg.GeoSpatialValues.Any());
+                        Assert.IsTrue(msg.GeoCoordinateValues.Any());
                     }
                 }
             }

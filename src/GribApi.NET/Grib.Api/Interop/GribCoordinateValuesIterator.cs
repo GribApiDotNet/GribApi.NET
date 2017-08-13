@@ -7,13 +7,13 @@ namespace Grib.Api.Interop
     /// <summary>
     /// Wraps a grib_iterator struct.
     /// </summary>
-    public class GribValuesIterator : AutoRef
+    public class GribCoordinateValuesIterator : AutoRef
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GribValuesIterator"/> class.
+        /// Initializes a new instance of the <see cref="GribCoordinateValuesIterator"/> class.
         /// </summary>
         /// <param name="h">The h.</param>
-        internal GribValuesIterator (IntPtr h)
+        internal GribCoordinateValuesIterator (IntPtr h)
             : base(h)
         {
         }
@@ -62,11 +62,11 @@ namespace Grib.Api.Interop
         /// <param name="h">The handle of the message to iterate.</param>
         /// <param name="filters">The filters.</param>
         /// <returns></returns>
-        public static GribValuesIterator Create (GribHandle h, uint filters)
+        public static GribCoordinateValuesIterator Create (GribHandle h, uint filters)
         {
             int err = 0;
 
-            GribValuesIterator iter = GribApiProxy.GribIteratorNew(h, filters, out err);
+            GribCoordinateValuesIterator iter = GribApiProxy.GribIteratorNew(h, filters, out err);
 
             if (err != 0)
             {

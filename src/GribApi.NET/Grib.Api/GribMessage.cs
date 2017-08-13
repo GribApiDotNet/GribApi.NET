@@ -42,20 +42,36 @@ namespace Grib.Api
         /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
+        public IntPtr NativeBuffer = IntPtr.Zero;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage" /> class.
         /// </summary>
         /// <param name="handle">The handle.</param>
         /// <param name="context">The context.</param>
         /// <param name="index">The index.</param>
-        protected GribMessage (GribHandle handle, GribContext context = null, int index = 0)
+        protected GribMessage (GribHandle handle, GribContext context, int index = 0)
+            : this(handle, context, IntPtr.Zero, index)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GribMessage" /> class.
+        /// </summary>
+        /// <param name="handle">The handle.</param>
+        /// <param name="context">The context.</param>
+        /// <param name="buffer">Pointer to a native array containing the message bytes.</param>
+        /// <param name="index">The index.</param>
+        protected GribMessage (GribHandle handle, GribContext context, IntPtr buffer, int index = 0)
             : base()
         {
             Handle = handle;
             Namespace = Namespaces[0];
             KeyFilters = Interop.KeyFilters.All;
             Index = index;
+            NativeBuffer = buffer;
         }
+
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -101,7 +117,7 @@ namespace Grib.Api
         {
             var newHandle = GribApiProxy.GribHandleClone(this.Handle);
 
-            return new GribMessage(newHandle);
+            return new GribMessage(newHandle, GribContext.Default);
         }
 
         /// <summary>
@@ -139,15 +155,15 @@ namespace Grib.Api
         /// 
         /// </summary>
         /// <param name="bits"></param>
+        /// <param name="index"></param>
         /// <param name="ctx"></param>
         /// <returns></returns>
-        public static GribMessage Create (byte[] bits, GribContext ctx)
+        public static GribMessage Create (byte[] bits, int index, GribContext ctx)
         {
-            var buff = Marshal.AllocCoTaskMem(bits.Length);
+            var buff = Marshal.AllocHGlobal(bits.Length);
             Marshal.Copy(bits, 0, buff, bits.Length);
             int err = 0;
             SizeT sz = (SizeT)bits.Length;
-
 
             GribMessage msg = null;
             GribHandle handle = null;
@@ -155,17 +171,18 @@ namespace Grib.Api
             lock (_fileLock)
             {
                 // grib_api moves to the next message in a stream for each new handle
-                handle = GribApiProxy.GribHandleNewFromMultiMessage(GribContext.Default, out buff, ref sz, out err);
+                handle = GribApiProxy.GribHandleNewFromMultiMessage(ctx, out buff, ref sz, out err);
             }
 
             if (err != 0)
             {
+                Marshal.AllocHGlobal(buff);
                 throw GribApiException.Create(err);
             }
 
             if (handle != null)
             {
-                msg = new GribMessage(handle, ctx, 0);
+                msg = new GribMessage(handle, ctx, buff, index);
             }
 
             return msg;
@@ -186,23 +203,26 @@ namespace Grib.Api
             return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HH:mm:ss"), ShortName);
         }
 
-        public void WriteValuesToCsv (Stream stream)
+        public void WriteValuesToCsv (Stream stream, bool includeMissing = false)
         {
             // write column headers
             var bytes = Encoding.UTF8.GetBytes("Time0,Time1,Field,Level,Longitude,Latitude,Grib Value\n");
             stream.Write(bytes, 0, bytes.Length);
 
-            foreach (var v in this.GeoSpatialValues)
+            foreach (var v in this.GeoCoordinateValues)
             {
+                if (!includeMissing && v.IsMissing) { continue; }
+
                 // "time0","time1","field","level",longitude,latitude,grid-value
-                var line = String.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4},{5},{6}\n", this.ReferenceTime.ToString("yyyy-MM-dd HH:mm:ss"), this.Time.ToString("yyyy-MM-dd HH:mm:ss"), this.Name, this.Level, v.Longitude, v.Latitude, v.Value);
+                var line = String.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4},{5},{6}\n", this.ReferenceTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                                         this.Time.ToString("yyyy-MM-dd HH:mm:ss"), this.Name, this.Level, v.Longitude, v.Latitude, v.Value);
                 bytes = Encoding.ASCII.GetBytes(line);
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Flush();
             }
         }
 
-        public void WriteValuesToCsv (string filePath, FileMode mode = FileMode.Create)
+        public void WriteValuesToCsv (string filePath, FileMode mode = FileMode.Create, bool includeMissing = false)
         {
             using (var fs = File.Open(filePath, mode))
             {
@@ -690,6 +710,20 @@ namespace Grib.Api
         }
 
         /// <summary>
+        /// This is the number of total values in the field.
+        /// </summary>
+        /// <value>
+        /// The values count.
+        /// </value>
+        public int ValuesTotal
+        {
+            get
+            {
+                return this["getNumberOfValues"].AsInt();
+            }
+        }
+
+        /// <summary>
         /// The number of missing values in the field.
         /// </summary>
         /// <value>
@@ -815,13 +849,13 @@ namespace Grib.Api
         /// <value>
         /// The geo spatial values.
         /// </value>
-        public IEnumerable<GeoCoordinateValue> GeoSpatialValues
+        public IEnumerable<GeoCoordinateValue> GeoCoordinateValues
         {
             get
             {
                 GeoCoordinateValue gsVal;
 
-                using (GribValuesIterator iter = GribValuesIterator.Create(Handle, (uint)KeyFilters))
+                using (GribCoordinateValuesIterator iter = GribCoordinateValuesIterator.Create(Handle, (uint)KeyFilters))
                 {
                     int mVal = this.MissingValue;
 
@@ -890,18 +924,28 @@ namespace Grib.Api
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
+        public bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose (bool disposing)
         {
             if (!disposedValue)
             {
+                disposedValue = true;
+               // Console.WriteLine(this.Index);
                 if (this._nearest != null)
                 {
                     this._nearest.Dispose();
                 }
 
-                disposedValue = true;
+                if (this.NativeBuffer != IntPtr.Zero)
+                {
+                    //Console.WriteLine("Freeing buffer");
+                    //this.Handle.Dispose();
+                    //Marshal.FreeHGlobal(this.NativeBuffer);
+                    //this.NativeBuffer = IntPtr.Zero;
+                }
+
+
             }
         }
 

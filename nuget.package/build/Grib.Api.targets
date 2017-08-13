@@ -7,6 +7,6 @@
 		<Copy SourceFiles="@(_Definitions)" 
 		  DestinationFiles="@(_Definitions->'$(TargetDir)\Grib.Api\%(RecursiveDir)%(Filename)%(Extension)')"
 		  UseHardlinksIfPossible="true" 
-		  SkipUnchangedFiles="false" />
+		  SkipUnchangedFiles="true" />
 	</Target>
 </Project>

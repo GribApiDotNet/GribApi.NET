@@ -35,13 +35,13 @@ namespace Grib.Api
         private static AutoRef _libHandle;
         private static object _initLock = new object();
 
-        static GribEnvironment ()
-        {
-            GribEnvironment.Init();
-            // grib_api discourages enabling multi-fields, however leaving it disabled has caused
-            // considerable confusion among users. 
-            GribContext.Default.EnableMultipleFieldMessages = true;
-        }
+        //static GribEnvironment ()
+        //{
+        //    GribEnvironment.Init();
+        //    // grib_api discourages enabling multi-fields, however leaving it disabled has caused
+        //    // considerable confusion among users. 
+        //    GribContext.Default.EnableMultipleFieldMessages = true;
+        //}
 
         /// <summary>
         /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly

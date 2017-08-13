@@ -129,26 +129,26 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GribEnvironmentLoadHelper.cs" />
-    <Compile Include="GribNearest.cs" />
-    <Compile Include="GribNearestCoordinate.cs" />
+    <Compile Include="Interop\GribNearest.cs" />
+    <Compile Include="Interop\GribNearestCoordinate.cs" />
     <Compile Include="GribStream.cs" />
     <Compile Include="Interop\GribApiException.cs" />
-    <Compile Include="GribBox.cs" />
+    <Compile Include="Interop\GribBox.cs" />
     <Compile Include="Interop\GribContext.cs" />
     <Compile Include="Interop\GribHandle.cs" />
     <Compile Include="Interop\GribKeysIterator.cs" />
-    <Compile Include="Interop\GribValuesIterator.cs" />
-    <Compile Include="GribPackingSpec.cs" />
+    <Compile Include="Interop\GribCoordinateValuesIterator.cs" />
+    <Compile Include="Interop\GribPackingSpec.cs" />
     <Compile Include="Interop\GribValueTypeException.cs" />
     <Compile Include="IGeoCoordinate.cs" />
     <Compile Include="Interop\AutoRef.cs" />
     <Compile Include="Interop\FileHandleProxy.cs" />
     <Compile Include="GeoCoordinate.cs" />
-    <Compile Include="GeoSpatialValue.cs" />
+    <Compile Include="GeoCoordinateValue.cs" />
     <Compile Include="GribEnvironment.cs" />
     <Compile Include="GribFile.cs" />
     <Compile Include="GribMessage.cs" />
-    <Compile Include="GribValue.cs" />
+    <Compile Include="GribKeyValue.cs" />
     <Compile Include="Interop\GribValueType.cs" />
     <Compile Include="Interop\KeyFilters.cs" />
     <Compile Include="Interop\SizeT.cs" />
