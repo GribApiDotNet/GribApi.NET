@@ -1,16 +1,30 @@
-﻿using System;
+﻿// Copyright 2017 Eric Millin
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using Grib.Api.Interop;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Grib.Api.Interop;
-using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
-    public class GribStream: IEnumerable<GribMessage>, IDisposable
+    /// <summary>
+    /// Proof of concept. Do not use. Current performance is extremely slow and almost certainly leaks.
+    /// </summary>
+    internal class GribStream: IEnumerable<GribMessage>
     {
         static readonly byte[] GRIB_MSG_START = { 0x47, 0x52, 0x49, 0x42 };
         static readonly byte[] GRIB_MSG_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
@@ -22,23 +36,7 @@ namespace Grib.Api
         public GribStream (Stream stream)
         {
             this.Stream = stream;
-            //var len = (int)stream.Length;
-            //this.Buffer = new byte[len];
-            //stream.Read(this.Buffer, 0, len);
-
-            //var msg = GribMessage.Create(buff, GribContext.Default);
-            //foreach (var k in msg)
-            //{
-            //    Console.WriteLine(k.Key);
-            //}
         }
-
-        //public IEnumerator<GribMessage> GetEnumerator ()
-        //{
-        //    GribMessage msg;
-        //    int i = 0;
-
-        //}
 
         public GribMessage GetNextMessage (int index)
         {
@@ -129,12 +127,6 @@ namespace Grib.Api
         public void Rewind ()
         {
             this.Stream.Seek(0, SeekOrigin.Begin);
-            //foreach (var b in buffers)
-            //{
-            //    Console.WriteLine("oi");
-            //    Marshal.FreeCoTaskMem(b);
-            //}
-            //buffers.Clear();
         }
 
         /// <summary>
@@ -149,8 +141,6 @@ namespace Grib.Api
             throw new NotImplementedException();
         }
 
-        private List<IntPtr> buffers = new List<IntPtr>();
-
         public IEnumerator<GribMessage> GetEnumerator ()
         {
             GribMessage msg;
@@ -158,53 +148,10 @@ namespace Grib.Api
 
             while ((msg = this.GetNextMessage(i++)) != null)
             {
-                buffers.Add(msg.NativeBuffer);
                 yield return msg;
             }
 
             this.Rewind();
         }
-
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        public Action OnDispose;
-
-        protected virtual void Dispose (bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                //foreach(var b in buffers)
-                //{
-                //    Console.WriteLine("oi");
-                //    Marshal.FreeHGlobal(b);
-                //}
-               // buffers.Clear();                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~GribStream() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose ()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
-        }
-        #endregion
     }
 }

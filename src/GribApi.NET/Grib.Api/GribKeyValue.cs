@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Eric Millin
+﻿// Copyright 2017 Eric Millin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -260,7 +260,7 @@ namespace Grib.Api
         /// </returns>
         public override string ToString ()
         {
-            return this.AsString();
+            return String.Format("{0} {1}: {2}", Enum.GetName(typeof(GribValueType), this.NativeType), this.Key, this.AsString());
         }
 
         /// <summary>

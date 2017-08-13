@@ -1,4 +1,4 @@
-﻿// Copyright 2015 Eric Millin
+﻿// Copyright 2017 Eric Millin
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -42,7 +42,12 @@ namespace Grib.Api
         /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
-        public IntPtr NativeBuffer = IntPtr.Zero;
+        /// <summary>
+        /// Experimental
+        /// </summary>
+        internal IntPtr NativeBuffer = IntPtr.Zero;
+
+        protected bool OwnsMemory = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage" /> class.
@@ -70,6 +75,7 @@ namespace Grib.Api
             KeyFilters = Interop.KeyFilters.All;
             Index = index;
             NativeBuffer = buffer;
+            OwnsMemory = buffer != IntPtr.Zero;
         }
 
 
@@ -203,6 +209,11 @@ namespace Grib.Api
             return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HH:mm:ss"), ShortName);
         }
 
+        /// <summary>
+        /// Dumps the message values to a csv file. The first line is the column names.
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="includeMissing"></param>
         public void WriteValuesToCsv (Stream stream, bool includeMissing = false)
         {
             // write column headers
@@ -221,7 +232,12 @@ namespace Grib.Api
                 stream.Flush();
             }
         }
-
+        /// <summary>
+        /// Dumps the message values to a csv file. The first line is the column names.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="mode"></param>
+        /// <param name="includeMissing"></param>
         public void WriteValuesToCsv (string filePath, FileMode mode = FileMode.Create, bool includeMissing = false)
         {
             using (var fs = File.Open(filePath, mode))
@@ -546,7 +562,7 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// Gets or set the *reference* time of the data - date and time of start of averaging or accumulation period. Time is UTC.
+        /// Gets or set Time0, the *reference* time of the data - date and time of start of averaging or accumulation period. Time is UTC.
         /// </summary>
         /// <value>
         /// The reference time.
@@ -580,7 +596,7 @@ namespace Grib.Api
         }
 
         /// <summary>
-		/// Gets the beginning of the time interval, i.e., ReferenceTime + forecastTime or ReferenceTime + P2. Time is UTC.
+		/// Gets Time1, the beginning of the time interval, i.e., ReferenceTime + forecastTime or ReferenceTime + P2. Time is UTC.
 		/// If the time range indicator is greater than 5, ReferenceTime is returned.
         /// </summary>
         /// <value>
@@ -931,21 +947,19 @@ namespace Grib.Api
             if (!disposedValue)
             {
                 disposedValue = true;
-               // Console.WriteLine(this.Index);
+
                 if (this._nearest != null)
                 {
                     this._nearest.Dispose();
                 }
 
-                if (this.NativeBuffer != IntPtr.Zero)
+                if (this.OwnsMemory)
                 {
-                    //Console.WriteLine("Freeing buffer");
-                    //this.Handle.Dispose();
-                    //Marshal.FreeHGlobal(this.NativeBuffer);
-                    //this.NativeBuffer = IntPtr.Zero;
+                    SWIGTYPE_p_grib_multi_handle mh = new SWIGTYPE_p_grib_multi_handle(this.Handle.Reference.Handle, false);
+                    GribApiProxy.GribMultiHandleDelete(mh);
+                    Marshal.FreeHGlobal(this.NativeBuffer);
+                    this.NativeBuffer = IntPtr.Zero;
                 }
-
-
             }
         }
 
