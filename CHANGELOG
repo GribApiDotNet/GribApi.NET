@@ -2,7 +2,7 @@ CHANGELOG
 
 1.0.0
 =====
-* Moved from grib_api to ecCodes 2.4.0
+* Moved from grib_api to ecCodes 2.4.1
 * Added GribNearest feature
 * Improved manual setting of definitions path
 * EnableMultiFieldMessages now defaults to 'true'
