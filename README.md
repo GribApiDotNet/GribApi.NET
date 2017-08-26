@@ -27,6 +27,7 @@ The documentation is very much a WIP, but you'll find the [ecCodes website](http
 * [GRIB Parameter Database](http://apps.ecmwf.int/codes/grib/param-db/)
 * [Key Concepts](https://github.com/0x1mason/GribApi.NET/blob/master/docs/KeyConcepts.md)
 * [Example Key Dump](https://github.com/0x1mason/GribApi.NET/blob/master/docs/TypicalKeyDump.md)
+* [ecCodes API](http://download.ecmwf.int/test-data/eccodes/html/eccodes_8h.html)
 
 --------------------------
 
@@ -79,29 +80,13 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 	}
 ```
 
-#### Key dump:
-```csharp
-	using (GribFile file = new GribFile("mygrib.grb"))
-	{
-		GribMessage msg = file.First();
-		
-		foreach (var msg in file)
-		{
-			foreach (var key in msg)
-			{
-				Console.WriteLine("Key: {0}, Value: {1}", key.Name, key.Value.AsString());
-			}
-		}
-	}
-```
-
 #### Iterating lat/lon/value:
 ```csharp
 
 	GribMessage msg = gribFile.First();
 	
 	// the values in GeoSpatialValues are calculated by grid type
-	foreach (GeoSpatialValue val in msg.GeoSpatialValues)
+	foreach (GridCoordinateValue val in msg.GridCoordinateValues)
 	{
 		if (val.IsMissing) { continue; }
 
@@ -109,11 +94,11 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 	}
 ```
 
-#### Finding the four nearest values to a coordinate
+#### Finding the four nearest grid values to a coordinate
 ```csharp
 
 	GribMessage msg = gribFile.First();
-   var referencePt = msg.GeoSpatialValues.First();
+   var referencePt = msg.GridCoordinateValues.First();
    
    Console.WriteLine("Getting the four nearest grib points to Lat: {0} Lon: {1}", referencePt.Latitude, referencePt.Longitude);
 
@@ -132,10 +117,30 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 	{
 		var vComp = file.Where(m => m.Name.Contains("V-component of wind m s**-1")).First();
 
-		foreach (var val in vComp.GeoSpatialValues)
+		foreach (var val in vComp.GridCoordinateValues)
 		{
 			Console.WriteLine("Lat: {0} Lon: {1} Val: {2}", val.Latitude, val.Longitude, val.Value);
 		}
+	}
+```
+
+#### Dumping message keys to a pretty-printed string:
+```csharp
+	using (GribFile file = new GribFile("mygrib.grb"))
+	{
+		GribMessage msg = file.First();
+		
+		Console.WriteLine(msg.Dump());
+	}
+```
+
+#### Dumping grid values to a CSV:
+```csharp
+	using (GribFile file = new GribFile("mygrib.grb"))
+	{
+		GribMessage msg = file.First();
+		
+		msg.WriteValuesToCsv("my\\file.csv");
 	}
 ```
 

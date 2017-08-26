@@ -130,9 +130,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Deprecated\GeoSpatialValue.cs" />
     <Compile Include="GribEnvironmentLoadHelper.cs" />
+    <Compile Include="Deprecated\GribValue.cs" />
+    <Compile Include="Deprecated\IGeoCoordinate.cs" />
     <Compile Include="Interop\GribNearest.cs" />
-    <Compile Include="Interop\GribNearestCoordinate.cs" />
+    <Compile Include="GridNearestCoordinate.cs" />
     <Compile Include="GribStream.cs" />
     <Compile Include="Interop\GribApiException.cs" />
     <Compile Include="Interop\GribBox.cs" />
@@ -142,11 +145,11 @@
     <Compile Include="Interop\GribCoordinateValuesIterator.cs" />
     <Compile Include="Interop\GribPackingSpec.cs" />
     <Compile Include="Interop\GribValueTypeException.cs" />
-    <Compile Include="IGeoCoordinate.cs" />
+    <Compile Include="IGridCoordinate.cs" />
     <Compile Include="Interop\AutoRef.cs" />
     <Compile Include="Interop\FileHandleProxy.cs" />
-    <Compile Include="GeoCoordinate.cs" />
-    <Compile Include="GeoCoordinateValue.cs" />
+    <Compile Include="GridCoordinate.cs" />
+    <Compile Include="GridCoordinateValue.cs" />
     <Compile Include="GribEnvironment.cs" />
     <Compile Include="GribFile.cs" />
     <Compile Include="GribMessage.cs" />
@@ -198,7 +201,6 @@
     <Compile Include="Interop\Util\Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ParameterNumbers.cs" />
-    <Compile Include="Templates\RegularLatLon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Grib.Api\definitions\boot.def" />

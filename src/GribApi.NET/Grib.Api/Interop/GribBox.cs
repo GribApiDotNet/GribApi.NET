@@ -29,7 +29,7 @@ namespace Grib.Api.Interop
         /// <param name="msgHandle">The MSG handle.</param>
         /// <param name="nw">The nw.</param>
         /// <param name="se">The se.</param>
-        public GribBox (GribHandle msgHandle, GeoCoordinate nw, GeoCoordinate se)
+        public GribBox (GribHandle msgHandle, GridCoordinate nw, GridCoordinate se)
         {
             int err;
             var box = GribApiProxy.GribBoxNew(msgHandle, out err);

@@ -206,7 +206,23 @@ namespace Grib.Api
             string stepType = this["stepType"].AsString();
             string timeQaulifier = stepType == "avg" ? String.Format("({0})", stepType) : "";
 
-            return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, Name, StepType, GridType, TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HH:mm:ss"), ShortName);
+            return String.Format("{0}:[{10}] \"{1}\" ({2}):{3}:{4} {5}:fcst time {6} {7}s {8}:from {9}", Index, ParameterName, StepType, GridType,
+                                  TypeOfLevel, Level, StepRange, "hr", timeQaulifier, Time.ToString("yyyy-MM-dd HH:mm:ss"), this.ParameterShortName);
+        }
+
+        /// <summary>
+        /// Returns a pretty-printed list of the message key-value pairs.
+        /// </summary>
+        /// <returns>Stringified key-value pairs.</returns>
+        public string Dump ()
+        {
+            List<string> keys = new List<string>();
+            foreach (var key in this)
+            {
+                keys.Add(key.ToString());
+            }
+
+            return String.Join(Environment.NewLine, keys);
         }
 
         /// <summary>
@@ -220,13 +236,13 @@ namespace Grib.Api
             var bytes = Encoding.UTF8.GetBytes("Time0,Time1,Field,Level,Longitude,Latitude,Grib Value\n");
             stream.Write(bytes, 0, bytes.Length);
 
-            foreach (var v in this.GeoCoordinateValues)
+            foreach (var v in this.GridCoordinateValues)
             {
                 if (!includeMissing && v.IsMissing) { continue; }
 
                 // "time0","time1","field","level",longitude,latitude,grid-value
                 var line = String.Format("\"{0}\",\"{1}\",\"{2}\",\"{3}\",{4},{5},{6}\n", this.ReferenceTime.ToString("yyyy-MM-dd HH:mm:ss"),
-                                         this.Time.ToString("yyyy-MM-dd HH:mm:ss"), this.Name, this.Level, v.Longitude, v.Latitude, v.Value);
+                                         this.Time.ToString("yyyy-MM-dd HH:mm:ss"), this.ParameterName, this.Level, v.Longitude, v.Latitude, v.Value);
                 bytes = Encoding.ASCII.GetBytes(line);
                 stream.Write(bytes, 0, bytes.Length);
                 stream.Flush();
@@ -279,7 +295,7 @@ namespace Grib.Api
         /// <param name="longitude">The reference longitude.</param>
         /// <param name="searchType">The type of search to perform. Bitwise "or-able".</param>
         /// <returns>An array of the nearest four coordinates sorted by distance.</returns>
-        public GribNearestCoordinate[] FindNearestCoordinates (double latitude, double longitude, GribNearestToSame searchType = GribNearestToSame.POINT)
+        public GridNearestCoordinate[] FindNearestCoordinates (double latitude, double longitude, GribNearestToSame searchType = GribNearestToSame.POINT)
         {
             return this.Nearest.FindNearestCoordinates(latitude, longitude, searchType);
         }
@@ -290,7 +306,7 @@ namespace Grib.Api
         /// <param name="coord">The reference coordinate.</param>
         /// <param name="searchType">The type of search to perform. Bitwise "or-able".</param>
         /// <returns>An array of the nearest four coordinates sorted by distance.</returns>
-        public GribNearestCoordinate[] FindNearestCoordinates (IGeoCoordinate coord, GribNearestToSame searchType = GribNearestToSame.POINT)
+        public GridNearestCoordinate[] FindNearestCoordinates (IGridCoordinate coord, GribNearestToSame searchType = GribNearestToSame.POINT)
         {
             return this.FindNearestCoordinates(coord.Latitude, coord.Longitude, searchType);
         }
@@ -303,7 +319,22 @@ namespace Grib.Api
         /// <value>
         /// The name.
         /// </value>
+        [Obsolete("This API is deprecated. Please use ParameterName instead.", false)]
         public string Name
+        {
+            get
+            {
+                return this.ParameterName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parameter name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
+        public string ParameterName
         {
             get
             {
@@ -329,7 +360,22 @@ namespace Grib.Api
         /// <value>
         /// The short name.
         /// </value>
+        [Obsolete("This API is deprecated. Please use ParameterShortName instead.", false)]
         public string ShortName
+        {
+            get
+            {
+                return this.ParameterShortName;
+            }
+        }
+
+        /// <summary>
+        /// Gets the parameter's short name.
+        /// </summary>
+        /// <value>
+        /// The short name.
+        /// </value>
+        public string ParameterShortName
         {
             get
             {
@@ -428,7 +474,22 @@ namespace Grib.Api
         /// <value>
         /// The units.
         /// </value>
+        [Obsolete("This API is deprecated. Please use ParameterUnits instead.", false)]
         public string Units
+        {
+            get
+            {
+                return this.ParameterUnits;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the parameter units.
+        /// </summary>
+        /// <value>
+        /// The units.
+        /// </value>
+        public string ParameterUnits
         {
             get
             {
@@ -859,17 +920,26 @@ namespace Grib.Api
             }
         }
 
+        [Obsolete("This API is no longer supported. Please use GridCoordinateValues instead.", true)]
+        public IEnumerable<GeoSpatialValue> GeoSpatialValues
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         /// <summary>
         /// Gets the messages values with coordinates.
         /// </summary>
         /// <value>
         /// The geo spatial values.
         /// </value>
-        public IEnumerable<GeoCoordinateValue> GeoCoordinateValues
+        public IEnumerable<GridCoordinateValue> GridCoordinateValues
         {
             get
             {
-                GeoCoordinateValue gsVal;
+                GridCoordinateValue gsVal;
 
                 using (GribCoordinateValuesIterator iter = GribCoordinateValuesIterator.Create(Handle, (uint)KeyFilters))
                 {
@@ -957,7 +1027,7 @@ namespace Grib.Api
                 {
                     SWIGTYPE_p_grib_multi_handle mh = new SWIGTYPE_p_grib_multi_handle(this.Handle.Reference.Handle, false);
                     GribApiProxy.GribMultiHandleDelete(mh);
-                    Marshal.FreeHGlobal(this.NativeBuffer);
+                    // Marshal.FreeHGlobal(this.NativeBuffer);
                     this.NativeBuffer = IntPtr.Zero;
                 }
             }

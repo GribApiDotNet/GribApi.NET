@@ -43,11 +43,24 @@ namespace Grib.Api.Tests
             {
                 GribMessage msg = file.First();
                 Assert.Greater(msg.ValuesCount, 1);
-                foreach (GeoCoordinateValue gs in msg.GeoSpatialValues)
+                foreach (GridCoordinateValue gs in msg.GridCoordinateValues)
                 {
                     Assert.Greater(gs.Latitude, 15);
                 }
             }
+        }
+
+        [Test, Timeout(5000)]
+        public void TestBits ()
+        {
+            var bytes = File.ReadAllBytes(".\\TestData\\constant_field.grib2");
+            var msg = GribMessage.Create(bytes, 0, GribContext.Default);
+            Assert.Greater(msg.ValuesCount, 1);
+            foreach (GridCoordinateValue gs in msg.GridCoordinateValues)
+            {
+                Assert.Greater(gs.Latitude, 15);
+            }
+            msg.Dispose();
         }
 
         [Test, Timeout(5000)]
@@ -62,9 +75,9 @@ namespace Grib.Api.Tests
                 {
                     Assert.IsTrue(msg["packingType"].AsString().ToLower().EndsWith("_png"));
                     Assert.IsTrue(msg.ValuesCount > 0);
-                    Assert.IsTrue(msg.GeoSpatialValues.Any());
+                    Assert.IsTrue(msg.GridCoordinateValues.Any());
                     int i = 0;
-                    foreach (var v in msg.GeoSpatialValues)
+                    foreach (var v in msg.GridCoordinateValues)
                     {
                         Assert.AreNotEqual(Double.NaN, v.Value);
                         if (i++ > 1000) break;
@@ -73,7 +86,7 @@ namespace Grib.Api.Tests
                 catch (GribApiException e)
                 {
                     Console.WriteLine(e.Message);
-                    Console.WriteLine(msg.ShortName);
+                    Console.WriteLine(msg.ParameterShortName);
                     Console.WriteLine(msg.ToString());
                     Assert.IsTrue(false);
                 }
@@ -105,7 +118,7 @@ namespace Grib.Api.Tests
                     catch (GribApiException e)
                     {
                         Console.WriteLine(e.Message);
-                        Console.WriteLine(msg.ShortName);
+                        Console.WriteLine(msg.ParameterShortName);
                         Console.WriteLine(msg.ToString());
                         Assert.IsTrue(false);
                     }

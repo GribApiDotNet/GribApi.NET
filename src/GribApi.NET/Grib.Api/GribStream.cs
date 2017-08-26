@@ -30,7 +30,7 @@ namespace Grib.Api
         static readonly byte[] GRIB_MSG_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
         static readonly byte[] GRIB_MSG_END = { 0x37, 0x37, 0x37, 0x37 };
 
-        protected byte[] Buffer;
+        //protected byte[] Buffer;
         protected Stream Stream;
 
         public GribStream (Stream stream)

@@ -64,7 +64,7 @@ namespace Grib.Api.Tests
             int count = 0;
             double val = Double.NaN;
 
-            Dictionary<int, GeoCoordinateValue> orig = new Dictionary<int, GeoCoordinateValue>();
+            Dictionary<int, GridCoordinateValue> orig = new Dictionary<int, GridCoordinateValue>();
 
             using (var readFile = new GribFile(Settings.REDUCED_LATLON_GRB2))
             {
@@ -86,12 +86,12 @@ namespace Grib.Api.Tests
                         }
                         while (orig.ContainsKey(k));
 
-                        orig.Add(k, new GeoCoordinateValue());
+                        orig.Add(k, new GridCoordinateValue());
                     }
 
                     int x = 0;
                     int y = 0;
-                    foreach (var gsv in msg.GeoCoordinateValues)
+                    foreach (var gsv in msg.GridCoordinateValues)
                     {
                         if (orig.ContainsKey(x))
                         {
@@ -112,7 +112,7 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 GribFile.Write(Settings.OUT_GRIB, msg);
 
-                var newGsv = msg.GeoCoordinateValues.ToArray();
+                var newGsv = msg.GridCoordinateValues.ToArray();
                 Assert.IsTrue(newGsv.Any());
 
                 foreach (var kvp in orig)
@@ -129,7 +129,7 @@ namespace Grib.Api.Tests
                 Assert.AreEqual(val, msg["latitudeOfFirstGridPoint"].AsDouble());
                 Assert.AreEqual(msg["packingType"].AsString(), grid);
 
-                var newGsv = msg.GeoCoordinateValues.ToArray();
+                var newGsv = msg.GridCoordinateValues.ToArray();
                 Assert.IsTrue(newGsv.Any());
 
                 foreach (var kvp in orig)

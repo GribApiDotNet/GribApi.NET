@@ -56,7 +56,7 @@ namespace Grib.Api.Interop
         /// a call to another you can use POINT. The same is valid for the grid. Flags can be used together
         /// doing a bitwise OR. The distances are given in kilometres.</param>
         /// <returns>An array of the nearest four coordinates sorted by distance.</returns>
-        public GribNearestCoordinate[] FindNearestCoordinates (double latitude, double longitude, GribNearestToSame searchType = GribNearestToSame.POINT)
+        public GridNearestCoordinate[] FindNearestCoordinates (double latitude, double longitude, GribNearestToSame searchType = GribNearestToSame.POINT)
         {
             var latitudes = new double[] { 0, 0, 0, 0 };
             var longitudes = new double[] { 0, 0, 0, 0 };
@@ -69,11 +69,11 @@ namespace Grib.Api.Interop
                                                     latitudes, longitudes, values, distances,
                                                     indexes, ref len);
 
-            var vals = new GribNearestCoordinate[len];
+            var vals = new GridNearestCoordinate[len];
 
             for (var i = 0; i < len; i++)
             {
-                vals[i] = new GribNearestCoordinate(latitudes[i], longitudes[i], values[i], distances[i], indexes[i]);
+                vals[i] = new GridNearestCoordinate(latitudes[i], longitudes[i], values[i], distances[i], indexes[i]);
             }
 
             Array.Sort(vals, (v1, v2) => v1.Distance.CompareTo(v2.Distance));

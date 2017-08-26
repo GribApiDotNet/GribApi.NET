@@ -17,34 +17,21 @@ using System;
 namespace Grib.Api
 {
     /// <summary>
-    /// A geospatial coordinate.
+    /// A GRIB grid value with coordinates.
     /// </summary>
-    public struct GeoCoordinate : IGeoCoordinate, IEquatable<GeoCoordinate>
+	public struct GridCoordinateValue : IGridCoordinate, IEquatable<GridCoordinateValue>
     {
-        /// <summary>
-        /// Gets or sets the latitude for this coordinate.
-        /// </summary>
-        /// <value>
-        /// The latitude.
-        /// </value>
         public double Latitude { get; set; }
-        /// <summary>
-        /// Gets or sets the longitude for this coordinate.
-        /// </summary>
-        /// <value>
-        /// The longitude.
-        /// </value>
         public double Longitude { get; set; }
+        public double Value { get; set; }
+        public bool IsMissing { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GeoCoordinate"/> struct.
-        /// </summary>
-        /// <param name="lat">The lat.</param>
-        /// <param name="lon">The lon.</param>
-        public GeoCoordinate(double lat, double lon) : this()
+        public GridCoordinateValue (double lat, double lon, double val, bool isMissing) : this()
         {
             this.Latitude = lat;
             this.Longitude = lon;
+            this.Value = val;
+            this.IsMissing = isMissing;
         }
 
         /// <summary>
@@ -52,10 +39,11 @@ namespace Grib.Api
         /// </summary>
         /// <param name="that">The that.</param>
         /// <returns></returns>
-        public bool Equals (GeoCoordinate that)
+        public bool Equals (GridCoordinateValue that)
         {
             return (this.Latitude == that.Latitude) &&
-                   (this.Longitude == that.Longitude);
+                (this.Longitude == that.Longitude) &&
+                (this.Value == that.Value);
         }
 
         /// <summary>
@@ -67,7 +55,7 @@ namespace Grib.Api
         /// </returns>
         public override bool Equals (object obj)
         {
-            return (obj is GeoCoordinate) && this.Equals((GeoCoordinate)obj);
+            return (obj is GridCoordinateValue) && this.Equals((GridCoordinateValue)obj);
         }
 
         /// <summary>
@@ -76,9 +64,9 @@ namespace Grib.Api
         /// <returns>
         /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
         /// </returns>
-        public override int GetHashCode()
+        public override int GetHashCode ()
         {
-            return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode();
+            return this.Latitude.GetHashCode() ^ this.Longitude.GetHashCode() ^ this.Value.GetHashCode();
         }
 
         /// <summary>
@@ -89,7 +77,7 @@ namespace Grib.Api
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator == (GeoCoordinate a, GeoCoordinate b)
+        public static bool operator ==(GridCoordinateValue a, GridCoordinateValue b)
         {
             if (System.Object.ReferenceEquals(a, b))
             {
@@ -107,7 +95,7 @@ namespace Grib.Api
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator != (GeoCoordinate a, GeoCoordinate b)
+        public static bool operator !=(GridCoordinateValue a, GridCoordinateValue b)
         {
             return !(a.Equals(b));
         }

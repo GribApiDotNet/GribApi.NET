@@ -12,12 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 namespace Grib.Api
 {
-    public interface IGeoCoordinate
-    {
-        double Latitude { get; set; }
-        double Longitude { get; set; }
-    }
+    /// <summary>
+    /// Describes a grid coordinate and its relative distance to another grid coordinate.
+    /// </summary>
+    public struct GridNearestCoordinate
+	{
+		public GridCoordinateValue Value;
+		public double Distance;
+		public int Index;
+
+		public GridNearestCoordinate (double latitude, double longitude, double value, double distance, int index)
+		{
+			this.Distance = distance;
+			this.Index = index;
+			this.Value = new GridCoordinateValue(latitude, longitude, value, false);
+		}
+	}
 }

@@ -164,7 +164,7 @@ namespace Grib.Api.Tests
 
                         try
                         {
-                            foreach (var v in msg.GeoCoordinateValues)
+                            foreach (var v in msg.GridCoordinateValues)
                             {
                                 Assert.AreNotEqual(Double.NaN, v.Latitude);
                                 Assert.AreNotEqual(Double.NaN, v.Longitude);
@@ -174,7 +174,7 @@ namespace Grib.Api.Tests
                         catch (GribApiException e)
                         {
                             Console.WriteLine(e.Message);
-                            Console.WriteLine(msg.ShortName);
+                            Console.WriteLine(msg.ParameterShortName);
                             Console.WriteLine(path);
                             Assert.IsTrue(false);
                         }
@@ -192,7 +192,7 @@ namespace Grib.Api.Tests
                 Assert.IsTrue(file.MessageCount > 0);
                 foreach (var msg in file)
                 {
-                    var val = msg.GeoCoordinateValues.First();
+                    var val = msg.GridCoordinateValues.First();
                     var nearest = msg.FindNearestCoordinates(val);
                     Assert.IsTrue(nearest.Length == 4);
                     foreach (var n in nearest)
@@ -230,7 +230,7 @@ namespace Grib.Api.Tests
 
                         Assert.AreNotEqual(c, msg.Count());
 
-                        Assert.IsTrue(msg.GeoCoordinateValues.Any());
+                        Assert.IsTrue(msg.GridCoordinateValues.Any());
                     }
                 }
             }

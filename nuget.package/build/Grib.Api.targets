@@ -6,7 +6,16 @@
 		</ItemGroup>
 		<Copy SourceFiles="@(_Definitions)" 
 		  DestinationFiles="@(_Definitions->'$(TargetDir)\Grib.Api\%(RecursiveDir)%(Filename)%(Extension)')"
+        Visible="false"
 		  UseHardlinksIfPossible="true" 
 		  SkipUnchangedFiles="true" />
 	</Target>
+   <Target Name="AfterClean">
+      <Message Text="Removing the Grib.Api directory..."/> 
+      <RemoveDir Directories="$(TargetDir)\Grib.Api" />  
+   </Target>
+   <Target Name="BeforeRebuild">
+      <Message Text="Removing the Grib.Api directory..."/> 
+      <RemoveDir Directories="$(TargetDir)\Grib.Api" />  
+   </Target>
 </Project>

@@ -12,19 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Grib.Api.Interop
+using System;
+namespace Grib.Api
 {
-    public struct GribNearestCoordinate
-	{
-		public GeoCoordinateValue Value;
-		public double Distance;
-		public int Index;
-
-		public GribNearestCoordinate (double latitude, double longitude, double value, double distance, int index)
-		{
-			this.Distance = distance;
-			this.Index = index;
-			this.Value = new GeoCoordinateValue(latitude, longitude, value, false);
-		}
-	}
+    public interface IGridCoordinate
+    {
+        double Latitude { get; set; }
+        double Longitude { get; set; }
+    }
 }
