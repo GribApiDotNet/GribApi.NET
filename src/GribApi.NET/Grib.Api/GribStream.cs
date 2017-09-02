@@ -22,9 +22,10 @@ using System.Linq;
 namespace Grib.Api
 {
     /// <summary>
-    /// Proof of concept. Do not use. Current performance is extremely slow and almost certainly leaks.
+    /// Light wrapper for streams. The current implementation is slower than 
+    /// reading from file, but is provided for convenience.
     /// </summary>
-    internal class GribStream: IEnumerable<GribMessage>
+    public class GribStream: IEnumerable<GribMessage>
     {
         static readonly byte[] GRIB_MSG_START = { 0x47, 0x52, 0x49, 0x42 };
         static readonly byte[] GRIB_MSG_END_GTS = { 0x0D, 0x0D, 0x0A, 0x03 };
@@ -33,12 +34,17 @@ namespace Grib.Api
         //protected byte[] Buffer;
         protected Stream Stream;
 
+        static GribStream ()
+        {
+            GribEnvironment.Init();
+        }
+
         public GribStream (Stream stream)
         {
             this.Stream = stream;
         }
 
-        public GribMessage GetNextMessage (int index)
+        protected GribMessage GetNextMessage (int index)
         {
             // the starting position of the stream
             var streamStartPos = this.Stream.Position;
@@ -117,12 +123,11 @@ namespace Grib.Api
             byte[] msgBytes = new byte[totalLen];
             this.Stream.Read(msgBytes, 0, (int)totalLen);
 
-            return GribMessage.Create(msgBytes, index, GribContext.Default);
-
+            return GribMessage.Create(msgBytes);
         }
 
         /// <summary>
-        /// Resets the underlying file pointer to the beginning of the file.
+        /// Resets the underlying pointer to the beginning of the stream.
         /// </summary>
         public void Rewind ()
         {
@@ -150,8 +155,6 @@ namespace Grib.Api
             {
                 yield return msg;
             }
-
-            this.Rewind();
         }
     }
 }

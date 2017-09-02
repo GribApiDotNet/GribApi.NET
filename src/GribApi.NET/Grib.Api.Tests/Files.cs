@@ -4,15 +4,36 @@ using NUnit.Framework;
 using System.IO;
 using Grib.Api.Interop;
 using System.Threading;
-using System.Text;
-using System.Diagnostics;
+
 
 namespace Grib.Api.Tests
 {
     [TestFixture]
     public class Files
     {
-        //[Test, Timeout(2000)]
+        [Test, Timeout(2000)]
+        public void TestEnableMultField ()
+        {
+            Assert.IsTrue(GribContext.Default.EnableMultipleFieldMessages);
+
+            using (GribFile file = new GribFile(Settings.MULTI))
+            {
+                Assert.AreEqual(file.MessageCount, 24);
+            }
+
+            GribContext.Default.EnableMultipleFieldMessages = false;
+            Assert.IsFalse(GribContext.Default.EnableMultipleFieldMessages);
+
+            using (GribFile file = new GribFile(Settings.MULTI))
+            {
+                Assert.AreEqual(file.MessageCount, 1);
+            }
+
+            GribContext.Default.EnableMultipleFieldMessages = true;
+            Assert.IsTrue(GribContext.Default.EnableMultipleFieldMessages);
+        }
+
+        [Test, Timeout(2000)]
         public void TestInvalidFiles ()
         {
             try
@@ -45,22 +66,76 @@ namespace Grib.Api.Tests
                 Assert.Greater(msg.ValuesCount, 1);
                 foreach (GridCoordinateValue gs in msg.GridCoordinateValues)
                 {
+
                     Assert.Greater(gs.Latitude, 15);
                 }
             }
         }
 
+        //[Test, Timeout(5000)]
+        //public void TestBounds ()
+        //{
+        //    using (GribFile file = new GribFile(Settings.TIME))
+        //    {
+
+        //        GribMessage msg = file.First();
+        //        msg["jDirectionIncrement"].AsDouble(0.25);
+        //     //   for (var i = 1600; i < 1681; i++)
+        //    //    Console.WriteLine("[{3}] Lat {0}, Lon {1}, Value {2}", msg.GridCoordinateValues.ElementAt(i).Latitude, msg.GridCoordinateValues.ElementAt(i).Longitude, msg.GridCoordinateValues.ElementAt(i).Value, i);
+
+        //    }
+        //}
+
         [Test, Timeout(5000)]
         public void TestBits ()
         {
             var bytes = File.ReadAllBytes(".\\TestData\\constant_field.grib2");
-            var msg = GribMessage.Create(bytes, 0, GribContext.Default);
+            var msg = GribMessage.Create(bytes);
             Assert.Greater(msg.ValuesCount, 1);
             foreach (GridCoordinateValue gs in msg.GridCoordinateValues)
             {
                 Assert.Greater(gs.Latitude, 15);
             }
             msg.Dispose();
+        }
+
+        [Test, Timeout(30000)]
+        public void TestStream ()
+        {
+            //Stopwatch sw = new Stopwatch();
+
+            using (var fs = File.OpenRead(".\\TestData\\mixed.grib"))
+            {
+                //sw.Start();
+                foreach (var msg in new GribStream(fs))
+                {
+                    Assert.Greater(msg.ValuesCount, 1);
+                    foreach (GridCoordinateValue cv in msg.GridCoordinateValues)
+                    {
+                        Assert.Greater(cv.Latitude, -180);
+                        Assert.Less(cv.Latitude, 180);
+                    }
+                }
+                //sw.Stop();
+                //Console.WriteLine("Elapsed={0}", sw.Elapsed);
+            }
+            //sw.Reset();
+
+            //sw.Start();
+            //using (GribFile file = new GribFile(".\\TestData\\mixed.grib"))
+            //{
+            //    foreach (var msg in file)
+            //    {
+            //        Assert.Greater(msg.ValuesCount, 1);
+            //        foreach (GridCoordinateValue cv in msg.GridCoordinateValues)
+            //        {
+            //            Assert.Greater(cv.Latitude, -180);
+            //            Assert.Less(cv.Latitude, 180);
+            //        }
+            //    }
+            //}
+            //sw.Stop();
+            //Console.WriteLine("Elapsed={0}", sw.Elapsed);
         }
 
         [Test, Timeout(5000)]

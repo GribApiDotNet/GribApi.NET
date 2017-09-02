@@ -102,315 +102,6 @@
     <Compile Include="Setup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="TestData\gfs_0p50_2015101500_003.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\GRIB.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\MRMS.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\Pacific.wind.7days.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="packages.config" />
-    <Content Include="TestData\reduced_gaussian_model_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_latlon_surface.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_latlon_surface.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\MRMS2.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\bad.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\empty.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\time.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\bad2.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\ccsds.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\constant_field.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\constant_field.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\constant_width_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\constant_width_boust_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_boust.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_boust_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_spd_2.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_spd_2_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_spd_2_boust_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_spd_3.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gen_ext_spd_3_boust_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gep10.t12z.pgrb2af78.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gfs.c255.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\grid_ieee.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\gts.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\index.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\in_copy.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\jpeg.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\lfpw.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\lfpw.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\missing.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\missing_field.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\mixed.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\multi.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\multi_created.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\pad.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_lsm.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_model_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_pressure_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_pressure_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_pressure_level_constant.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_pressure_level_constant.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_sub_area.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_sub_area.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_surface.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_surface.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_gaussian_surface_jpeg.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_latlon_surface.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_latlon_surface_constant.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reduced_latlon_surface_constant.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reference_ensemble_mean.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\reference_stdev.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_model_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_model_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_pressure_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_pressure_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_pressure_level_constant.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_pressure_level_constant.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_surface.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_gaussian_surface.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_latlon_surface.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_latlon_surface_constant.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\regular_latlon_surface_constant.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\row.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\sample.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\satellite.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\second_ord_rbr.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\simple.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\simple_bitmap.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\small_ensemble.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spectral_compex.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spectral_complex.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spherical_model_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spherical_model_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spherical_pressure_level.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\spherical_pressure_level.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\sst_globus0083.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\test.grib1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\test_uuid.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\tigge_af_ecmwf.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\tigge_cf_ecmwf.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\tigge_ecmwf.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\tigge_pf_ecmwf.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\timeRangeIndicator_0.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\timeRangeIndicator_10.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\timeRangeIndicator_5.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\tp_ecmwf.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\v.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\polar_stereo.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\bad.grib">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\nam.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\uv.grib2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\ds.apt.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\weird.grb">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TestData\RawFileBadETOGrib.os">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Grib.Api\Grib.Api.csproj">
       <Project>{9cc21630-ace4-4d14-93ba-e4e801ad2a91}</Project>
       <Name>Grib.Api</Name>
@@ -421,11 +112,122 @@
     <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"
 taskkill /f /t /im nunit-agent-x86.exe /fi "memusage gt 2"</PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
+  <ItemGroup>
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\bad.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\bad.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\bad2.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\ccsds.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\constant_field.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\constant_field.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\constant_width_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\constant_width_boust_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\ds.apt.bin" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\empty.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_boust.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_boust_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_spd_2.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_spd_2_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_spd_2_boust_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_spd_3.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gen_ext_spd_3_boust_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gep10.t12z.pgrb2af78.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gfs.c255.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gfs_0p50_2015101500_003.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\GRIB.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\grid_ieee.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\gts.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\high_level_api.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\index.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\in_copy.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\jpeg.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\latlon.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\latlon_noread.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\lfpw.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\lfpw.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\missing.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\missing_field.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\mixed.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\MRMS.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\MRMS2.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\msl.octa.glob.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\multi.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\multi_created.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\nam.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\Pacific.wind.7days.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\pad.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\polar_stereo.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\RawFileBadETOGrib.os" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_lsm.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_model_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_model_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_pressure_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_pressure_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_pressure_level_constant.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_pressure_level_constant.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_sub_area.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_sub_area.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_surface.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_surface.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_gaussian_surface_jpeg.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_latlon_surface.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_latlon_surface.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_latlon_surface_constant.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reduced_latlon_surface_constant.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reference_ensemble_mean.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\reference_stdev.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_model_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_model_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_pressure_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_pressure_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_pressure_level_constant.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_pressure_level_constant.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_surface.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_gaussian_surface.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_latlon_surface.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_latlon_surface.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_latlon_surface_constant.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\regular_latlon_surface_constant.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\row.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\sample.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\satellite.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\second_ord_rbr.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\simple.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\simple_bitmap.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\small_ensemble.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\spectral_complex.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\spherical_model_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\spherical_model_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\spherical_pressure_level.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\spherical_pressure_level.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\sst_globus0083.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\test.grib1" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\test_file.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\test_uuid.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\tigge_af_ecmwf.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\tigge_cf_ecmwf.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\tigge_ecmwf.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\tigge_pf_ecmwf.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\time.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\timeRangeIndicator_0.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\timeRangeIndicator_10.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\timeRangeIndicator_5.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\tp_ecmwf.grib" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\uv.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\v.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\weird.grb" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\WRFPRS_NAM_00z_d01.000.multifield.grib2" />
+    <TestDataFiles Include="C:\Users\eric\GribApi.NET\src\GribApi.NET\Grib.Api.Tests\TestData\Z_NWGD_C_BABJ.GRB2" />
+  </ItemGroup>
+  <Target Name="BeforeClean">
+    <Message Text="Removing test data..." Importance="high" />
+    <RemoveDir Directories="$(OutDir)TestData" ContinueOnError="true" />
   </Target>
   <Target Name="AfterBuild">
+    <Message Text="Copying test data..." Importance="high" />
+    <Copy SourceFiles="@(TestDataFiles)" DestinationFolder="$(OutDir)TestData\" SkipUnchangedFiles="true" />
   </Target>
-  -->
 </Project>

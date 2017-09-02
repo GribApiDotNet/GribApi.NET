@@ -48,14 +48,14 @@ In general, GribApi.NET should "just work". In rare cases, GribApi.NET may have 
 To solve this problem, you can manually set the path to the definitions:
 ```csharp
 GribEnvironment.Init();
-GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
+GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions";
 ```
 
 ### Examples
 
 #### Getting grid information from a GRIB message:
 ```csharp
-	using (GribFile file = new GribFile("mygrib.grb"))
+	using (GribFile file = new GribFile("mygrib2.grib"))
 	{
 		GribMessage msg = file.First();
 
@@ -65,13 +65,13 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 		double latInDegrees = msg["latitudeOfFirstGridPoint"].AsDouble();
 		
 		// values are also accessible as strings
-		Console.WriteLine("latitudeOfFirstGridPointInDegrees = " + msg["latitudeOfFirstGridPoint"].AsString());
+		Console.WriteLine("latitudeOfFirstGridPoint = " + msg["latitudeOfFirstGridPoint"].AsString());
 	}
 ```
 
-#### Iterating messages:
+#### Iterating messages in a file:
 ```csharp
-	using (GribFile file = new GribFile("mygrib.grb"))
+	using (GribFile file = new GribFile("mygrib1.grib"))
 	{
 		foreach (GribMessage msg in file)
 		{
@@ -80,12 +80,21 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 	}
 ```
 
+#### Iterating messages in a stream _Note: iterating streams is currently much slower than iterating a file_:
+```csharp
+   var gribStream = new GribStream(myStream);
+   foreach (GribMessage msg in gribStream)
+   {
+      // do something
+   }
+```
+
 #### Iterating lat/lon/value:
 ```csharp
 
 	GribMessage msg = gribFile.First();
 	
-	// the values in GeoSpatialValues are calculated by grid type
+	// the values in GridCoordinateValues are calculated by grid type
 	foreach (GridCoordinateValue val in msg.GridCoordinateValues)
 	{
 		if (val.IsMissing) { continue; }
@@ -100,13 +109,13 @@ GribEnvironment.DefinitionsPath = "C:\\Some\\Path\\Grib.Api\\definitions"
 	GribMessage msg = gribFile.First();
    var referencePt = msg.GridCoordinateValues.First();
    
-   Console.WriteLine("Getting the four nearest grib points to Lat: {0} Lon: {1}", referencePt.Latitude, referencePt.Longitude);
+   Console.WriteLine("Getting the four nearest grid points to Lat: {0} Lon: {1}", referencePt.Latitude, referencePt.Longitude);
 
    var nearest = msg.FindNearestCoordinates(referencePt);
    
 	foreach (var near in nearest)
 	{
-      GeoSpatialValue val = near.Value;
+      GridCoordinateValue val = near.Value;
 		Console.WriteLine("Lat: {0} Lon: {1} Val: {2} Distance: {3}", var.Latitude, val.Longitude, val.Value, near.Distance);
 	}
 ```

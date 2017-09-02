@@ -13,12 +13,9 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Grib.Api.Interop.SWIG;
-using System.Runtime.InteropServices;
 using Grib.Api.Interop;
 using Grib.Api.Interop.Util;
 
@@ -260,7 +257,7 @@ namespace Grib.Api
         /// </returns>
         public override string ToString ()
         {
-            return String.Format("{0} {1}: {2}", Enum.GetName(typeof(GribValueType), this.NativeType), this.Key, this.AsString());
+            return String.Format("<{0}> {1}: {2}", Enum.GetName(typeof(GribValueType), this.NativeType), this.Key, this.AsString());
         }
 
         /// <summary>

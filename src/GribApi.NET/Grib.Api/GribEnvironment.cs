@@ -16,11 +16,8 @@ using Grib.Api.Interop;
 using Grib.Api.Interop.SWIG;
 using Grib.Api.Interop.Util;
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace Grib.Api
 {
@@ -35,25 +32,13 @@ namespace Grib.Api
         private static AutoRef _libHandle;
         private static object _initLock = new object();
 
-        //static GribEnvironment ()
-        //{
-        //    GribEnvironment.Init();
-        //    // grib_api discourages enabling multi-fields, however leaving it disabled has caused
-        //    // considerable confusion among users. 
-        //    GribContext.Default.EnableMultipleFieldMessages = true;
-        //}
 
-        /// <summary>
-        /// Initializes GribApi.NET. In very rare cases, you may need to call this method directly
-        /// to ensure the native libraries are bootstrapped and the environment setup correctly.
-        /// </summary>
-        /// <exception cref="System.ComponentModel.Win32Exception"></exception>
-        public static void Init ()
+        static GribEnvironment ()
         {
+            if (Initialized) { return; }
+
             lock (_initLock)
             {
-                if (Initialized) { return; }
-
                 Initialized = true;
 
                 if (String.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("GRIB_API_NO_ABORT")))
@@ -74,7 +59,21 @@ namespace Grib.Api
 
                 SamplesPath = definitions.Remove(definitions.LastIndexOf("definitions")) + "samples";
                 DefinitionsPath = definitions;
+
+                // grib_api discourages enabling multi-fields because they do not use them regularly and do not feel they
+                // are well-tested, however leaving them disabled has caused considerable confusion among users. 
+                GribContext.Default.EnableMultipleFieldMessages = true;
             }
+        }
+
+        /// <summary>
+        /// Hook to initialize GribApi.NET. In very rare cases, you may need to call this method directly
+        /// to ensure the native libraries are bootstrapped.
+        /// </summary>
+        /// <exception cref="System.ComponentModel.Win32Exception"></exception>
+        public static void Init ()
+        {
+            // empty hook for static ctor
         }
 
         /// <summary>

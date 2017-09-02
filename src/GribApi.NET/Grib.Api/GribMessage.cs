@@ -42,12 +42,12 @@ namespace Grib.Api
         /// </summary>
         public static readonly string[] Namespaces = { "all", "ls", "parameter", "statistics", "time", "geography", "vertical", "mars" };
 
-        /// <summary>
-        /// Experimental
-        /// </summary>
-        internal IntPtr NativeBuffer = IntPtr.Zero;
+        internal GCHandle BufferHandle;
 
-        protected bool OwnsMemory = false;
+        static GribMessage ()
+        {
+            GribEnvironment.Init();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage" /> class.
@@ -56,28 +56,26 @@ namespace Grib.Api
         /// <param name="context">The context.</param>
         /// <param name="index">The index.</param>
         protected GribMessage (GribHandle handle, GribContext context, int index = 0)
-            : this(handle, context, IntPtr.Zero, index)
+            : this(handle, context, new GCHandle(), index)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GribMessage" /> class.
         /// </summary>
-        /// <param name="handle">The handle.</param>
-        /// <param name="context">The context.</param>
-        /// <param name="buffer">Pointer to a native array containing the message bytes.</param>
-        /// <param name="index">The index.</param>
-        protected GribMessage (GribHandle handle, GribContext context, IntPtr buffer, int index = 0)
-            : base()
+        /// <param name="handle"></param>
+        /// <param name="context"></param>
+        /// <param name="buffer"></param>
+        /// <param name="index"></param>
+        protected GribMessage (GribHandle handle, GribContext context, GCHandle buffer, int index = 0)
+    : base()
         {
             Handle = handle;
             Namespace = Namespaces[0];
             KeyFilters = Interop.KeyFilters.All;
             Index = index;
-            NativeBuffer = buffer;
-            OwnsMemory = buffer != IntPtr.Zero;
+            BufferHandle = buffer;
         }
-
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
@@ -158,42 +156,36 @@ namespace Grib.Api
         }
 
         /// <summary>
-        /// 
+        /// Creates a GribMessage instance from a buffer.
         /// </summary>
         /// <param name="bits"></param>
         /// <param name="index"></param>
-        /// <param name="ctx"></param>
         /// <returns></returns>
-        public static GribMessage Create (byte[] bits, int index, GribContext ctx)
+        public static GribMessage Create (byte[] bits, int index = 0)
         {
-            var buff = Marshal.AllocHGlobal(bits.Length);
-            Marshal.Copy(bits, 0, buff, bits.Length);
+            GCHandle h = GCHandle.Alloc(bits, GCHandleType.Pinned);
+            IntPtr pHandle = h.AddrOfPinnedObject();
+
             int err = 0;
             SizeT sz = (SizeT)bits.Length;
-
-            GribMessage msg = null;
-            GribHandle handle = null;
-
-            lock (_fileLock)
-            {
-                // grib_api moves to the next message in a stream for each new handle
-                handle = GribApiProxy.GribHandleNewFromMultiMessage(ctx, out buff, ref sz, out err);
-            }
+            GribHandle handle = GribApiProxy.GribHandleNewFromMultiMessage(GribContext.Default, out pHandle, ref sz, out err);
 
             if (err != 0)
             {
-                Marshal.AllocHGlobal(buff);
+                h.Free();
                 throw GribApiException.Create(err);
             }
 
+            GribMessage msg = null;
+
             if (handle != null)
             {
-                msg = new GribMessage(handle, ctx, buff, index);
+                msg = new GribMessage(handle, GribContext.Default, h, index);
             }
 
             return msg;
         }
-
+ 
         /// <summary>
         /// Returns a <see cref="System.String" /> containing metadata about this instance.
         /// </summary>
@@ -219,7 +211,10 @@ namespace Grib.Api
             List<string> keys = new List<string>();
             foreach (var key in this)
             {
-                keys.Add(key.ToString());
+                if (key.IsDefined)
+                {
+                    keys.Add(key.ToString());
+                }
             }
 
             return String.Join(Environment.NewLine, keys);
@@ -1023,12 +1018,11 @@ namespace Grib.Api
                     this._nearest.Dispose();
                 }
 
-                if (this.OwnsMemory)
+                if (this.BufferHandle.IsAllocated)
                 {
                     SWIGTYPE_p_grib_multi_handle mh = new SWIGTYPE_p_grib_multi_handle(this.Handle.Reference.Handle, false);
                     GribApiProxy.GribMultiHandleDelete(mh);
-                    // Marshal.FreeHGlobal(this.NativeBuffer);
-                    this.NativeBuffer = IntPtr.Zero;
+                    this.BufferHandle.Free();
                 }
             }
         }

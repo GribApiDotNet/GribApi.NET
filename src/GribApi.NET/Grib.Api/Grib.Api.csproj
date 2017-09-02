@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Grib.Api</RootNamespace>
     <AssemblyName>Grib.Api</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -201,6 +201,21 @@
     <Compile Include="Interop\Util\Win32.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\ParameterNumbers.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <GribApiSourceFiles Include="$(ProjectDir)Grib.Api\**\*.*">
+      <Visible>false</Visible>
+    </GribApiSourceFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <GribApiNativeBin64 Include="$(OutDir)Grib.Api\lib\win\x64\$(ConfigurationName)\*.dll;$(OutDir)Grib.Api\lib\win\x64\$(ConfigurationName)\*.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <GribApiNativeBin86 Include="$(OutDir)Grib.Api\lib\win\x86\$(ConfigurationName)\*.dll;$(OutDir)Grib.Api\lib\win\x86\$(ConfigurationName)\*.pdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Grib.Api\definitions\bufr\descriptor_template" />
@@ -15477,21 +15492,20 @@
     <Content Include="Grib.Api\lib\win\x86\Release\Grib.Api.Native.pdb" />
     <Content Include="Grib.Api\samples\CMakeLists.txt" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>taskkill /f /t /im nunit-agent.exe /fi "memusage gt 2"</PreBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PostBuildEvent>rd $(OutDir)Grib.Api /S /Q
-xcopy $(ProjectDir)Grib.Api $(OutDir)Grib.Api\ /d /Y /S /I /Q
-xcopy $(OutDir)Grib.Api\lib\win\x64\$(ConfigurationName) $(OutDir)Grib.Api\lib\win\x64 /d /Y /S  /I /Q
-xcopy $(OutDir)Grib.Api\lib\win\x86\$(ConfigurationName) $(OutDir)Grib.Api\lib\win\x86 /Y /S  /I /Q</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
+    <ItemGroup>
+  <Content Include="$(ProjectDir)Grib.Api\**\*.*">
+  <Link>$(OutDir)Grib.Api\%(RecursiveDir)%(Filename)%(Extension)</Link>
+  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+</Content>
+  </ItemGroup>
   <Target Name="AfterBuild">
+    <Message Text="Copying native x64 $(ConfigurationName) binaries to Grib.Api\lib\win\x64 directory..." Importance="high" />
+    <Copy SourceFiles="@(GribApiNativeBin64)" DestinationFolder="$(OutDir)Grib.Api\lib\win\x64" SkipUnchangedFiles="true" />
+    <Message Text="Copying native x86 $(ConfigurationName) binaries to Grib.Api\lib\win\x86 directory..." Importance="high" />
+    <Copy SourceFiles="@(GribApiNativeBin86)" DestinationFolder="$(OutDir)Grib.Api\lib\win\x86" SkipUnchangedFiles="true" />
   </Target>
-  -->
+  <Target Name="BeforeClean">
+    <Message Text="Removing the Grib.Api directory..." Importance="high" />
+    <RemoveDir Directories="$(OutDir)Grib.Api" ContinueOnError="true" />
+  </Target>
 </Project>

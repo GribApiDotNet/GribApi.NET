@@ -52,6 +52,16 @@ namespace Grib.Api.Tests
         }
 
         [Test, Timeout(2000)]
+        public void TestDumpNoError ()
+        {
+            using (GribFile file = new GribFile(Settings.REG_LATLON_GRB1))
+            {
+                var msg = file.First();
+                msg.Dump();
+            }
+        }
+
+        [Test, Timeout(2000)]
         public void TestCanConvertToDegress ()
         {
             using (GribFile file = new GribFile(Settings.REDUCED_LATLON_GRB2))
