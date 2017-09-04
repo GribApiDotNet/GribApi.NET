@@ -253,7 +253,7 @@ namespace Grib.Api
         {
             using (var fs = File.Open(filePath, mode))
             {
-                this.WriteValuesToCsv(fs);
+                this.WriteValuesToCsv(fs, includeMissing);
                 fs.Flush();
             }
         }
