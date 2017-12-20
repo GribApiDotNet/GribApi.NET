@@ -55,7 +55,15 @@ namespace Grib.Api
         /// <exception cref="System.IO.FileLoadException">The file is empty.</exception>
         public GribFile (string fileName)
         {
-            FileInfo fi = new FileInfo(fileName);
+            if (fileName == null)
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+
+            if (!File.Exists(fileName))
+            {
+                throw new FileNotFoundException("Could not find file.", fileName);
+            }
 
             // need a better check
             if (!GribFile.FileIsValid(fileName))

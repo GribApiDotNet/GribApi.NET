@@ -57,6 +57,34 @@ namespace Grib.Api.Tests
             catch (FileLoadException) { }
         }
 
+        [Test, Timeout(2000)]
+        public void TestNullFile()
+        {
+            try
+            {
+                using (GribFile file = new GribFile(null))
+                {
+                    // shouldn't get here
+                    Assert.Fail();
+                }
+            }
+            catch (ArgumentNullException) { }
+        }
+
+        [Test, Timeout(2000)]
+        public void TestNonExistingFile()
+        {
+            try
+            {
+                using (GribFile file = new GribFile(string.Empty))
+                {
+                    // shouldn't get here
+                    Assert.Fail();
+                }
+            }
+            catch (FileNotFoundException) { }
+        }
+
         [Test, Timeout(5000)]
         public void TestSteographic ()
         {
